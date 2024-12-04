@@ -1,21 +1,18 @@
-# kraszak-banger
-school-project
+# kraszak-banger  
+School Project  
 
-How to compile and run the game:
+## How to Compile and Run the Game  
 
-    Windows machines:
-    Dowland files.
-    Unzip the files. 
-    Instal Python and pip
+### Windows Machines  
+1. **Download the files.**  
+2. **Unzip the files.**  
+3. **Install Python and pip.**  
 
-    Run those commands in comand prompt:
-    pip install pygame-ce
+4. Open the Command Prompt and run the following command to install the required library:  
+   ```Comand prompt
+   pip install pygame-ce
 
-    Now to sucefuli run the game you need to
-    open it directly in folder or go to cmd
-    and do 
-    YOUR_PATH_TO_GAMES_FOLDER cd
-    and than do
-    python main.py
-    if python main.py doesn't work try
-    python3 main.py
+5. Run the game by opening it from direct folder
+or by following comands in comand prompt
+cd YOUR_PATH_TO_GAMES_FOLDER
+python main.py orpython3 main.py
