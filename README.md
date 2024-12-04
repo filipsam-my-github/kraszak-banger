@@ -17,6 +17,6 @@ or by following comands in comand prompt
     ```Comand prompt
     cd YOUR_PATH_TO_GAMES_FOLDER
     python main.py
-if python main.py doesn't work
-    ```Comand prompt
+
+    if python main.py doesn't work than
     python3 main.py
