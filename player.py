@@ -2,8 +2,9 @@ import pygame
 from math import sqrt
 from graphic_handlerer import ImageLoader
 from items import Item
+from blocks import PhysicsCollider
 
-class Player:
+class Player(PhysicsCollider):
     """
         The player.
         for now it's one class but as ideas go on
@@ -12,6 +13,10 @@ class Player:
     """
     
     GRAVITY = 50
+    HIEGHT = 50
+    WIDTH = 20
+    
+    
     def __init__(self, cord_x, cord_y, skin_number) -> object:
         self.image = f"player{skin_number}"
 
@@ -22,8 +27,12 @@ class Player:
 
         self.x_cord = cord_x
         self.y_cord = cord_y
+        self.movement_vector = [0,0]
+        self.rect = pygame.Rect(cord_x, cord_y, Player.WIDTH, Player.WIDTH)
 
         self.item = None
+
+        super().__init__()#Tests
     
     def SpeedUpdate(self):
         """
@@ -40,7 +49,8 @@ class Player:
             to ensure the player moves at the same speed 
             regardless of the frame rate.
         """
-        diagonal_multiplier = 1 
+        diagonal_multiplier = 1
+        self.movement_vector = [0,0] 
 
         keys_down = 0
         for i in [keys[pygame.K_w], keys[pygame.K_s], keys[pygame.K_d], keys[pygame.K_a]]:
@@ -51,10 +61,14 @@ class Player:
 
         if keys[pygame.K_w]:
             self.y_cord -= self.entity_speed*dt*diagonal_multiplier
+            self.movement_vector[1] = -self.entity_speed*dt*diagonal_multiplier
         if keys[pygame.K_d]:
             self.x_cord += self.entity_speed*dt*diagonal_multiplier
+            self.movement_vector[0] = self.entity_speed*dt*diagonal_multiplier
         if keys[pygame.K_a]:
             self.x_cord -= self.entity_speed*dt*diagonal_multiplier
+            self.movement_vector[0] = -self.entity_speed*dt*diagonal_multiplier
+            
     
     def PickAnItem(self, item : Item):
         self.item = item
