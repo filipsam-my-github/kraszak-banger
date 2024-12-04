@@ -4,6 +4,13 @@ from graphic_handlerer import ImageLoader
 from items import Item
 
 class Player:
+    """
+        The player.
+        for now it's one class but as ideas go on
+        there may be new for very unique thing
+        
+    """
+    
     GRAVITY = 50
     def __init__(self, cord_x, cord_y, skin_number) -> object:
         self.image = f"player{skin_number}"
@@ -19,9 +26,20 @@ class Player:
         self.item = None
     
     def SpeedUpdate(self):
-        return self.ROOT_SPEED + self.speed_bonuses + self.speed_multiplier
+        """
+            Updates the speed of a player. This is necessary 
+            due to self.speed_bonuses and self.speed_multiplier, which can 
+            dynamically change.
+        """
+        return (self.ROOT_SPEED + self.speed_bonuses)*self.speed_multiplier
 
     def Tick(self, keys, dt):
+        """
+            Updates the player every game frame. 
+            This method processes input keys and delta time (dt) 
+            to ensure the player moves at the same speed 
+            regardless of the frame rate.
+        """
         diagonal_multiplier = 1 
 
         keys_down = 0

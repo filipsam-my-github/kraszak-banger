@@ -2,7 +2,10 @@ from abc import ABC , abstractmethod
 import graphic_handlerer as gh
 
 class Item(ABC):
-
+    """
+        CHANE ME AFTER CHANGES IN THIS CODE 
+        For now it's just residue of rogue-like game
+    """
 
     def __init__(self, image_name, cords):
         self.image = image_name
@@ -40,18 +43,3 @@ class Sword(Item):
         self.in_swinging = True
         self.ratation = -90
     
-
-
-# array = [0,2,-34,234,-5]
-# old = [float('inf'),float('inf')]
-
-# medium = (array[0] + array[-1])/2
-
-# for val in array:
-#     how_close_is_val = abs(medium-val)
-
-#     if how_close_is_val < old[1]:
-#         old = [val,how_close_is_val]
-
-
-# print(old[0])

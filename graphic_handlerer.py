@@ -1,6 +1,12 @@
 import pygame
 
 class ImageLoader:
+    """
+        A class for loading and displaying images.
+
+        Note: The init() method must be called before any other
+        usage of this module to ensure proper functionality.
+    """
     _SCALE = 4
     _STANDARD_SIZE_OF_IMAGA = 16 * _SCALE
 
@@ -12,6 +18,9 @@ class ImageLoader:
 
     @classmethod
     def init(cls):
+        """
+            Loads the essential images required for running any other methods.
+        """
         cls._MOBS_ASSET = pygame.image.load("mob_animation/Atlas.png")
         cls._MOBS_ASSET = pygame.transform.scale(cls._MOBS_ASSET, (cls._MOBS_ASSET.get_width() * cls._SCALE, cls._MOBS_ASSET.get_height() * cls._SCALE))
         cls._MOBS_ASSET.convert_alpha()
@@ -61,6 +70,15 @@ class ImageLoader:
 
     @classmethod
     def DarwEntityImage(cls, screen: pygame.display, name, x_cord, y_cord, rotation_angle=0):
+        """
+            Draws ONLY the Entity (from _MOBS_ASSET) on the screen. 
+    
+            @param rotation_angle: The rotation angle in degrees (not radians).
+                                Positive values (+) rotate left (counter-clockwise),
+                                and negative values (-) rotate right (clockwise).
+            The rotation_angle is static and always calculated relative to angle 0, 
+            regardless of the previous angle.
+        """
         #TODO optimise it
         image_rect = cls.names_of_entitysto_cords[name]
         entity_image = cls._MOBS_ASSET.subsurface(image_rect)
