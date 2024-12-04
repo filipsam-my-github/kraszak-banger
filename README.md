@@ -14,5 +14,8 @@ School Project
 
 5. Run the game by opening it from direct folder
 or by following comands in comand prompt
-cd YOUR_PATH_TO_GAMES_FOLDER
-python main.py orpython3 main.py
+    ```Comand prompt
+    cd YOUR_PATH_TO_GAMES_FOLDER
+    python main.py
+if python main.py doesnt' work
+    python3 main.py
