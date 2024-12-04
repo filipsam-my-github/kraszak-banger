@@ -26,7 +26,7 @@ class ImageLoader:
         for i in range(7):
             cls.names_of_entitysto_cords[f"player{i}"] = (i * cls._STANDARD_SIZE_OF_IMAGA, 0, cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA)
 
-        _mobs_names_in_order = ["zombi", "skeleton", "dark_knight", "meth_man", "cyclop",
+        _mobs_names_in_order = ["zombie", "skeleton", "dark_knight", "meth_man", "cyclop",
                                 "blue_bat", "green_bat", "cyan_bat", "red_bat"]
 
         for i, name in enumerate(_mobs_names_in_order):
