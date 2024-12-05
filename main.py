@@ -14,6 +14,7 @@ import sys
 from player import Player
 from graphic_handlerer import ImageLoader
 from items import *
+from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox
 
 screen = pygame.display.set_mode((640, 480))
 
@@ -51,11 +52,11 @@ def Main():
     """
     
     clock = pygame.time.Clock()
-    player = Player(0,480,3)
+    player = Player(0,480,3,True)
+    blocks = [WoodenBox(100,100), GoldenBox(200,200)]
     player.PickAnItem(Sword("wooden_sword", (0,0)))
     player.item.Swing()
 
-    items = []
 
     while True:
         
@@ -65,10 +66,15 @@ def Main():
         HandelPygameEvents()
 
         screen.fill((16.5,15.7,25.1))
+        
+        for block in blocks:
+            block.Draw(screen)
+    
 
         player.Tick(keys,1/60)
+        player.Colide(blocks)
         player.Draw(screen)
-
+        
         
 
         pygame.display.update()

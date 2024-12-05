@@ -15,6 +15,7 @@ class Player(PhysicsCollider):
     GRAVITY = 50
     HIEGHT = 50
     WIDTH = 20
+    HITBOX = True
     
     
     def __init__(self, cord_x, cord_y, skin_number) -> object:
@@ -28,11 +29,11 @@ class Player(PhysicsCollider):
         self.x_cord = cord_x
         self.y_cord = cord_y
         self.movement_vector = [0,0]
-        self.rect = pygame.Rect(cord_x, cord_y, Player.WIDTH, Player.WIDTH)
+        self.rect = pygame.Rect(cord_x, cord_y, ImageLoader.images[self.image].get_width(), ImageLoader.images[self.image].get_width())
 
         self.item = None
 
-        super().__init__()#Tests
+        super().__init__(movement_strength=1)
     
     def SpeedUpdate(self):
         """
@@ -59,6 +60,9 @@ class Player(PhysicsCollider):
         if keys_down == 2:
             diagonal_multiplier = sqrt(self.entity_speed*dt)/(self.entity_speed*dt)
 
+        if keys[pygame.K_s]:
+            self.y_cord += self.entity_speed*dt*diagonal_multiplier
+            self.movement_vector[1] = self.entity_speed*dt*diagonal_multiplier
         if keys[pygame.K_w]:
             self.y_cord -= self.entity_speed*dt*diagonal_multiplier
             self.movement_vector[1] = -self.entity_speed*dt*diagonal_multiplier
@@ -68,13 +72,17 @@ class Player(PhysicsCollider):
         if keys[pygame.K_a]:
             self.x_cord -= self.entity_speed*dt*diagonal_multiplier
             self.movement_vector[0] = -self.entity_speed*dt*diagonal_multiplier
-            
+        
+        self.rect.x = self.x_cord
+        self.rect.y = self.y_cord
     
     def PickAnItem(self, item : Item):
         self.item = item
         item.picked()
     
     def Draw(self, screen):
+        if Player.HITBOX:
+            pygame.draw.rect(screen, (230,50,50), (self.rect.x, self.rect.y, self.rect.width, self.rect.height))
         ImageLoader.DarwEntityImage(screen, self.image, self.x_cord, self.y_cord)
         if self.item:
             ImageLoader.DarwEntityImage(screen, self.item.image, self.x_cord+self.item.x_cord, self.y_cord+self.item.y_cord, self.item.ratation)
