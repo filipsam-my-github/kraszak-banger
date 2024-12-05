@@ -13,7 +13,6 @@ class ImageLoader:
     _MOBS_ASSET = None
     _MAP_ASSET = None
 
-    names_of_map_blocks_to_cords = None
     images = None
 
     @classmethod
@@ -29,7 +28,6 @@ class ImageLoader:
         cls._MAP_ASSET = pygame.transform.scale(cls._MAP_ASSET, (cls._MAP_ASSET.get_width() * cls._SCALE, cls._MAP_ASSET.get_height() * cls._SCALE))
         cls._MAP_ASSET.convert_alpha()
 
-        cls.names_of_map_blocks_to_cords = {}
         cls.images = {}
 
         for i in range(7):
