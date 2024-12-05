@@ -71,7 +71,6 @@ class ImageLoader:
         
     @classmethod
     def DarwEntityImage(cls, screen: pygame.display, name, x_cord, y_cord, rotation_angle=0):
-        #TODO optimise it
         """
             Draws ONLY the Entity (from _MOBS_ASSET) on the screen. 
     
