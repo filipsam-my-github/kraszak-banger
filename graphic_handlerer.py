@@ -26,7 +26,7 @@ class ImageLoader:
         for i in range(7):
             cls.names_of_entitysto_cords[f"player{i}"] = (i * cls._STANDARD_SIZE_OF_IMAGA, 0, cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA)
 
-        _mobs_names_in_order = ["zombi", "skeleton", "dark_knight", "meth_man", "cyclop",
+        _mobs_names_in_order = ["zombie", "skeleton", "dark_knight", "meth_man", "cyclop",
                                 "blue_bat", "green_bat", "cyan_bat", "red_bat"]
 
         for i, name in enumerate(_mobs_names_in_order):
@@ -73,3 +73,14 @@ class ImageLoader:
         rotated_rect.center = (x_cord, y_cord)
 
         screen.blit(entity_image, rotated_rect.topleft)
+    def DrawSceneryImage(self,x_cord,y_cord,wight,height):
+        pygame.sprite.Sprite.__init__(self)
+        self.image= pygame.Surface([wight,height]) # jaka wielkosc okna w pixelach; to narazie placeholder na nazwy.
+        self.rect= self.image.get_rect()
+        self.rect.topleft=()#potrzeba x,y; zrobic specjalnie dla wczytywania mapy na ekran.
+
+    def AttackAnimations(self):
+        for event in pygame.event.get():
+            if event.type == pygame.mouse.get_pressed():
+                pass
+        

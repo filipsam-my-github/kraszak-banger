@@ -19,6 +19,9 @@ def HandelPygameEvents():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
+    for event in pygame.event.get():
+        if event.type== pygame.event.set_keyboard_grab():  #<-zapisac zmienna ktora rozumie AltTab
+            sys.exit()
 
 def Main():
     clock = pygame.time.Clock()
