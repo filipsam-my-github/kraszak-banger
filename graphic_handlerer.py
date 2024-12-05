@@ -1,4 +1,5 @@
 import pygame
+from player import Player
 
 class ImageLoader:
     """
@@ -85,12 +86,12 @@ class ImageLoader:
         screen.blit(entity_image, rotated_rect.topleft)
     def DrawSceneryImage(self,x_cord,y_cord,wight,height):
         pygame.sprite.Sprite.__init__(self)
-        self.image= pygame.Surface([wight,height]) # jaka wielkosc okna w pixelach; to narazie placeholder na nazwy.
+        self.image= pygame.Surface([wight,height]) #placeholder for Pixel x and y 
         self.rect= self.image.get_rect()
-        self.rect.topleft=()#potrzeba x,y; zrobic specjalnie dla wczytywania mapy na ekran.
+        self.rect.topleft=()#requaired adisional X and Y; X and Y set only for that
 
     def AttackAnimations(self):
         for event in pygame.event.get():
             if event.type == pygame.mouse.get_pressed():
-                pass
+                Player.item.Swing()
         
