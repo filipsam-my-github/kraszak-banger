@@ -52,8 +52,8 @@ def Main():
     """
     
     clock = pygame.time.Clock()
-    player = Player(0,480,3,True)
-    blocks = [WoodenBox(100,100), GoldenBox(200,200)]
+    player = Player(100,400,3)
+    blocks = [WoodenBox(100,300), GoldenBox(100,200),  HeavyGoldenBox(200,200), SteelBox(300,300), HeavyWoodenBox(200,300)]
     player.PickAnItem(Sword("wooden_sword", (0,0)))
     player.item.Swing()
 
@@ -69,7 +69,10 @@ def Main():
         
         for block in blocks:
             block.Draw(screen)
-    
+            for other_block in blocks:
+                if block == other_block:
+                    continue
+                block.Colide([other_block])
 
         player.Tick(keys,1/60)
         player.Colide(blocks)

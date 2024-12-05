@@ -52,6 +52,11 @@ class PhysicsCollider(ABC):
         return collisions
     
     def SetCordsToRectPosition(self):
+        if self.x_cord != self.rect.x:
+            self.movement_vector[0] = self.rect.x - self.x_cord 
+        if self.y_cord != self.rect.y:
+            self.movement_vector[1] =  self.rect.y - self.y_cord
+        
         self.x_cord = self.rect.x
         self.y_cord = self.rect.y
     

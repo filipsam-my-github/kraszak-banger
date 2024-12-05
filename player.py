@@ -33,7 +33,7 @@ class Player(PhysicsCollider):
 
         self.item = None
 
-        super().__init__(movement_strength=1)
+        super().__init__(movement_strength=30)
     
     def SpeedUpdate(self):
         """
