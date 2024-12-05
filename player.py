@@ -19,7 +19,7 @@ class Player:
         self.item = None
     
     def SpeedUpdate(self):
-        return self.ROOT_SPEED + self.speed_bonuses + self.speed_multiplier
+        return self.ROOT_SPEED + self.speed_bonuses * self.speed_multiplier
 
     def Tick(self, keys, dt):
         diagonal_multiplier = 1 
@@ -37,6 +37,8 @@ class Player:
             self.x_cord += self.entity_speed*dt*diagonal_multiplier
         if keys[pygame.K_a]:
             self.x_cord -= self.entity_speed*dt*diagonal_multiplier
+        if keys[pygame.K_s]:
+            self.y_cord += self.entity_speed*dt*diagonal_multiplier
     
     def PickAnItem(self, item : Item):
         self.item = item

@@ -19,16 +19,15 @@ def HandelPygameEvents():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-    for event in pygame.event.get():
-        if event.type== pygame.event.set_keyboard_grab():  #<-zapisac zmienna ktora rozumie AltTab
-            sys.exit()
+""" for event in pygame.event.get():
+        if event.type== pygame.event.set_keyboard_grab():  #<-zapisac zmienna ktora rozumie AltTab; nyga to czyta nawet lepkie re-work ASAP
+            sys.exit()"""
 
 def Main():
     clock = pygame.time.Clock()
     player = Player(0,480,3)
     player.PickAnItem(Sword("wooden_sword", (0,0)))
     player.item.Swing()
-
     items = []
 
     while True:
