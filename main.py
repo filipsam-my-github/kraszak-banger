@@ -61,7 +61,7 @@ def Main():
         blocks.append(HeavyGoldenBox(i*64,400))
     player.PickAnItem(Sword("wooden_sword", (0,0)))
     player.item.Swing()
-    #player. <- wywyołać funkje attack animacion
+    #player.Animacions.AttackAnimations() #<- wywyołać funkje attack animacion
     items = []
 
     while True:
