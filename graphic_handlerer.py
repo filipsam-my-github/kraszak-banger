@@ -1,5 +1,6 @@
 import pygame
-from player import Player
+import player
+from items import Sword
 
 class ImageLoader:
     """
@@ -91,9 +92,12 @@ class ImageLoader:
         self.image= pygame.Surface([wight,height]) #placeholder for Pixel x and y 
         self.rect= self.image.get_rect()
         self.rect.topleft=()#requaired adisional X and Y; X and Y set only for that
-
-    def AttackAnimations(self):
+class Animacions:
+    def AttackAnimations(self,):
         for event in pygame.event.get():
-            if event.type == pygame.mouse.get_pressed():
-                Player.item.Swing()
-        
+            if event.type == pygame.KEYDOWN():
+                if event.key == pygame.K_RIGHT:
+                    player.Player.item.Swing(True)
+            elif event.type == pygame.KEYUP():
+                if event.key == pygame.K_RIGHT:
+                    player.Player.item.Swing(False)

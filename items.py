@@ -40,6 +40,6 @@ class Sword(Item):
         self.y_cord = 5
     
     def Swing(self):
-        self.in_swinging = True
+        self.in_swinging = False
         self.ratation = -90
     

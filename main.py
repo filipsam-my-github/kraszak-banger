@@ -12,7 +12,7 @@
 import pygame
 import sys
 from player import Player
-from graphic_handlerer import ImageLoader
+from graphic_handlerer import ImageLoader,Animacions
 from items import *
 from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox
 
@@ -61,6 +61,7 @@ def Main():
         blocks.append(HeavyGoldenBox(i*64,400))
     player.PickAnItem(Sword("wooden_sword", (0,0)))
     player.item.Swing()
+    #player. <- wywyołać funkje attack animacion
     items = []
 
     while True:
