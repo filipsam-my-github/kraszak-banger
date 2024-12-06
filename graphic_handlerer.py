@@ -72,18 +72,20 @@ class ImageLoader:
         
     @classmethod
     def DarwEntityImage(cls, screen: pygame.display, name, x_cord, y_cord, rotation_angle=0):
-        #TODO optimise it
-        image_rect = cls.names_of_entitysto_cords[name]
-        entity_image = cls._MOBS_ASSET.subsurface(image_rect)
+        """
+            Draws ONLY the Entity (from _MOBS_ASSET) on the screen. 
+    
+            @param rotation_angle: The rotation angle in degrees (not radians).
+                                Positive values (+) rotate left (counter-clockwise),
+                                and negative values (-) rotate right (clockwise).
+            The rotation_angle is static and always calculated relative to angle 0, 
+            regardless of the previous angle.
+        """
+        if rotation_angle != 0:            
+            screen.blit(pygame.transform.rotate(cls.images[name], rotation_angle), (x_cord, y_cord))
+        else:
+            screen.blit(cls.images[name], (x_cord, y_cord))
 
-        if rotation_angle != 0:
-            entity_image = pygame.transform.rotate(entity_image, rotation_angle)
-
-        rotated_rect = entity_image.get_rect()
-
-        rotated_rect.center = (x_cord, y_cord)
-
-        screen.blit(entity_image, rotated_rect.topleft)
     def DrawSceneryImage(self,x_cord,y_cord,wight,height):
         pygame.sprite.Sprite.__init__(self)
         self.image= pygame.Surface([wight,height]) #placeholder for Pixel x and y 

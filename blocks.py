@@ -71,41 +71,47 @@ class PhysicsCollider(ABC):
         collisions = self.CollisionTest(tiles)
         self.rect.y += self.movement_vector[1]
         
-        for obj in collisions:
-            tile = obj.rect 
+        while collisions != []:
+            tile = collisions[0].rect 
             if self.movement_vector[0] > 0:
-                if self.movement_strength <= obj.movement_strength:
+                if self.movement_strength <= collisions[0].movement_strength:
                     self.rect.right = tile.left
                     self.SetCordsToRectPosition()
                 else:
-                    obj.rect.left = self.rect.right 
-                    obj.SetCordsToRectPosition()
+                    collisions[0].rect.left = self.rect.right 
+                    collisions[0].SetCordsToRectPosition()
             elif self.movement_vector[0] < 0:
-                if self.movement_strength <= obj.movement_strength:
+                if self.movement_strength <= collisions[0].movement_strength:
                     self.rect.left = tile.right
                     self.SetCordsToRectPosition()
                 else:
-                    obj.rect.right = self.rect.left 
-                    obj.SetCordsToRectPosition()
+                    collisions[0].rect.right = self.rect.left 
+                    collisions[0].SetCordsToRectPosition()
+            
+            self.rect.y -= self.movement_vector[1]
+            collisions = self.CollisionTest(tiles)
+            self.rect.y += self.movement_vector[1]
         
         collisions = self.CollisionTest(tiles)
         
-        for obj in collisions:
-            tile = obj.rect 
+        while collisions != []:
+            tile = collisions[0].rect
             if self.movement_vector[1] > 0:
-                if self.movement_strength <= obj.movement_strength:
+                if self.movement_strength <= collisions[0].movement_strength:
                     self.rect.bottom = tile.top
                     self.SetCordsToRectPosition()
                 else:
-                    obj.rect.top = self.rect.bottom 
-                    obj.SetCordsToRectPosition()
+                    collisions[0].rect.top = self.rect.bottom 
+                    collisions[0].SetCordsToRectPosition()
             elif self.movement_vector[1] < 0:
-                if self.movement_strength <= obj.movement_strength:
+                if self.movement_strength <= collisions[0].movement_strength:
                     self.rect.top = tile.bottom
                     self.SetCordsToRectPosition()
                 else:
-                    obj.rect.bottom = self.rect.top 
-                    obj.SetCordsToRectPosition()
+                    collisions[0].rect.bottom = self.rect.top 
+                    collisions[0].SetCordsToRectPosition()
+            
+            collisions = self.CollisionTest(tiles)
         
         self.rect.x = self.x_cord
         self.rect.y = self.y_cord

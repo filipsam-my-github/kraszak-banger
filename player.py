@@ -36,7 +36,7 @@ class Player(PhysicsCollider):
         super().__init__(movement_strength=30)
     
     def SpeedUpdate(self):
-        return self.ROOT_SPEED + self.speed_bonuses * self.speed_multiplier
+        return (self.ROOT_SPEED + self.speed_bonuses) * self.speed_multiplier
 
     def Tick(self, keys, dt):
         """

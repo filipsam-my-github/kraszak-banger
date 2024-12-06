@@ -55,8 +55,10 @@ def Main():
     """
     
     clock = pygame.time.Clock()
-    player = Player(100,400,3)
-    blocks = [WoodenBox(100,300), GoldenBox(100,200),  HeavyGoldenBox(200,200), SteelBox(300,300), HeavyWoodenBox(200,300)]
+    player = Player(100,300,3)
+    blocks = [WoodenBox(400,50), GoldenBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
+    for i in range(12):
+        blocks.append(HeavyGoldenBox(i*64,400))
     player.PickAnItem(Sword("wooden_sword", (0,0)))
     player.item.Swing()
     items = []
