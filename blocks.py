@@ -52,12 +52,10 @@ class PhysicsCollider(ABC):
         return collisions
     
     def SetCordsToRectPosition(self):
-        print(self.movement_vector)
         if int(self.x_cord) != self.rect.x:
             self.movement_vector[0] = self.rect.x - self.x_cord 
         if int(self.y_cord) != self.rect.y:
             self.movement_vector[1] =  self.rect.y - self.y_cord
-        print(self.movement_vector)
         
         self.x_cord = self.rect.x
         self.y_cord = self.rect.y
@@ -130,9 +128,13 @@ class Block(PhysicsCollider):
                          movement_strength = movement_strength)
         self.image_name = image_name
     
-    def Draw(self, screen):
-        print(self.x_cord, self.y_cord)
-        ImageLoader.DarwEntityImage(screen,self.image_name, self.x_cord, self.y_cord)
+    def Draw(self, screen, x_cord = None, y_cord = None):
+        if x_cord == None:
+            x_cord = self.x_cord
+        if y_cord == None:
+            y_cord = self.y_cord
+            
+        ImageLoader.DarwEntityImage(screen,self.image_name, x_cord, y_cord)
 
 
 class WoodenBox(Block):

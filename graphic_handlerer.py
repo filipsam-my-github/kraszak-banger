@@ -1,6 +1,7 @@
 import pygame
 import player
 from items import Sword
+from math import ceil
 
 class ImageLoader:
     """
@@ -10,7 +11,10 @@ class ImageLoader:
         usage of this module to ensure proper functionality.
     """
     _SCALE = 4
-    _STANDARD_SIZE_OF_IMAGA = 16 * _SCALE
+    _standard_size_of_image_height = 16 * _SCALE
+    _standard_size_of_image_width = 16 * _SCALE
+    _big_image_scale_height = _SCALE
+    _big_image_scale_width = _SCALE
 
     _MOBS_ASSET = None
     _MAP_ASSET = None
@@ -23,35 +27,35 @@ class ImageLoader:
             Loads the essential images required for running any other methods.
         """
         cls._MOBS_ASSET = pygame.image.load("mob_animation/Atlas.png")
-        cls._MOBS_ASSET = pygame.transform.scale(cls._MOBS_ASSET, (cls._MOBS_ASSET.get_width() * cls._SCALE, cls._MOBS_ASSET.get_height() * cls._SCALE))
+        cls._MOBS_ASSET = pygame.transform.scale(cls._MOBS_ASSET, (cls._MOBS_ASSET.get_width() * cls._big_image_scale_width, cls._MOBS_ASSET.get_height() * cls._big_image_scale_height))
         cls._MOBS_ASSET.convert_alpha()
 
         cls._MAP_ASSET = pygame.image.load("mob_animation/tilemap.png")
-        cls._MAP_ASSET = pygame.transform.scale(cls._MAP_ASSET, (cls._MAP_ASSET.get_width() * cls._SCALE, cls._MAP_ASSET.get_height() * cls._SCALE))
+        cls._MAP_ASSET = pygame.transform.scale(cls._MAP_ASSET, (cls._MAP_ASSET.get_width() * cls._big_image_scale_width, cls._MAP_ASSET.get_height() * cls._big_image_scale_height))
         cls._MAP_ASSET.convert_alpha()
 
         cls.images = {}
 
         for i in range(7):
-            cls.images[f"player{i}"] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._STANDARD_SIZE_OF_IMAGA, 0, cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA)).copy()
+            cls.images[f"player{i}"] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, 0, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
 
         _mobs_names_in_order = ["zombiee", "skeleton", "dark_knight", "meth_man", "cyclop",
                                 "blue_bat", "green_bat", "cyan_bat", "red_bat"]
 
         for i, name in enumerate(_mobs_names_in_order):
-            cls.images[name] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA * 1, cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA)).copy()
+            cls.images[name] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, cls._standard_size_of_image_height * 1, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
 
         _weapons_names_in_order = ["wooden_sword", "simple_sword", "bulk_sword", "x_sword", "mace-sword",
                                    "saber", "tanto", "big_knife"]
 
         for i, name in enumerate(_weapons_names_in_order):
-            cls.images[name] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA * 2, cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA)).copy()
+            cls.images[name] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, cls._standard_size_of_image_height * 2, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
 
         _foods_names_in_order = ["chicken_wing", "apple", "water_mellon_slice", "fish", "asparagus",
                                  "chary", "cheese", "cucumber"]
 
         for i, name in enumerate(_foods_names_in_order):
-            cls.images[name] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA * 3, cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA)).copy()
+            cls.images[name] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, cls._standard_size_of_image_height * 3, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
 
         _potions_names_in_order = ["flask_of_healing", "flask_of_suffering",
                                    "bottle_of_healing", "bottle_of_suffering",
@@ -59,17 +63,31 @@ class ImageLoader:
                                    "fancy_flask_of_healing", "fancy_flask_of_suffering"]
 
         for i, name in enumerate(_potions_names_in_order):
-            cls.images[name] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA * 4, cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA)).copy()
+            cls.images[name] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, cls._standard_size_of_image_height * 4, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
 
         _boxs_names_in_order = ["wooden_box", "heavy_wooden_box",
                                 "steel_box", "heavy_steel_box",
                                 "golden_box", "heavy_golden_box", ]
 
         for i, name in enumerate(_boxs_names_in_order):
-            cls.images[name] = cls._MAP_ASSET.subsurface(pygame.Rect(i * cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA * 5, cls._STANDARD_SIZE_OF_IMAGA, cls._STANDARD_SIZE_OF_IMAGA)).copy()
+            cls.images[name] = cls._MAP_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, cls._standard_size_of_image_height * 5, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
 
         cls._MOBS_ASSET = None #free memory that is not needed anymore
         cls._MAP_ASSET = None
+    
+    @classmethod
+    def CheangSize(cls, New_proportion):
+        cls._standard_size_of_image_width = int(16 * cls._SCALE * New_proportion[0])
+        cls._standard_size_of_image_height = int(16 * cls._SCALE * New_proportion[1])
+        cls._big_image_scale_width = int(cls._standard_size_of_image_width/16)
+        cls._big_image_scale_height = int(cls._standard_size_of_image_height/16)
+        
+        print(cls._big_image_scale_width, cls._big_image_scale_height)
+        cls.init()
+    
+    @classmethod
+    def GetSize(cls):
+        return (cls._big_image_scale_width, cls._big_image_scale_height)
         
     @classmethod
     def DarwEntityImage(cls, screen: pygame.display, name, x_cord, y_cord, rotation_angle=0):
@@ -92,6 +110,7 @@ class ImageLoader:
         self.image= pygame.Surface([wight,height]) #placeholder for Pixel x and y 
         self.rect= self.image.get_rect()
         self.rect.topleft=()#requaired adisional X and Y; X and Y set only for that
+        
 class Animacions:
     def AttackAnimations(self,):
         for event in pygame.event.get():

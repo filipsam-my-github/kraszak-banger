@@ -75,9 +75,17 @@ class Player(PhysicsCollider):
         self.item = item
         item.picked()
     
-    def Draw(self, screen):
+    def Draw(self, screen, x_cord = None, y_cord = None):
+        if x_cord == None:
+            x_cord = self.x_cord
+        if y_cord == None:
+            y_cord = self.y_cord
+            
+        
         if Player.HITBOX:
             pygame.draw.rect(screen, (230,50,50), (self.rect.x, self.rect.y, self.rect.width, self.rect.height))
-        ImageLoader.DarwEntityImage(screen, self.image, self.x_cord, self.y_cord)
-        if self.item:
-            ImageLoader.DarwEntityImage(screen, self.item.image, self.x_cord+self.item.x_cord, self.y_cord+self.item.y_cord, self.item.ratation)
+            pygame.draw.rect(screen, (230,250,50), (144, 1000, self.rect.width, self.rect.height))
+        ImageLoader.DarwEntityImage(screen, self.image, x_cord, y_cord)
+        # if self.item:
+        #     ImageLoader.DarwEntityImage(screen, self.item.image, x_cord+self.item.x_cord*(x_cord/self.x_cord), y_cord+self.item.y_cord*(y_cord/self.y_cord), self.item.ratation)
+            

@@ -25,8 +25,12 @@ class Item(ABC):
     def GetCords(self):
         return (self.x_cord, self.y_cord)
 
-    def Draw(self, screen):
-        gh.ImageLoader.DarwEntityImage(screen, self.image, self.x_cord, self.y_cord)
+    def Draw(self, screen, x_cord = None, y_cord = None):
+        if not x_cord:
+            x_cord = self.x_cord
+        if not y_cord:
+            y_cord = self.y_cord
+        gh.ImageLoader.DarwEntityImage(screen, self.image, x_cord, y_cord)
 
 class Sword(Item):
 
