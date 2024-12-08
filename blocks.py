@@ -135,6 +135,9 @@ class Block(PhysicsCollider):
             y_cord = self.y_cord
             
         ImageLoader.DarwEntityImage(screen,self.image_name, x_cord, y_cord)
+    
+    def GetImageSize(self):
+        return ImageLoader.images[self.image_name].get_size()
 
 
 class WoodenBox(Block):

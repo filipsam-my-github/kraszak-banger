@@ -4,18 +4,30 @@ class Scean:
     ...
 
 class Camera:
-    def __init__(self, screen_size, x_cord, y_cord) -> None:
+    def __init__(self, oraginal_screen_size, x_cord, y_cord,) -> None:
         self.width = 1
         self.height = 1
         
         self.x_cord = x_cord
         self.y_cord = y_cord
         
-        self.screen_size = screen_size
+        self.oraginal_screen_size = oraginal_screen_size
+        
+        # self.Center(x_cord,y_cord)
+        
+        self.dead_zone = None
+        self.object = None
+        self.smoothnes = None
+    
     
     def ChangedScale(self, new_proportions):
         self.width = new_proportions[0]
         self.height = new_proportions[1]
+        
+    
+    def Center(self,x_cord,y_cord):
+        self.x_cord = x_cord - self.oraginal_screen_size[0]//2
+        self.y_cord = y_cord - self.oraginal_screen_size[1]//2
     
     def Draw(self,*args,screen):
         """
@@ -27,6 +39,30 @@ class Camera:
         for arg in args:
             if type(arg) == list:
                 for obj in arg:
-                    obj.Draw(screen, obj.x_cord*self.width -self.x_cord*self.width, obj.y_cord*self.height-self.y_cord*self.height)
+                    if self.CheackIfInCamera(obj):
+                        obj.Draw(screen, obj.x_cord*self.width -self.x_cord*self.width, obj.y_cord*self.height-self.y_cord*self.height)
             else:
-                arg.Draw(screen, arg.x_cord*self.width-self.x_cord*self.width, arg.y_cord*self.height-self.y_cord*self.height)
+                if self.CheackIfInCamera(arg):
+                    arg.Draw(screen, arg.x_cord*self.width-self.x_cord*self.width, arg.y_cord*self.height-self.y_cord*self.height)
+    
+    
+    def Tick(self,dt):
+        """
+            camera moves to predeternate objects
+        """
+        if self.object != None:
+            ...
+    
+    def FollowObject(self,object, dead_zone:tuple[int,int,int,int], smoothnes:int):
+        """
+            defines what camera should follow
+        """
+        ...
+    
+    def CheackIfInCamera(self,obj):
+        _image_size = obj.GetImageSize()
+        if (obj.x_cord-self.x_cord) + _image_size[0] >= 0 and (obj.y_cord-self.y_cord) + _image_size[1] >= 0:
+            if obj.x_cord-self.x_cord <= self.oraginal_screen_size[0] and obj.y_cord-self.y_cord <= self.oraginal_screen_size[1]:
+                return True
+        return False
+            

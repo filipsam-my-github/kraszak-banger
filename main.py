@@ -81,14 +81,18 @@ def Main():
     blocks = [WoodenBox(400,50), GoldenBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
     for i in range(12):
         blocks.append(HeavyGoldenBox(i*64,400))
+    blocks.append(GoldenBox(-32,-32))
     blocks.append(HeavyGoldenBox(1,465))
-    blocks.append(HeavyGoldenBox(0,0))
+    
+
+    
     
     player.PickAnItem(Sword("wooden_sword", (0,0)))
     player.item.Swing()
     #player.Animacions.AttackAnimations() #<- wywyołać funkje attack animaciona
     items = []
     camera = Camera((640, 480),0,0)
+    
 
     while True:
         
@@ -108,6 +112,8 @@ def Main():
         player.Tick(keys,1/60)
         player.Colide(blocks)
         
+        
+        
         # camera.x_cord = player.x_cord + 240
         # camera.y_cord = player.y_cord - 300
         # camera.x_cord += 1
@@ -117,9 +123,10 @@ def Main():
             camera.y_cord -= 1
         if keys[pygame.K_RIGHT]:
             camera.x_cord += 1
-        if keys[pygame.K_LEFT]:
+        elif keys[pygame.K_LEFT]:
             camera.x_cord -= 1
         
+        camera.Center(player.x_cord+15,player.y_cord)
         
         camera.Draw(player,blocks,screen=screen)
         screen.blit(pygame.font.Font.render(pygame.font.SysFont("arial",40),f"x:{(camera.x_cord)},y:{(camera.y_cord)}",True,(255, 255, 255)),(350,0))
