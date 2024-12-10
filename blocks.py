@@ -62,14 +62,15 @@ class PhysicsCollider(ABC):
     
     
     def Colide(self,tiles): # movement = [5,2]
+        suspected_tiles = self.CollisionTest(tiles)#optimalization
         self.rect.x -= self.movement_vector[0]
         self.rect.y -= self.movement_vector[1]
         
         self.rect.x += self.movement_vector[0]
-        collisions = self.CollisionTest(tiles)
+        collisions = self.CollisionTest(suspected_tiles)
         self.rect.y += self.movement_vector[1]
         
-        while collisions != []:
+        for i in collisions:
             tile = collisions[0].rect 
             if self.movement_vector[0] > 0:
                 if self.movement_strength <= collisions[0].movement_strength:
@@ -87,12 +88,12 @@ class PhysicsCollider(ABC):
                     collisions[0].SetCordsToRectPosition()
             
             self.rect.y -= self.movement_vector[1]
-            collisions = self.CollisionTest(tiles)
+            collisions = self.CollisionTest(suspected_tiles)
             self.rect.y += self.movement_vector[1]
         
-        collisions = self.CollisionTest(tiles)
+        collisions = self.CollisionTest(suspected_tiles)
         
-        while collisions != []:
+        for i in collisions:
             tile = collisions[0].rect
             if self.movement_vector[1] > 0:
                 if self.movement_strength <= collisions[0].movement_strength:
@@ -109,7 +110,7 @@ class PhysicsCollider(ABC):
                     collisions[0].rect.bottom = self.rect.top 
                     collisions[0].SetCordsToRectPosition()
             
-            collisions = self.CollisionTest(tiles)
+            collisions = self.CollisionTest(suspected_tiles)
         
         self.rect.x = self.x_cord
         self.rect.y = self.y_cord
