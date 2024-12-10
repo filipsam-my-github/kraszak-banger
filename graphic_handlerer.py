@@ -105,6 +105,10 @@ class ImageLoader:
         else:
             screen.blit(cls.images[name], (x_cord, y_cord))
 
+    @classmethod
+    def GetScale(cls):
+        return cls._SCALE
+    
     def DrawSceneryImage(self,x_cord,y_cord,wight,height):
         pygame.sprite.Sprite.__init__(self)
         self.image= pygame.Surface([wight,height]) #placeholder for Pixel x and y 

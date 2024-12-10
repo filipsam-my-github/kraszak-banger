@@ -17,7 +17,7 @@ class Player(PhysicsCollider):
     WIDTH = 20
     HITBOX = True
     
-    HACKS = False
+    HACKS = True
     
     
     def __init__(self, cord_x, cord_y, skin_number) -> object:
@@ -31,7 +31,10 @@ class Player(PhysicsCollider):
         self.x_cord = cord_x
         self.y_cord = cord_y
         self.movement_vector = [0,0]
-        self.rect = pygame.Rect(cord_x, cord_y, ImageLoader.images[self.image_name].get_width(), ImageLoader.images[self.image_name].get_width())
+        self.rect = pygame.Rect(cord_x, cord_y, 7*ImageLoader.GetScale(), 13*ImageLoader.GetScale())
+
+        self.skin_x = -ImageLoader.GetScale()*5
+        self.skin_y = -ImageLoader.GetScale()*3
 
         self.item = None
 
@@ -57,6 +60,8 @@ class Player(PhysicsCollider):
         if keys_down == 2:
             diagonal_multiplier = sqrt(self.entity_speed*dt)/(self.entity_speed*dt)
 
+         
+            
         if keys[pygame.K_w]:
             self.y_cord -= self.entity_speed*dt*diagonal_multiplier
             self.movement_vector[1] = -self.entity_speed*dt*diagonal_multiplier
@@ -72,8 +77,8 @@ class Player(PhysicsCollider):
                 self.y_cord += self.entity_speed*dt*diagonal_multiplier
                 self.movement_vector[1] = self.entity_speed*dt*diagonal_multiplier
         else:
-            self.movement_vector[1] += 1
-            self.y_cord += self.movement_vector[1]
+            #gravity
+            ...
         
         self.rect.x = self.x_cord
         self.rect.y = self.y_cord
@@ -89,10 +94,10 @@ class Player(PhysicsCollider):
             y_cord = self.y_cord
             
         
+        
+        ImageLoader.DarwEntityImage(screen, self.image_name, x_cord + self.skin_x, y_cord + self.skin_y)
         if Player.HITBOX:
-            pygame.draw.rect(screen, (230,50,50), (self.rect.x, self.rect.y, self.rect.width, self.rect.height))
-            pygame.draw.rect(screen, (230,250,50), (144, 1000, self.rect.width, self.rect.height))
-        ImageLoader.DarwEntityImage(screen, self.image_name, x_cord, y_cord)
+            pygame.draw.rect(screen, (230,50,50), (x_cord, y_cord, self.rect.width, self.rect.height),width=2)
         # if self.item:
         #     ImageLoader.DarwEntityImage(screen, self.item.image, x_cord+self.item.x_cord*(x_cord/self.x_cord), y_cord+self.item.y_cord*(y_cord/self.y_cord), self.item.ratation)
     
