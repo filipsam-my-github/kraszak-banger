@@ -71,6 +71,9 @@ class PhysicsCollider(ABC):
         self.rect.y += self.movement_vector[1]
         
         for i in collisions:
+            if collisions == []:
+                break
+            
             tile = collisions[0].rect 
             if self.movement_vector[0] > 0:
                 if self.movement_strength <= collisions[0].movement_strength:
@@ -94,6 +97,9 @@ class PhysicsCollider(ABC):
         collisions = self.CollisionTest(suspected_tiles)
         
         for i in collisions:
+            if collisions == []:
+                break
+            
             tile = collisions[0].rect
             if self.movement_vector[1] > 0:
                 if self.movement_strength <= collisions[0].movement_strength:

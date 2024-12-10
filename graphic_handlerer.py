@@ -113,8 +113,7 @@ class ImageLoader:
         pygame.sprite.Sprite.__init__(self)
         self.image= pygame.Surface([wight,height]) #placeholder for Pixel x and y 
         self.rect= self.image.get_rect()
-        self.rect.topleft=()#requaired adisional X and Y; X and Y set only for that
-        
+        self.rect.topleft=()#requaired adisional X and Y; X and Y set only for that#
 class Animacions:
     def AttackAnimations(self,):
         for event in pygame.event.get():
