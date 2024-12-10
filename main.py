@@ -15,12 +15,11 @@ from player import Player
 from graphic_handlerer import ImageLoader,Animacions
 from items import *
 from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox
-from pyautogui import size as screen_size
 from camera import Camera
 
-screen = pygame.display.set_mode((640, 480))
-MONITOR_SIZE = screen_size()
+MONITOR_SIZE = (pygame.display.Info().current_w, pygame.display.Info().current_h)#works when screen hasn't been defnie
 MONITOR_PROPORTIONS = [MONITOR_SIZE[0]/640, MONITOR_SIZE[1]/480]
+screen = pygame.display.set_mode((640, 480))
 print(MONITOR_SIZE)
 print(MONITOR_PROPORTIONS)
 full_screen = False
