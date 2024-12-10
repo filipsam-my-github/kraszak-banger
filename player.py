@@ -12,12 +12,12 @@ class Player(PhysicsCollider):
         
     """
     
-    GRAVITY = 50
+    GRAVITY = 250
     HIEGHT = 50
     WIDTH = 20
     HITBOX = True
     
-    HACKS = True
+    HACKS = False
     
     
     def __init__(self, cord_x, cord_y, skin_number) -> object:
@@ -51,7 +51,7 @@ class Player(PhysicsCollider):
             regardless of the frame rate.
         """
         diagonal_multiplier = 1
-        self.movement_vector = [0,0] 
+        self.movement_vector[0] = 0 
 
         keys_down = 0
         for i in [keys[pygame.K_w], keys[pygame.K_d], keys[pygame.K_a]]:
@@ -61,10 +61,9 @@ class Player(PhysicsCollider):
             diagonal_multiplier = sqrt(self.entity_speed*dt)/(self.entity_speed*dt)
 
          
-            
-        if keys[pygame.K_w]:
-            self.y_cord -= self.entity_speed*dt*diagonal_multiplier
-            self.movement_vector[1] = -self.entity_speed*dt*diagonal_multiplier
+        if keys[pygame.K_w] and self.touched_left_right_top_bot[3] > 0:
+            self.movement_vector[1] = -250       
+            self.touched_left_right_top_bot[3] = 0     
         if keys[pygame.K_d]:
             self.x_cord += self.entity_speed*dt*diagonal_multiplier
             self.movement_vector[0] = self.entity_speed*dt*diagonal_multiplier
@@ -73,12 +72,17 @@ class Player(PhysicsCollider):
             self.movement_vector[0] = -self.entity_speed*dt*diagonal_multiplier
         
         if Player.HACKS:
+            if keys[pygame.K_w]:
+                self.y_cord -= self.entity_speed*dt*diagonal_multiplier
+                self.movement_vector[1] = self.entity_speed*dt*diagonal_multiplier
             if keys[pygame.K_s]:
                 self.y_cord += self.entity_speed*dt*diagonal_multiplier
                 self.movement_vector[1] = self.entity_speed*dt*diagonal_multiplier
-        else:
-            #gravity
-            ...
+        elif self.touched_left_right_top_bot[3] == 0:
+            self.y_cord += self.movement_vector[1]*dt
+            self.movement_vector[1] += Player.GRAVITY*dt
+        elif self.movement_vector[1] < 0:
+            self.movement_vector[1] = 0
         
         self.rect.x = self.x_cord
         self.rect.y = self.y_cord

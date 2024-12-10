@@ -32,7 +32,8 @@ class PhysicsCollider(ABC):
             self.movement_vector = movement_vector
         if movement_strength != None:
             self.movement_strength = movement_strength
-        
+        self.touched_left_right_top_bot = [0, 0, 0, 0]
+    
         if not hasattr(self, 'rect'):
             raise NotImplementedError(f"{self.__class__.__name__} must define 'self.rect' in __init__.")
         if not hasattr(self, 'movement_vector'):
@@ -43,6 +44,8 @@ class PhysicsCollider(ABC):
             raise NotImplementedError(f"{self.__class__.__name__} must define 'self.y_cord' in __init__.")
         if not hasattr(self, 'movement_strength'):
             raise NotImplementedError(f"{self.__class__.__name__} must define 'self.movement_strength' in __init__.")
+        if not hasattr(self, 'touched_left_right_top_bot'):
+            raise NotImplementedError(f"{self.__class__.__name__} must define 'self.touched_left_right_top_bot' in __init__.")
         
     def CollisionTest(self,tiles):
         collisions = []
@@ -82,6 +85,9 @@ class PhysicsCollider(ABC):
                 else:
                     collisions[0].rect.left = self.rect.right 
                     collisions[0].SetCordsToRectPosition()
+                self.touched_left_right_top_bot[1] = collisions[0].movement_strength
+                collisions[0].touched_left_right_top_bot[0] = self.movement_strength
+
             elif self.movement_vector[0] < 0:
                 if self.movement_strength <= collisions[0].movement_strength:
                     self.rect.left = tile.right
@@ -89,6 +95,8 @@ class PhysicsCollider(ABC):
                 else:
                     collisions[0].rect.right = self.rect.left 
                     collisions[0].SetCordsToRectPosition()
+                self.touched_left_right_top_bot[0] = collisions[0].movement_strength
+                collisions[0].touched_left_right_top_bot[1] = self.movement_strength
             
             self.rect.y -= self.movement_vector[1]
             collisions = self.CollisionTest(suspected_tiles)
@@ -108,6 +116,9 @@ class PhysicsCollider(ABC):
                 else:
                     collisions[0].rect.top = self.rect.bottom 
                     collisions[0].SetCordsToRectPosition()
+                self.touched_left_right_top_bot[3] = collisions[0].movement_strength
+                collisions[0].touched_left_right_top_bot[2] = self.movement_strength
+                
             elif self.movement_vector[1] < 0:
                 if self.movement_strength <= collisions[0].movement_strength:
                     self.rect.top = tile.bottom
@@ -115,7 +126,9 @@ class PhysicsCollider(ABC):
                 else:
                     collisions[0].rect.bottom = self.rect.top 
                     collisions[0].SetCordsToRectPosition()
-            
+                self.touched_left_right_top_bot[3] = collisions[0].movement_strength
+                collisions[0].touched_left_right_top_bot[2] = self.movement_strength
+                
             collisions = self.CollisionTest(suspected_tiles)
         
         self.rect.x = self.x_cord

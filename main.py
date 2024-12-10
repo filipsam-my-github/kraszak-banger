@@ -6,6 +6,11 @@
     @method HandelPygameEvents
     @method Main
     are esential to run the program
+    
+    Game idea
+    1. Plot unclear yet
+    2. It's a platformer game
+    3. Probably relaxing orientated game
 """
 
 
@@ -15,11 +20,12 @@ from player import Player
 from graphic_handlerer import ImageLoader,Animacions
 from items import *
 from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox
+from pyautogui import size as screen_size
 from camera import Camera
 
-MONITOR_SIZE = (pygame.display.Info().current_w, pygame.display.Info().current_h)#works when screen hasn't been defnie
-MONITOR_PROPORTIONS = [MONITOR_SIZE[0]/640, MONITOR_SIZE[1]/480]
 screen = pygame.display.set_mode((640, 480))
+MONITOR_SIZE = screen_size()
+MONITOR_PROPORTIONS = [MONITOR_SIZE[0]/640, MONITOR_SIZE[1]/480]
 print(MONITOR_SIZE)
 print(MONITOR_PROPORTIONS)
 full_screen = False
@@ -37,15 +43,17 @@ def InitaliezProgram():
     pygame.mixer.init()
     ImageLoader.init()
 
-def HandelPygameEvents(camera:Camera):
+def HandelPygameEvents(camera:Camera, keys, dt,*args):
     global full_screen
     global screen
     """
     Handle pygame events and key events
     It is likely that lines like
     player.Tick(keys,1/60)
-    will be moved belove this for 
-    and sometimes into this for
+    
+    because of dt mostly imputing hadlying st
+    
+    
     """
     
     for event in pygame.event.get():
@@ -63,11 +71,14 @@ def HandelPygameEvents(camera:Camera):
                     screen = pygame.display.set_mode((640, 480), pygame.RESIZABLE)
                     ImageLoader.CheangSize([1,1])
                     camera.ChangedScale([1,1])
-
-
-""" for event in pygame.event.get():
-        if event.type== pygame.event.set_keyboard_grab():  #<-zapisac zmienna ktora rozumie AltTab; nyga to czyta nawet lepkie re-work ASAP
-            sys.exit()"""
+    
+    
+    for arg in args:
+        if arg == list or arg == tuple:
+            for obj in arg:
+                obj.Tick(keys,dt)
+        else:
+            arg.Tick(keys, dt)
 
 def Main():
     """
@@ -98,9 +109,13 @@ def Main():
         clock.tick(60)
 
         keys = pygame.key.get_pressed()
-        HandelPygameEvents(camera)
 
         screen.fill((16.5,15.7,25.1))
+
+        HandelPygameEvents(camera,keys,1/60,player)
+
+
+        #COLISIONS
         
         for block in blocks:
             for other_block in blocks:
@@ -108,22 +123,9 @@ def Main():
                     continue
                 block.Colide([other_block])
 
-        player.Tick(keys,1/60)
         player.Colide(blocks)
         
         
-        
-        # camera.x_cord = player.x_cord + 240
-        # camera.y_cord = player.y_cord - 300
-        # camera.x_cord += 1
-        if keys[pygame.K_DOWN]:
-            camera.y_cord += 1
-        if keys[pygame.K_UP]:
-            camera.y_cord -= 1
-        if keys[pygame.K_RIGHT]:
-            camera.x_cord += 1
-        elif keys[pygame.K_LEFT]:
-            camera.x_cord -= 1
         
         camera.Center(player.x_cord+15,player.y_cord)
         
