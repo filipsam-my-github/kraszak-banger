@@ -1,6 +1,4 @@
 import pygame
-import player
-from items import Sword
 from math import ceil
 
 class ImageLoader:
@@ -26,6 +24,14 @@ class ImageLoader:
         """
             Loads the essential images required for running any other methods.
         """
+        pygame.init()
+        if not pygame.display.get_surface():
+            raise RuntimeError(
+                "A Pygame display has not been initialized. "
+                "Please call pygame.display.set_mode((width, height)) before ImageLoader.init()."
+            )
+
+        
         cls._MOBS_ASSET = pygame.image.load("mob_animation/Atlas.png")
         cls._MOBS_ASSET = pygame.transform.scale(cls._MOBS_ASSET, (cls._MOBS_ASSET.get_width() * cls._big_image_scale_width, cls._MOBS_ASSET.get_height() * cls._big_image_scale_height))
         cls._MOBS_ASSET.convert_alpha()
@@ -114,12 +120,12 @@ class ImageLoader:
         self.image= pygame.Surface([wight,height]) #placeholder for Pixel x and y 
         self.rect= self.image.get_rect()
         self.rect.topleft=()#requaired adisional X and Y; X and Y set only for that#
-class Animacions:
-    def AttackAnimations(self,):
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN():
-                if event.key == pygame.K_RIGHT:
-                    player.Player.item.Swing(True)
-            elif event.type == pygame.KEYUP():
-                if event.key == pygame.K_RIGHT:
-                    player.Player.item.Swing(False)
+# class Animacions:
+#     def AttackAnimations(self,):
+#         for event in pygame.event.get():
+#             if event.type == pygame.KEYDOWN():
+#                 if event.key == pygame.K_RIGHT:
+#                     player.Player.item.Swing(True)
+#             elif event.type == pygame.KEYUP():
+#                 if event.key == pygame.K_RIGHT:
+#                     player.Player.item.Swing(False)

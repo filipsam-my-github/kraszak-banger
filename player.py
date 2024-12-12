@@ -81,8 +81,9 @@ class Player(PhysicsCollider):
         elif self.touched_left_right_top_bot[3] == 0:
             self.y_cord += self.movement_vector[1]*dt
             self.movement_vector[1] += Player.GRAVITY*dt
-        elif self.movement_vector[1] < 0:
-            self.movement_vector[1] = 0
+        else:
+            self.movement_vector[1] = 4
+            self.y_cord += self.movement_vector[1]*dt
         
         self.rect.x = self.x_cord
         self.rect.y = self.y_cord
@@ -102,8 +103,8 @@ class Player(PhysicsCollider):
         ImageLoader.DarwEntityImage(screen, self.image_name, x_cord + self.skin_x, y_cord + self.skin_y)
         if Player.HITBOX:
             pygame.draw.rect(screen, (230,50,50), (x_cord, y_cord, self.rect.width, self.rect.height),width=2)
-        # if self.item:
-        #     ImageLoader.DarwEntityImage(screen, self.item.image, x_cord+self.item.x_cord*(x_cord/self.x_cord), y_cord+self.item.y_cord*(y_cord/self.y_cord), self.item.ratation)
+        if self.item:
+            ImageLoader.DarwEntityImage(screen, self.item.image, x_cord+self.item.x_cord, y_cord+self.item.y_cord, self.item.ratation)
     
     def GetImageSize(self):
         return ImageLoader.images[self.image_name].get_size()
