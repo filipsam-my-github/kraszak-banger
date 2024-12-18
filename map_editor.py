@@ -36,10 +36,9 @@ scroll_speed = 1
 
 
 #store tiles in a list
-img_list = [ImageLoader.images["heavy_golden_box"]]
+img_list = []
 for image in ImageLoader.images.keys():
-    if image == "heavy_golden_box":
-        continue
+
     img_list.append(ImageLoader.images[image])
 
 save_img = pygame.image.load('mob_animation/save_btn.png').convert_alpha()
@@ -97,12 +96,12 @@ def DrawWorld():
 save_button = button.Button(SCREEN_WIDTH // 2, SCREEN_HEIGHT + LOWER_MARGIN - 50, save_img, 1)
 load_button = button.Button(SCREEN_WIDTH // 2 + 200, SCREEN_HEIGHT + LOWER_MARGIN - 50, load_img, 1)
 #make a button list
-button_list = []
+entities_to_place = []
 button_col = 0
 button_row = 0
 for i in range(len(img_list)):
 	tile_button = button.Button(SCREEN_WIDTH + (75 * button_col) + 50, 75 * button_row + 50, img_list[i], 1)
-	button_list.append(tile_button)
+	entities_to_place.append(tile_button)
 	button_col += 1
 	if button_col == 3:
 		button_row += 1
@@ -123,24 +122,26 @@ while run:
 
 	#save and load data
 	if save_button.Draw(screen):
-		#save level data
-		with open(f'level{level}_data.csv', 'w', newline='') as csvfile:
-			writer = csv.writer(csvfile, delimiter = ',')
-			for row in world_data:
-				writer.writerow(row)
+		...		
+  #save level data
+		# with open(f'level{level}_data.csv', 'w', newline='') as csvfile:
+		# 	writer = csv.writer(csvfile, delimiter = ',')
+		# 	for row in world_data:
+		# 		writer.writerow(row)
 		#alternative pickle method
 		#pickle_out = open(f'level{level}_data', 'wb')
 		#pickle.dump(world_data, pickle_out)
 		#pickle_out.close()
 	if load_button.Draw(screen):
+		...
 		#load in level data
 		#reset scroll back to the start of the level
-		scroll = 0
-		with open(f'level{level}_data.csv', newline='') as csvfile:
-			reader = csv.reader(csvfile, delimiter = ',')
-			for x, row in enumerate(reader):
-				for y, tile in enumerate(row):
-					world_data[x][y] = int(tile)
+		# scroll = 0
+		# with open(f'level{level}_data.csv', newline='') as csvfile:
+		# 	reader = csv.reader(csvfile, delimiter = ',')
+		# 	for x, row in enumerate(reader):
+		# 		for y, tile in enumerate(row):
+		# 			world_data[x][y] = int(tile)
 		#alternative pickle method
 		#world_data = []
 		#pickle_in = open(f'level{level}_data', 'rb')
@@ -152,12 +153,13 @@ while run:
 
 	#choose a tile
 	button_count = 0
-	for button_count, i in enumerate(button_list):
+	for button_count, i in enumerate(entities_to_place):
 		if i.Draw(screen):
 			current_tile = button_count
+	
 
 	#highlight the selected tile
-	pygame.draw.rect(screen, RED, button_list[current_tile].rect, 3)
+	pygame.draw.rect(screen, RED, entities_to_place[current_tile].rect, 3)
 
 	#scroll the map
 	if scroll_left == True and scroll > 0:
@@ -184,8 +186,14 @@ while run:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			run = False
+		if event.type == pygame.MOUSEWHEEL:
+			for i in entities_to_place:
+				i.rect.y -= event.y*10
 		#keyboard presses
 		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.MOUSEBUTTONUP:
+				for i in entities_to_place:
+					i.rect.y += 10
 			if event.key == pygame.K_UP:
 				level += 1
 			if event.key == pygame.K_DOWN and level > 0:
