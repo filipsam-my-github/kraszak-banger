@@ -32,7 +32,7 @@ class PhysicsCollider(ABC):
             self.movement_vector = movement_vector
         if movement_strength != None:
             self.movement_strength = movement_strength
-        self.touched_left_right_top_bot = [0, 0, 0, 0]
+        self.collision_types = {'top': 0, 'bottom': 0, 'right': 0, 'left': 0}
     
         if not hasattr(self, 'rect'):
             raise NotImplementedError(f"{self.__class__.__name__} must define 'self.rect' in __init__.")
@@ -44,100 +44,160 @@ class PhysicsCollider(ABC):
             raise NotImplementedError(f"{self.__class__.__name__} must define 'self.y_cord' in __init__.")
         if not hasattr(self, 'movement_strength'):
             raise NotImplementedError(f"{self.__class__.__name__} must define 'self.movement_strength' in __init__.")
-        if not hasattr(self, 'touched_left_right_top_bot'):
-            raise NotImplementedError(f"{self.__class__.__name__} must define 'self.touched_left_right_top_bot' in __init__.")
+        if not hasattr(self, 'collision_types'):
+            raise NotImplementedError(f"{self.__class__.__name__} must define 'self.collision_types' in __init__.")
         
     def CollisionTest(self,tiles):
         collisions = []
         for tile in tiles:
             if self.rect.colliderect(tile.rect):
-                collisions.append(tile)
+                if tile == self:
+                    print(tile,self)
+                    print(1)
+                    pass
+                else:
+                    collisions.append(tile)
         return collisions
-    
-    def SetCordsToRectPosition(self):
+
+    def CreateVector(self):
+        self.movement_vector = [0,0]
         if int(self.x_cord) != self.rect.x:
             self.movement_vector[0] = self.rect.x - self.x_cord 
         if int(self.y_cord) != self.rect.y:
             self.movement_vector[1] =  self.rect.y - self.y_cord
         
+    
+    def SetCordsToRectPosition(self):
+        
         self.x_cord = self.rect.x
         self.y_cord = self.rect.y
     
+     
+    
     
     def Colide(self,tiles): # movement = [5,2]
-        suspected_tiles = self.CollisionTest(tiles)#optimalization
+        collision_types = {'top': 0, 'bottom': 0, 'right': 0, 'left': 0}
+        suspected_tiles = self.CollisionTest(tiles)
+
         self.rect.x -= self.movement_vector[0]
-        self.rect.y -= self.movement_vector[1]
+        self.rect.y -= self.movement_vector[1]   
         
         self.rect.x += self.movement_vector[0]
-        collisions = self.CollisionTest(suspected_tiles)
-        self.rect.y += self.movement_vector[1]
+        hit_list = self.CollisionTest(suspected_tiles)
         
-        for i in collisions:
-            if collisions == []:
-                break
-            
-            tile = collisions[0].rect 
+        for obj in hit_list:
+            tile = obj.rect
             if self.movement_vector[0] > 0:
-                if self.movement_strength <= collisions[0].movement_strength:
+                if max(self.movement_strength,self.collision_types["right"]) <= max(obj.movement_strength,obj.collision_types["right"]):
                     self.rect.right = tile.left
-                    self.SetCordsToRectPosition()
+                    collision_types["right"] = max(self.movement_strength,self.collision_types["right"],collision_types["right"])
+                    hit_list = self.CollisionTest(tiles)#here should be function that does all from here
+                    
+                    movement_vector = self.movement_vector.copy()
+                    if int(self.x_cord) != self.rect.x:
+                        movement_vector[0] = self.rect.x - self.x_cord 
+                    if int(self.y_cord) != self.rect.y:
+                        movement_vector[1] =  self.rect.y - self.y_cord
+                        
+                    for i in hit_list:
+                        i.movement_vector = [-movement_vector[0],movement_vector[1]]
+                        i.Colide([self])#to there
                 else:
-                    collisions[0].rect.left = self.rect.right 
-                    collisions[0].SetCordsToRectPosition()
-                self.touched_left_right_top_bot[1] = collisions[0].movement_strength
-                collisions[0].touched_left_right_top_bot[0] = self.movement_strength
-
+                    obj.rect.left = self.rect.right
+                    obj.collision_types["right"] = max(self.movement_strength,self.collision_types["right"],obj.collision_types["right"])
+                    obj.CreateVector()#here should be function that does all from here
+                    obj.SetCordsToRectPosition()
+                    tiles.append(self)
+                    obj.Colide(tiles)
+                    tiles.pop(-1)#to there
             elif self.movement_vector[0] < 0:
-                if self.movement_strength <= collisions[0].movement_strength:
+                if max(self.movement_strength,self.collision_types["left"]) <= max(obj.movement_strength,obj.collision_types["left"]):
                     self.rect.left = tile.right
-                    self.SetCordsToRectPosition()
+                    collision_types["left"] = max(self.movement_strength,self.collision_types["left"])
+                    hit_list = self.CollisionTest(tiles)
+                    
+                    movement_vector = self.movement_vector.copy()#here should be function that does all from here
+                    if int(self.x_cord) != self.rect.x:
+                        movement_vector[0] = self.rect.x - self.x_cord 
+                    if int(self.y_cord) != self.rect.y:
+                        movement_vector[1] =  self.rect.y - self.y_cord
+                    
+                    
+                    for i in hit_list:
+                        i.movement_vector = [-movement_vector[0],movement_vector[1]]
+                        i.Colide([self])#to there
                 else:
-                    collisions[0].rect.right = self.rect.left 
-                    collisions[0].SetCordsToRectPosition()
-                self.touched_left_right_top_bot[0] = collisions[0].movement_strength
-                collisions[0].touched_left_right_top_bot[1] = self.movement_strength
-            
-            self.rect.y -= self.movement_vector[1]
-            collisions = self.CollisionTest(suspected_tiles)
-            self.rect.y += self.movement_vector[1]
+                    obj.rect.right = self.rect.left
+                    obj.collision_types["left"] = max(self.movement_strength,self.collision_types["left"])
+                    obj.CreateVector()#here should be function that does all from here
+                    obj.SetCordsToRectPosition()
+                    tiles.append(self)
+                    obj.Colide(tiles)
+                    tiles.pop(-1)#to there
+                    
+        self.rect.y += self.movement_vector[1]
+        hit_list = self.CollisionTest(tiles)
         
-        collisions = self.CollisionTest(suspected_tiles)
-        
-        for i in collisions:
-            if collisions == []:
-                break
-            
-            tile = collisions[0].rect
+        for obj in hit_list:
+            tile = obj.rect
             if self.movement_vector[1] > 0:
-                if self.movement_strength <= collisions[0].movement_strength:
+                if max(self.movement_strength,self.collision_types["bottom"]) <= max(obj.movement_strength,obj.collision_types["bottom"]):
                     self.rect.bottom = tile.top
-                    self.SetCordsToRectPosition()
+                    collision_types["bottom"] = max(self.movement_strength,self.collision_types["bottom"],collision_types["bottom"])
+                    
+                    hit_list = self.CollisionTest(tiles)#here should be function that does all from here
+                    
+                    movement_vector = self.movement_vector.copy()
+                    if int(self.x_cord) != self.rect.x:
+                        movement_vector[0] = self.rect.x - self.x_cord 
+                    if int(self.y_cord) != self.rect.y:
+                        movement_vector[1] =  self.rect.y - self.y_cord
+                        
+                    for i in hit_list:
+                        i.movement_vector = [movement_vector[0],-movement_vector[1]]
+                        i.Colide([self])#to there
+                    
                 else:
-                    collisions[0].rect.top = self.rect.bottom 
-                    collisions[0].SetCordsToRectPosition()
-                self.touched_left_right_top_bot[3] = collisions[0].movement_strength
-                collisions[0].touched_left_right_top_bot[2] = self.movement_strength
+                    obj.rect.top = self.rect.bottom
+                    obj.collision_types["bottom"] = max(self.movement_strength,self.collision_types["bottom"],obj.collision_types["bottom"])
+                    obj.CreateVector()#here should be function that does all from here
+                    obj.SetCordsToRectPosition()
+                    tiles.append(self)
+                    obj.Colide(tiles)
+                    tiles.pop(-1)#to there
                 
             elif self.movement_vector[1] < 0:
-                if self.movement_strength <= collisions[0].movement_strength:
+                if max(self.movement_strength,self.collision_types["top"]) <= max(obj.movement_strength,obj.collision_types["top"]):
                     self.rect.top = tile.bottom
-                    self.SetCordsToRectPosition()
-                else:
-                    collisions[0].rect.bottom = self.rect.top 
-                    collisions[0].SetCordsToRectPosition()
-                self.touched_left_right_top_bot[3] = collisions[0].movement_strength
-                collisions[0].touched_left_right_top_bot[2] = self.movement_strength
+                    collision_types["top"] = max(self.movement_strength,self.collision_types["top"],collision_types["top"])
+                    
+                    hit_list = self.CollisionTest(tiles)#here should be function that does all from here
+                    
+                    movement_vector = self.movement_vector.copy()
+                    if int(self.x_cord) != self.rect.x:
+                        movement_vector[0] = self.rect.x - self.x_cord 
+                    if int(self.y_cord) != self.rect.y:
+                        movement_vector[1] =  self.rect.y - self.y_cord
+                        
+                    for i in hit_list:
+                        i.movement_vector = [movement_vector[0],-movement_vector[1]]
+                        i.Colide([self])#to there
                 
-            collisions = self.CollisionTest(suspected_tiles)
+                else:
+                    obj.rect.bottom = self.rect.top
+                    obj.collision_types["top"] = max(self.movement_strength,self.collision_types["top"],obj.collision_types["top"])
+                    obj.CreateVector()#here should be function that does all from here
+                    obj.SetCordsToRectPosition()
+                    tiles.append(self)
+                    obj.Colide(tiles)
+                    tiles.pop(-1)#to there
+
         
-        self.rect.x = self.x_cord
-        self.rect.y = self.y_cord
+        self.collision_types = collision_types
+        for i in self.collision_types.keys():
+            if self.collision_types[i]:
+                self.SetCordsToRectPosition()
         
-        for obj in collisions:
-            if self.movement_strength > obj.movement_strength:
-                obj.rect.x = obj.x_cord
-                obj.rect.y = obj.y_cord
 
 class Block(PhysicsCollider):
     def __init__(self, x_cord:int, y_cord:int, image_name, movement_strength):
@@ -155,7 +215,9 @@ class Block(PhysicsCollider):
             y_cord = self.y_cord
             
         ImageLoader.DarwEntityImage(screen,self.image_name, x_cord, y_cord)
-    
+
+        pygame.draw.rect(screen, (230,230,50), (x_cord, y_cord, self.rect.width, self.rect.height),width=2)
+        
     def GetImageSize(self):
         return ImageLoader.images[self.image_name].get_size()
 

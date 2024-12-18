@@ -17,13 +17,13 @@
 import pygame
 import sys
 from player import Player
-from graphic_handlerer import ImageLoader,Animacions
+from graphic_handlerer import ImageLoader
 from items import *
 from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox
 from pyautogui import size as screen_size
 from camera import Camera
 
-screen = pygame.display.set_mode((640, 480))
+screen = pygame.display.set_mode((640, 360))
 MONITOR_SIZE = screen_size()
 MONITOR_PROPORTIONS = [MONITOR_SIZE[0]/640, MONITOR_SIZE[1]/480]
 print(MONITOR_SIZE)
@@ -88,11 +88,31 @@ def Main():
     
     clock = pygame.time.Clock()
     player = Player(100,300,3)
-    blocks = [WoodenBox(400,50), GoldenBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
-    for i in range(12):
-        blocks.append(HeavyGoldenBox(i*64,400))
-    blocks.append(GoldenBox(-32,-32))
-    blocks.append(HeavyGoldenBox(1,465))
+    blocks = []#[WoodenBox(400,50), HeavySteelBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
+    # for i in range(12):
+    #     if i == 5:
+    #         continue
+    #     blocks.append(HeavyGoldenBox(i*64,400))
+    # blocks.append(GoldenBox(-32,-32))
+    # blocks.append(HeavyGoldenBox(1,465))
+    # blocks.append(HeavyGoldenBox(5*64,400-64))
+    # blocks.append(HeavyGoldenBox(8*64,400-64))
+
+    blocks.append(HeavyWoodenBox(500,150))
+    blocks.append(HeavySteelBox(600,150))
+
+    blocks.append(HeavyWoodenBox(200,150))
+    blocks.append(HeavySteelBox(300,150))
+    
+    blocks.append(HeavyGoldenBox(400,150))
+    
+    blocks.append(WoodenBox(400,250))
+    blocks.append(WoodenBox(400,350))
+    
+    blocks.append(WoodenBox(400,50))
+    blocks.append(WoodenBox(400,-50))
+    
+    
     
 
     
@@ -102,7 +122,7 @@ def Main():
     #player.Animacions.AttackAnimations() #<- wywyołać funkje attack animaciona
     items = []
     camera = Camera((640, 480),0,0)
-    
+    x=0
 
     while True:
         
@@ -117,21 +137,22 @@ def Main():
 
         #COLISIONS
         
-        for block in blocks:
-            for other_block in blocks:
-                if block == other_block:
-                    continue
-                block.Colide([other_block])
+        # for block in blocks:
+        #     for other_block in blocks:
+        #         if block == other_block:
+        #             continue
+        #         block.Colide([other_block])
 
         player.Colide(blocks)
         
         
         
-        camera.Center(player.x_cord+15,player.y_cord)
+        camera.Center(int(player.x_cord+15),int(player.y_cord))
         
         camera.Draw(player,blocks,screen=screen)
         screen.blit(pygame.font.Font.render(pygame.font.SysFont("arial",40),f"x:{(camera.x_cord)},y:{(camera.y_cord)}",True,(255, 255, 255)),(350,0))
         
+
 
         pygame.display.update()
     
@@ -139,4 +160,4 @@ def Main():
 
 if __name__ == "__main__":
     InitaliezProgram()
-    Main()
+    Main()#640,360  now 640, 480 -> 64,48
