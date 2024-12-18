@@ -143,7 +143,7 @@ def Main():
         #             continue
         #         block.Colide([other_block])
 
-        player.Colide(blocks)
+        player.Collide(blocks)
         
         
         

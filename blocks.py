@@ -72,10 +72,27 @@ class PhysicsCollider(ABC):
         self.x_cord = self.rect.x
         self.y_cord = self.rect.y
     
+    def TriggerCollideForObjWhichCollisedWithSelf(self,tiles,x=1,y=1):
+        hit_list = self.CollisionTest(tiles)
+                    
+        movement_vector = self.movement_vector.copy()
+        if int(self.x_cord) != self.rect.x:
+            movement_vector[0] = self.rect.x - self.x_cord 
+        if int(self.y_cord) != self.rect.y:
+            movement_vector[1] =  self.rect.y - self.y_cord
+            
+        for i in hit_list:
+            i.movement_vector = [x*movement_vector[0],y*movement_vector[1]]
+            i.Collide([self])
+    
+    def ProperlyTriggerCollideForObj(self,obj,tiles):
+        obj.CreateVector()
+        obj.SetCordsToRectPosition()
+        tiles.append(self)
+        obj.Collide(tiles)
+        tiles.pop(-1)
      
-    
-    
-    def Colide(self,tiles): # movement = [5,2]
+    def Collide(self,tiles): # movement = [5,2]
         collision_types = {'top': 0, 'bottom': 0, 'right': 0, 'left': 0}
         suspected_tiles = self.CollisionTest(tiles)
 
@@ -91,49 +108,23 @@ class PhysicsCollider(ABC):
                 if max(self.movement_strength,self.collision_types["right"]) <= max(obj.movement_strength,obj.collision_types["right"]):
                     self.rect.right = tile.left
                     collision_types["right"] = max(self.movement_strength,self.collision_types["right"],collision_types["right"])
-                    hit_list = self.CollisionTest(tiles)#here should be function that does all from here
+                    self.TriggerCollideForObjWhichCollisedWithSelf(tiles,x = -1)
                     
-                    movement_vector = self.movement_vector.copy()
-                    if int(self.x_cord) != self.rect.x:
-                        movement_vector[0] = self.rect.x - self.x_cord 
-                    if int(self.y_cord) != self.rect.y:
-                        movement_vector[1] =  self.rect.y - self.y_cord
-                        
-                    for i in hit_list:
-                        i.movement_vector = [-movement_vector[0],movement_vector[1]]
-                        i.Colide([self])#to there
                 else:
                     obj.rect.left = self.rect.right
                     obj.collision_types["right"] = max(self.movement_strength,self.collision_types["right"],obj.collision_types["right"])
-                    obj.CreateVector()#here should be function that does all from here
-                    obj.SetCordsToRectPosition()
-                    tiles.append(self)
-                    obj.Colide(tiles)
-                    tiles.pop(-1)#to there
+                    self.ProperlyTriggerCollideForObj(obj,tiles)
             elif self.movement_vector[0] < 0:
                 if max(self.movement_strength,self.collision_types["left"]) <= max(obj.movement_strength,obj.collision_types["left"]):
                     self.rect.left = tile.right
                     collision_types["left"] = max(self.movement_strength,self.collision_types["left"])
-                    hit_list = self.CollisionTest(tiles)
+                    self.TriggerCollideForObjWhichCollisedWithSelf(tiles,x = -1)
                     
-                    movement_vector = self.movement_vector.copy()#here should be function that does all from here
-                    if int(self.x_cord) != self.rect.x:
-                        movement_vector[0] = self.rect.x - self.x_cord 
-                    if int(self.y_cord) != self.rect.y:
-                        movement_vector[1] =  self.rect.y - self.y_cord
-                    
-                    
-                    for i in hit_list:
-                        i.movement_vector = [-movement_vector[0],movement_vector[1]]
-                        i.Colide([self])#to there
                 else:
                     obj.rect.right = self.rect.left
                     obj.collision_types["left"] = max(self.movement_strength,self.collision_types["left"])
-                    obj.CreateVector()#here should be function that does all from here
-                    obj.SetCordsToRectPosition()
-                    tiles.append(self)
-                    obj.Colide(tiles)
-                    tiles.pop(-1)#to there
+                    self.ProperlyTriggerCollideForObj(obj,tiles)
+                    
                     
         self.rect.y += self.movement_vector[1]
         hit_list = self.CollisionTest(tiles)
@@ -145,52 +136,24 @@ class PhysicsCollider(ABC):
                     self.rect.bottom = tile.top
                     collision_types["bottom"] = max(self.movement_strength,self.collision_types["bottom"],collision_types["bottom"])
                     
-                    hit_list = self.CollisionTest(tiles)#here should be function that does all from here
-                    
-                    movement_vector = self.movement_vector.copy()
-                    if int(self.x_cord) != self.rect.x:
-                        movement_vector[0] = self.rect.x - self.x_cord 
-                    if int(self.y_cord) != self.rect.y:
-                        movement_vector[1] =  self.rect.y - self.y_cord
-                        
-                    for i in hit_list:
-                        i.movement_vector = [movement_vector[0],-movement_vector[1]]
-                        i.Colide([self])#to there
+                    self.TriggerCollideForObjWhichCollisedWithSelf(tiles, y = -1)
                     
                 else:
                     obj.rect.top = self.rect.bottom
                     obj.collision_types["bottom"] = max(self.movement_strength,self.collision_types["bottom"],obj.collision_types["bottom"])
-                    obj.CreateVector()#here should be function that does all from here
-                    obj.SetCordsToRectPosition()
-                    tiles.append(self)
-                    obj.Colide(tiles)
-                    tiles.pop(-1)#to there
+                    self.ProperlyTriggerCollideForObj(obj,tiles)
                 
             elif self.movement_vector[1] < 0:
                 if max(self.movement_strength,self.collision_types["top"]) <= max(obj.movement_strength,obj.collision_types["top"]):
                     self.rect.top = tile.bottom
                     collision_types["top"] = max(self.movement_strength,self.collision_types["top"],collision_types["top"])
                     
-                    hit_list = self.CollisionTest(tiles)#here should be function that does all from here
-                    
-                    movement_vector = self.movement_vector.copy()
-                    if int(self.x_cord) != self.rect.x:
-                        movement_vector[0] = self.rect.x - self.x_cord 
-                    if int(self.y_cord) != self.rect.y:
-                        movement_vector[1] =  self.rect.y - self.y_cord
-                        
-                    for i in hit_list:
-                        i.movement_vector = [movement_vector[0],-movement_vector[1]]
-                        i.Colide([self])#to there
+                    self.TriggerCollideForObjWhichCollisedWithSelf(tiles, y = -1)
                 
                 else:
                     obj.rect.bottom = self.rect.top
                     obj.collision_types["top"] = max(self.movement_strength,self.collision_types["top"],obj.collision_types["top"])
-                    obj.CreateVector()#here should be function that does all from here
-                    obj.SetCordsToRectPosition()
-                    tiles.append(self)
-                    obj.Colide(tiles)
-                    tiles.pop(-1)#to there
+                    self.ProperlyTriggerCollideForObj(obj,tiles)
 
         
         self.collision_types = collision_types
