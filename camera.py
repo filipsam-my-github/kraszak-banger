@@ -18,6 +18,8 @@ class Camera:
         self.dead_zone = None
         self.object = None
         self.smoothnes = None
+        
+        self.rooms = []
     
     
     def ChangedScale(self, new_proportions):
@@ -28,6 +30,9 @@ class Camera:
     def Center(self,x_cord,y_cord):
         self.x_cord = x_cord - self.oraginal_screen_size[0]//2
         self.y_cord = y_cord - self.oraginal_screen_size[1]//2
+    
+    def AddRoom(self, x_cord, y_cord, width, height):
+        self.rooms.append((x_cord, y_cord, width, height))
     
     def Draw(self,*args,screen):
         """
@@ -40,10 +45,10 @@ class Camera:
             if type(arg) == list:
                 for obj in arg:
                     if self.CheackIfInCamera(obj):
-                        obj.Draw(screen, obj.x_cord*self.width -self.x_cord*self.width, obj.y_cord*self.height-self.y_cord*self.height)
+                        obj.Draw(screen, obj.x_cord*self.width -self.x_cord*self.width, obj.y_cord*self.height-self.y_cord*self.height,self.width,self.height)
             else:
                 if self.CheackIfInCamera(arg):
-                    arg.Draw(screen, arg.x_cord*self.width-self.x_cord*self.width, arg.y_cord*self.height-self.y_cord*self.height)
+                    arg.Draw(screen, arg.x_cord*self.width-self.x_cord*self.width, arg.y_cord*self.height-self.y_cord*self.height,self.width,self.height)
     
     
     def Tick(self,dt):

@@ -25,7 +25,7 @@ from camera import Camera
 
 screen = pygame.display.set_mode((640, 360))
 MONITOR_SIZE = screen_size()
-MONITOR_PROPORTIONS = [MONITOR_SIZE[0]/640, MONITOR_SIZE[1]/480]
+MONITOR_PROPORTIONS = [MONITOR_SIZE[0]/640, MONITOR_SIZE[1]/360]
 print(MONITOR_SIZE)
 print(MONITOR_PROPORTIONS)
 full_screen = False
@@ -68,7 +68,7 @@ def HandelPygameEvents(camera:Camera, keys, dt,*args):
                     ImageLoader.CheangSize(MONITOR_PROPORTIONS)
                     camera.ChangedScale(MONITOR_PROPORTIONS)
                 else:
-                    screen = pygame.display.set_mode((640, 480), pygame.RESIZABLE)
+                    screen = pygame.display.set_mode((640, 360), pygame.RESIZABLE)
                     ImageLoader.CheangSize([1,1])
                     camera.ChangedScale([1,1])
     
