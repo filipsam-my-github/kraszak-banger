@@ -72,7 +72,7 @@ class PhysicsCollider(ABC):
         self.x_cord = self.rect.x
         self.y_cord = self.rect.y
     
-    def __TriggerCollideForObjWhichCollisedWithSelf(self,tiles,x=1,y=1):
+    def __TriggerCollideForObjWhichCollisedWithSelf(self,tiles,x=0,y=0):
         hit_list = self.CollisionTest(tiles)
                     
         movement_vector = self.movement_vector.copy()
@@ -160,6 +160,7 @@ class PhysicsCollider(ABC):
         for i in self.collision_types.keys():
             if self.collision_types[i]:
                 self.SetCordsToRectPosition()
+                break
         
 
 class Block(PhysicsCollider):
