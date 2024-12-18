@@ -82,9 +82,9 @@ class ImageLoader:
         cls._MAP_ASSET = None
     
     @classmethod
-    def CheangSize(cls, New_proportion):
-        cls._standard_size_of_image_width = int(16 * cls._SCALE * New_proportion[0])
-        cls._standard_size_of_image_height = int(16 * cls._SCALE * New_proportion[1])
+    def CheangSize(cls, new_proportion):
+        cls._standard_size_of_image_width = int(16 * cls._SCALE * new_proportion[0])
+        cls._standard_size_of_image_height = int(16 * cls._SCALE * new_proportion[1])
         cls._big_image_scale_width = int(cls._standard_size_of_image_width/16)
         cls._big_image_scale_height = int(cls._standard_size_of_image_height/16)
         
