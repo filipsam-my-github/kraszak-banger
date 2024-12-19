@@ -20,8 +20,8 @@ class Player(PhysicsCollider):
     HACKS = True
     
     
-    def __init__(self, cord_x, cord_y, skin_number) -> object:
-        self.image_name = f"player{skin_number}"
+    def __init__(self, cord_x, cord_y) -> object:
+        self.image_name = f"kraszak_heading_down_1"
 
         self.ROOT_SPEED = 120
         self.speed_bonuses = 0
@@ -39,6 +39,8 @@ class Player(PhysicsCollider):
         self.jumping = Player.GRAVITY
 
         self.item = None
+        
+        self.animation_clock = 0
 
         super().__init__(movement_strength=26)
     
@@ -103,6 +105,65 @@ class Player(PhysicsCollider):
 
         self.movement_vector[0] = self.x_cord - old_x_cord
         self.movement_vector[1] = self.y_cord - old_y_cord
+        
+        self.AnimationTick(dt)
+            
+    def AnimationStanding(self):
+        new_image_name = self.image_name.split("_")
+        new_image_name[3] = "0"
+                
+        self.image_name = "_".join(new_image_name)
+                
+    
+    def AnimationDirectionUppdate(self):
+        if self.movement_vector[1] != 0:
+            if self.movement_vector[1] > 0:
+                new_image_name = self.image_name.split("_")
+                new_image_name[2] = "down"
+                
+                self.image_name = "_".join(new_image_name)
+            elif self.movement_vector[1] < 0:
+                new_image_name = self.image_name.split("_")
+                new_image_name[2] = "up"
+                
+                self.image_name = "_".join(new_image_name)
+        elif self.movement_vector[0] != 0:
+            if self.movement_vector[0] > 0:
+                new_image_name = self.image_name.split("_")
+                new_image_name[2] = "right"
+                
+                self.image_name = "_".join(new_image_name)
+            
+            elif self.movement_vector[0] < 0:
+                new_image_name = self.image_name.split("_")
+                new_image_name[2] = "left"
+                
+                self.image_name = "_".join(new_image_name)
+    
+    def AnimationClockTick(self,dt):
+        old_animation_clock = self.animation_clock
+        
+        self.animation_clock += dt*4
+        
+        if int(old_animation_clock) != int(self.animation_clock):
+            new_image_name = self.image_name.split("_")
+            new_image_name[3] = f"{(int(self.animation_clock)%4+1)}"
+                
+            self.image_name = "_".join(new_image_name)
+        
+        if self.animation_clock >= 4:
+            self.animation_clock = 0    
+        
+    def AnimationTick(self,dt):
+        self.AnimationDirectionUppdate()
+        if self.movement_vector[0] != 0 or self.movement_vector[1] != 0:
+            self.AnimationClockTick(dt)
+        else:
+            self.AnimationStanding()
+        
+        
+            
+            
         
     
     def PickAnItem(self, item : Item):

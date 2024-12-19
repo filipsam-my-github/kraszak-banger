@@ -24,6 +24,7 @@ from pyautogui import size as screen_size
 from camera import Camera
 
 screen = pygame.display.set_mode((640, 360))
+
 MONITOR_SIZE = screen_size()
 MONITOR_PROPORTIONS = [MONITOR_SIZE[0]/640, MONITOR_SIZE[1]/360]
 print(MONITOR_SIZE)
@@ -87,7 +88,7 @@ def Main():
     """
     
     clock = pygame.time.Clock()
-    player = Player(100,300,3)
+    player = Player(100,300)
     blocks = []#[WoodenBox(400,50), HeavySteelBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
     # for i in range(12):
     #     if i == 5:

@@ -41,6 +41,14 @@ class ImageLoader:
         cls._MAP_ASSET.convert_alpha()
 
         cls.images = {}
+        
+        for i in range(5):
+            for j in ["Down","Left","Up","Right"]:
+                kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszaks_heading_{j.lower()}/Kraszaks-Heading-{j}-{i}.png")
+                
+                cls.images[f"kraszak_heading_{j.lower()}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._big_image_scale_width, kraszak_heading_something.get_height() * cls._big_image_scale_height))
+            
+
 
         for i in range(7):
             cls.images[f"player{i}"] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, 0, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
