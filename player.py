@@ -31,10 +31,10 @@ class Player(PhysicsCollider):
         self.x_cord = cord_x
         self.y_cord = cord_y
         self.movement_vector = [0,0]
-        self.rect = pygame.Rect(cord_x, cord_y, 7*ImageLoader.GetScale(), 13*ImageLoader.GetScale())
+        self.rect = pygame.Rect(cord_x, cord_y, 14*ImageLoader.GetScale(), 11*ImageLoader.GetScale())
 
-        self.skin_x = -ImageLoader.GetScale()*5
-        self.skin_y = -ImageLoader.GetScale()*3
+        self.skin_x = -ImageLoader.GetScale()*1
+        self.skin_y = -ImageLoader.GetScale()*11
 
         self.jumping = Player.GRAVITY
 

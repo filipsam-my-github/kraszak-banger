@@ -23,7 +23,12 @@ from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox
 from pyautogui import size as screen_size
 from camera import Camera
 
-screen = pygame.display.set_mode((640, 360))
+import moderngl
+from array import array
+
+gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF)
+screen = pygame.Surface((640,360))
+ctx = moderngl.create_context()
 
 MONITOR_SIZE = screen_size()
 MONITOR_PROPORTIONS = [MONITOR_SIZE[0]/640, MONITOR_SIZE[1]/360]
@@ -31,6 +36,74 @@ print(MONITOR_SIZE)
 print(MONITOR_PROPORTIONS)
 full_screen = False
 
+quad_buffer = ctx.buffer(data=array('f', [
+    -1.0, 1.0, 0.0, 0.0,
+    1.0, 1.0, 1.0, 0.0,
+    -1.0, -1.0, 0.0, 1.0,
+    1.0, -1.0, 1.0, 1.0,
+]))
+
+vert_shader = '''
+#version 330 core
+
+in vec2 vert;
+in vec2 texcoord;
+out vec2 uvs;
+
+void main() {
+    uvs = texcoord;
+    gl_Position = vec4(vert, 0.0, 1.0);
+}
+'''
+
+frag_shader = '''
+#version 330 core
+
+uniform sampler2D tex;
+
+in vec2 uvs;
+out vec4 f_color;
+
+void main(){
+    vec2 circle_centre;
+    circle_centre = vec2(0.5, 0.7);
+    
+    float red;
+    float green;
+    float blue;
+    
+    red = texture(tex, uvs).r;
+    green = texture(tex, uvs).g;
+    blue = texture(tex, uvs).b;
+    
+    float disc = length(uvs - circle_centre);
+    
+    disc = 4*disc;
+    
+    if (disc > 1){
+        disc = 1;
+    }
+    
+    disc = abs(disc - 1.0);
+    
+    
+    
+    
+    
+    f_color = vec4(red*disc, green*disc, blue*disc, 1.0);
+}
+'''
+
+def SurfToTexture(surf):
+    tex = ctx.texture(surf.get_size(), 4)
+    tex.filter = (moderngl.NEAREST, moderngl.NEAREST)
+    tex.swizzle = 'BGRA'
+    tex.write(surf.get_view('1'))
+    
+    return tex
+
+program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
+render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
 #TODO documentation
 
@@ -47,6 +120,8 @@ def InitaliezProgram():
 def HandelPygameEvents(camera:Camera, keys, dt,*args):
     global full_screen
     global screen
+    global gl_screen
+    global ctx
     """
     Handle pygame events and key events
     It is likely that lines like
@@ -65,13 +140,18 @@ def HandelPygameEvents(camera:Camera, keys, dt,*args):
             if event.key == pygame.K_f:
                 full_screen = not full_screen
                 if full_screen:
-                    screen = pygame.display.set_mode(MONITOR_SIZE, pygame.FULLSCREEN)
+                    gl_screen = pygame.display.set_mode(MONITOR_SIZE,pygame.FULLSCREEN | pygame.OPENGL | pygame.DOUBLEBUF)
+                    screen = pygame.Surface(MONITOR_SIZE)
                     ImageLoader.CheangSize(MONITOR_PROPORTIONS)
                     camera.ChangedScale(MONITOR_PROPORTIONS)
+                    ctx.viewport  = (0, 0, MONITOR_SIZE[0], MONITOR_SIZE[1])
+                    
                 else:
-                    screen = pygame.display.set_mode((640, 360), pygame.RESIZABLE)
+                    gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF)
+                    screen = pygame.Surface((640,360))
                     ImageLoader.CheangSize([1,1])
                     camera.ChangedScale([1,1])
+                    ctx.viewport  = (0, 0, 640, 360)
     
     
     for arg in args:
@@ -154,8 +234,14 @@ def Main():
         screen.blit(pygame.font.Font.render(pygame.font.SysFont("arial",40),f"x:{(camera.x_cord)},y:{(camera.y_cord)}",True,(255, 255, 255)),(350,0))
         
 
+        frame_tex = SurfToTexture(screen)
+        frame_tex.use(0)
+        program['tex'] = 0
+        render_object.render(mode=moderngl.TRIANGLE_STRIP)
+        
+        frame_tex.release()
 
-        pygame.display.update()
+        pygame.display.flip()
     
 
 
