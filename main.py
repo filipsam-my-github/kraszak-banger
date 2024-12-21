@@ -43,56 +43,13 @@ quad_buffer = ctx.buffer(data=array('f', [
     1.0, -1.0, 1.0, 1.0,
 ]))
 
-vert_shader = '''
-#version 330 core
+def load_shader(file_path):
+    with open(file_path, 'r') as file:
+        return file.read()
 
-in vec2 vert;
-in vec2 texcoord;
-out vec2 uvs;
+vert_shader = load_shader("vertex_shaders/vert_normal.glsl")
 
-void main() {
-    uvs = texcoord;
-    gl_Position = vec4(vert, 0.0, 1.0);
-}
-'''
-
-frag_shader = '''
-#version 330 core
-
-uniform sampler2D tex;
-
-in vec2 uvs;
-out vec4 f_color;
-
-void main(){
-    vec2 circle_centre;
-    circle_centre = vec2(0.5, 0.7);
-    
-    float red;
-    float green;
-    float blue;
-    
-    red = texture(tex, uvs).r;
-    green = texture(tex, uvs).g;
-    blue = texture(tex, uvs).b;
-    
-    float disc = length(uvs - circle_centre);
-    
-    disc = 4*disc;
-    
-    if (disc > 1){
-        disc = 1;
-    }
-    
-    disc = abs(disc - 1.0);
-    
-    
-    
-    
-    
-    f_color = vec4(red*disc, green*disc, blue*disc, 1.0);
-}
-'''
+frag_shader = load_shader("fragment_shaders/farg_dark_forest.glsl")#load_shader("fragment_shaders/frag_normal.glsl")
 
 def SurfToTexture(surf):
     tex = ctx.texture(surf.get_size(), 4)
@@ -144,6 +101,7 @@ def HandelPygameEvents(camera:Camera, keys, dt,*args):
                     screen = pygame.Surface(MONITOR_SIZE)
                     ImageLoader.CheangSize(MONITOR_PROPORTIONS)
                     camera.ChangedScale(MONITOR_PROPORTIONS)
+                    ctx.clear()
                     ctx.viewport  = (0, 0, MONITOR_SIZE[0], MONITOR_SIZE[1])
                     
                 else:
@@ -151,6 +109,7 @@ def HandelPygameEvents(camera:Camera, keys, dt,*args):
                     screen = pygame.Surface((640,360))
                     ImageLoader.CheangSize([1,1])
                     camera.ChangedScale([1,1])
+                    ctx.clear()
                     ctx.viewport  = (0, 0, 640, 360)
     
     
@@ -242,6 +201,7 @@ def Main():
         frame_tex.release()
 
         pygame.display.flip()
+        ctx.clear()
     
 
 
