@@ -39,6 +39,9 @@ scroll_vertical = 0
 scroll_speed = 1
 
 
+vertex_shaders = "vertex_shaders/vert_normal.glsl"
+fragment_shaders = "fragment_shaders/frag_normal.glsl"
+
 
 #store tiles in a list
 img_list = []
@@ -48,6 +51,8 @@ for image in ImageLoader.images.keys():
 
 save_img = pygame.image.load('mob_animation/save_btn.png').convert_alpha()
 load_img = pygame.image.load('mob_animation/load_btn.png').convert_alpha()
+vertex_shaders_img = pygame.image.load('graphics/Icon-For-Vert_Shaders.png').convert_alpha()
+fragment_shaders_img = pygame.image.load('graphics/Icon-For-Frag_Shaders.png').convert_alpha()
 
 
 #define colours
@@ -98,6 +103,8 @@ def DrawWorld():
 #create buttons
 save_button = button.Button(SCREEN_WIDTH // 2, SCREEN_HEIGHT + LOWER_MARGIN - 50, save_img, 1)
 load_button = button.Button(SCREEN_WIDTH // 2 + 200, SCREEN_HEIGHT + LOWER_MARGIN - 50, load_img, 1)
+vertex_shaders_button = button.Button(SCREEN_WIDTH // 2 -200, SCREEN_HEIGHT + LOWER_MARGIN - 50, vertex_shaders_img, 1)
+fragment_shaders_button = button.Button(SCREEN_WIDTH // 2 - 400, SCREEN_HEIGHT + LOWER_MARGIN - 50, fragment_shaders_img, 1)
 #make a button list
 entities_to_place = []
 button_col = 0
@@ -135,6 +142,9 @@ while run:
 				file_path = file_dialog.GetPath()
 		if file_path:
 			with open(file_path, 'w') as file:
+				file.write(f"#!#Scale#@# {TILE_SIZE} {TILE_SIZE}\n")
+				file.write(f"#!#vertex_shaders#@# {vertex_shaders}\n")
+				file.write(f"#!#fragment_shaders#@# {fragment_shaders}\n")
 				for i in world_data:
 					cords = i.split('x')
 					file.write(f"{world_data[i]['name']} {cords[0]} {cords[1]}\n")
@@ -167,7 +177,30 @@ while run:
 
 		
 						world_data[f"{int(cords[0])}x{int(cords[1])}"] = {"id":id, "name":name}
-						
+    
+	if fragment_shaders_button.Draw(screen):
+		with wx.FileDialog(
+			None, "Select a File", wildcard="Text files (*.glsl)|*.glsl",
+			style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
+		) as file_dialog:
+
+			if file_dialog.ShowModal() == wx.ID_CANCEL:
+				print("No file selected.")
+			else:
+				file_path = file_dialog.GetPath()
+				fragment_shaders = file_path
+	
+	if vertex_shaders_button.Draw(screen):
+		with wx.FileDialog(
+			None, "Select a File", wildcard="Text files (*.glsl)|*.glsl",
+			style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
+		) as file_dialog:
+
+			if file_dialog.ShowModal() == wx.ID_CANCEL:
+				print("No file selected.")
+			else:
+				file_path = file_dialog.GetPath()
+				vertex_shaders = file_path
 
 				
 	screen.blit(pygame.font.Font.render(pygame.font.SysFont("arial",40),f"x:{(scroll)},y:{(scroll_vertical)}",True,(255, 255, 255)),(350,0))
