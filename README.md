@@ -11,6 +11,7 @@ School Project
 4. Open the Command Prompt and run the following command to install the required library:  
    ```Comand prompt
    pip install pygame-ce
+   pip install moderngl
 
 5. Run the game by opening it from direct folder
 or by following comands in comand prompt
