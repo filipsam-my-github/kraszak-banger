@@ -2,7 +2,9 @@ import pygame
 import button
 import csv
 from graphic_handlerer import ImageLoader
+import wx
 
+app = wx.App(False)
 
 pygame.init()
 
@@ -11,7 +13,7 @@ FPS = 60
 
 #game window
 SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 640
+SCREEN_HEIGHT = 480
 LOWER_MARGIN = 100
 SIDE_MARGIN = 300
 
@@ -22,15 +24,18 @@ ImageLoader.init()
 
 
 #define game variables
-ROWS = 10
-MAX_COLS = 150
+ROWS = 5
+MAX_COLS = 10
 TILE_SIZE = SCREEN_HEIGHT // ROWS
 TILE_TYPES = 21
 level = 0
 current_tile = 0
 scroll_left = False
 scroll_right = False
+scroll_down = False
+scroll_up = False
 scroll = 0
+scroll_vertical = 0
 scroll_speed = 1
 
 
@@ -39,7 +44,7 @@ scroll_speed = 1
 img_list = []
 for image in ImageLoader.images.keys():
 
-    img_list.append(ImageLoader.images[image])
+    img_list.append({"img":ImageLoader.images[image],"name":image})
 
 save_img = pygame.image.load('mob_animation/save_btn.png').convert_alpha()
 load_img = pygame.image.load('mob_animation/load_btn.png').convert_alpha()
@@ -54,14 +59,11 @@ RED = (200, 25, 25)
 font = pygame.font.SysFont('Futura', 30)
 
 #create empty tile list
-world_data = []
-for row in range(ROWS):
-	r = [-1] * MAX_COLS
-	world_data.append(r)
+world_data = {}
 
-#create ground
-for tile in range(0, MAX_COLS):
-	world_data[ROWS - 1][tile] = 0
+# #create ground
+# for tile in range(0, MAX_COLS):
+# 	world_data[ROWS - 1][tile] = 0
 
 
 #function for outputting text onto the screen
@@ -76,19 +78,20 @@ def DrawBg():
 #draw grid
 def DrawGrid():
 	#vertical lines
-	for c in range(MAX_COLS + 1):
-		pygame.draw.line(screen, WHITE, (c * TILE_SIZE - scroll, 0), (c * TILE_SIZE - scroll, SCREEN_HEIGHT))
+	for c in range(-4,MAX_COLS+4):
+		bonus = scroll//192.5
+		pygame.draw.line(screen, WHITE, (c * TILE_SIZE - scroll + bonus*192.5, 0), (c * TILE_SIZE - scroll + bonus*192.5, SCREEN_HEIGHT))
 	#horizontal lines
-	for c in range(ROWS + 1):
-		pygame.draw.line(screen, WHITE, (0, c * TILE_SIZE), (SCREEN_WIDTH, c * TILE_SIZE))
+	for c in range(-4,ROWS + 4):
+		bonus = scroll_vertical//190
+		pygame.draw.line(screen, WHITE, (0, c * TILE_SIZE - scroll_vertical + bonus*190), (SCREEN_WIDTH, c * TILE_SIZE - scroll_vertical + bonus*190))
 
 
 #function for drawing the world tiles
 def DrawWorld():
-	for y, row in enumerate(world_data):
-		for x, tile in enumerate(row):
-			if tile >= 0:
-				screen.blit(img_list[tile], (x * TILE_SIZE - scroll, y * TILE_SIZE))
+	for obj_data in world_data.keys():
+		cords = obj_data.split('x')
+		screen.blit(img_list[world_data[obj_data]["id"]]["img"], (int(cords[0]) * TILE_SIZE - scroll, int(cords[1]) * TILE_SIZE - scroll_vertical))
 
 
 
@@ -100,7 +103,7 @@ entities_to_place = []
 button_col = 0
 button_row = 0
 for i in range(len(img_list)):
-	tile_button = button.Button(SCREEN_WIDTH + (75 * button_col) + 50, 75 * button_row + 50, img_list[i], 1)
+	tile_button = button.Button(SCREEN_WIDTH + (75 * button_col) + 50, 75 * button_row + 50, img_list[i]["img"], 1)
 	entities_to_place.append(tile_button)
 	button_col += 1
 	if button_col == 3:
@@ -109,6 +112,8 @@ for i in range(len(img_list)):
 
 
 run = True
+
+ 
 while run:
 
 	clock.tick(FPS)
@@ -122,39 +127,57 @@ while run:
 
 	#save and load data
 	if save_button.Draw(screen):
-		...		
-  #save level data
-		# with open(f'level{level}_data.csv', 'w', newline='') as csvfile:
-		# 	writer = csv.writer(csvfile, delimiter = ',')
-		# 	for row in world_data:
-		# 		writer.writerow(row)
-		#alternative pickle method
-		#pickle_out = open(f'level{level}_data', 'wb')
-		#pickle.dump(world_data, pickle_out)
-		#pickle_out.close()
+		with wx.FileDialog(None,"Create a New File",wildcard="Text files (*.krl)|*.krl",style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT) as file_dialog:
+			if file_dialog.ShowModal() == wx.ID_CANCEL:
+				print("No file selected.")
+				file_path = None
+			else:
+				file_path = file_dialog.GetPath()
+		if file_path:
+			with open(file_path, 'w') as file:
+				for i in world_data:
+					cords = i.split('x')
+					file.write(f"{world_data[i]['name']} {cords[0]} {cords[1]}\n")
+     
 	if load_button.Draw(screen):
-		...
-		#load in level data
-		#reset scroll back to the start of the level
-		# scroll = 0
-		# with open(f'level{level}_data.csv', newline='') as csvfile:
-		# 	reader = csv.reader(csvfile, delimiter = ',')
-		# 	for x, row in enumerate(reader):
-		# 		for y, tile in enumerate(row):
-		# 			world_data[x][y] = int(tile)
-		#alternative pickle method
-		#world_data = []
-		#pickle_in = open(f'level{level}_data', 'rb')
-		#world_data = pickle.load(pickle_in)
-				
+		with wx.FileDialog(
+			None, "Select a File", wildcard="Text files (*.krl)|*.krl",
+			style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
+		) as file_dialog:
 
+			if file_dialog.ShowModal() == wx.ID_CANCEL:
+				print("No file selected.")
+			else:
+				file_path = file_dialog.GetPath()
+				print(f"Selected file: {file_path}")
+				with open(file_path, "r") as file_path:
+					world_data = {}
+					data = file_path.read().split('\n')
+					for i,e in enumerate(data):
+						cords = e.split(' ')[1:]
+						id = None
+						name = e.split(' ')[0]
+      
+						for i,e in enumerate(img_list):
+							if e["name"] == name:
+								id = i 
+								break
+						else:
+							continue
+
+		
+						world_data[f"{int(cords[0])}x{int(cords[1])}"] = {"id":id, "name":name}
+						
+
+				
+	screen.blit(pygame.font.Font.render(pygame.font.SysFont("arial",40),f"x:{(scroll)},y:{(scroll_vertical)}",True,(255, 255, 255)),(350,0))
 	#draw tile panel and tiles
 	pygame.draw.rect(screen, GREEN, (SCREEN_WIDTH, 0, SIDE_MARGIN, SCREEN_HEIGHT))
 
 	#choose a tile
 	button_count = 0
 	for button_count, i in enumerate(entities_to_place):
-		if i.Draw(screen):
+		if i.Draw(screen):	
 			current_tile = button_count
 	
 
@@ -162,25 +185,30 @@ while run:
 	pygame.draw.rect(screen, RED, entities_to_place[current_tile].rect, 3)
 
 	#scroll the map
-	if scroll_left == True and scroll > 0:
+	if scroll_left == True:
 		scroll -= 5 * scroll_speed
-	if scroll_right == True and scroll < (MAX_COLS * TILE_SIZE) - SCREEN_WIDTH:
+	if scroll_right == True:
 		scroll += 5 * scroll_speed
+	if scroll_up == True:
+		scroll_vertical -= 5 * scroll_speed
+	if scroll_down == True:
+		scroll_vertical += 5 * scroll_speed
 
 	#add new tiles to the screen
 	#get mouse position
 	pos = pygame.mouse.get_pos()
 	x = (pos[0] + scroll) // TILE_SIZE
-	y = pos[1] // TILE_SIZE
+	y = (pos[1] + scroll_vertical) // TILE_SIZE
 
 	#check that the coordinates are within the tile area
 	if pos[0] < SCREEN_WIDTH and pos[1] < SCREEN_HEIGHT:
 		#update tile value
 		if pygame.mouse.get_pressed()[0] == 1:
-			if world_data[y][x] != current_tile:
-				world_data[y][x] = current_tile
+			if not f"{x}x{y}" in world_data.keys():
+				world_data[f"{x}x{y}"] = {"id":current_tile ,"name": img_list[current_tile]["name"]}
 		if pygame.mouse.get_pressed()[2] == 1:
-			world_data[y][x] = -1
+			if f"{x}x{y}" in world_data.keys():
+				del world_data[f"{x}x{y}"]
 
 
 	for event in pygame.event.get():
@@ -188,16 +216,16 @@ while run:
 			run = False
 		if event.type == pygame.MOUSEWHEEL:
 			for i in entities_to_place:
-				i.rect.y -= event.y*10
+				i.rect.y += event.y*10
 		#keyboard presses
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.MOUSEBUTTONUP:
 				for i in entities_to_place:
 					i.rect.y += 10
 			if event.key == pygame.K_UP:
-				level += 1
-			if event.key == pygame.K_DOWN and level > 0:
-				level -= 1
+				scroll_up = True
+			if event.key == pygame.K_DOWN:
+				scroll_down = True
 			if event.key == pygame.K_LEFT:
 				scroll_left = True
 			if event.key == pygame.K_RIGHT:
@@ -211,6 +239,10 @@ while run:
 				scroll_left = False
 			if event.key == pygame.K_RIGHT:
 				scroll_right = False
+			if event.key == pygame.K_DOWN:
+				scroll_down = False
+			if event.key == pygame.K_UP:
+				scroll_up = False
 			if event.key == pygame.K_RSHIFT:
 				scroll_speed = 1
 

@@ -47,6 +47,11 @@ class ImageLoader:
                 kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszaks_heading_{j.lower()}/Kraszaks-Heading-{j}-{i}.png")
                 
                 cls.images[f"kraszak_heading_{j.lower()}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._big_image_scale_width, kraszak_heading_something.get_height() * cls._big_image_scale_height))
+        
+        for i in [["Level-Exit","level_exit"]]:
+            kraszak_heading_something = pygame.image.load(f"graphics//{i[0]}.png")
+                    
+            cls.images[f"{i[1]}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._big_image_scale_width, kraszak_heading_something.get_height() * cls._big_image_scale_height))
             
 
 
