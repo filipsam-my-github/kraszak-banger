@@ -26,7 +26,8 @@ ImageLoader.init()
 #define game variables
 ROWS = 5
 MAX_COLS = 10
-TILE_SIZE = SCREEN_HEIGHT // ROWS
+TILE_SIZE_X = 16*4
+TILE_SIZE_Y = 20*4
 TILE_TYPES = 21
 level = 0
 current_tile = 0
@@ -85,18 +86,18 @@ def DrawGrid():
 	#vertical lines
 	for c in range(-4,MAX_COLS+4):
 		bonus = scroll//192.5
-		pygame.draw.line(screen, WHITE, (c * TILE_SIZE - scroll + bonus*192.5, 0), (c * TILE_SIZE - scroll + bonus*192.5, SCREEN_HEIGHT))
+		pygame.draw.line(screen, WHITE, (c * TILE_SIZE_X - scroll + bonus*192.5, 0), (c * TILE_SIZE_X - scroll + bonus*192.5, SCREEN_HEIGHT))
 	#horizontal lines
 	for c in range(-4,ROWS + 4):
 		bonus = scroll_vertical//190
-		pygame.draw.line(screen, WHITE, (0, c * TILE_SIZE - scroll_vertical + bonus*190), (SCREEN_WIDTH, c * TILE_SIZE - scroll_vertical + bonus*190))
+		pygame.draw.line(screen, WHITE, (0, c * TILE_SIZE_Y - scroll_vertical + bonus*190), (SCREEN_WIDTH, c * TILE_SIZE_Y - scroll_vertical + bonus*190))
 
 
 #function for drawing the world tiles
 def DrawWorld():
 	for obj_data in world_data.keys():
 		cords = obj_data.split('x')
-		screen.blit(img_list[world_data[obj_data]["id"]]["img"], (int(cords[0]) * TILE_SIZE - scroll, int(cords[1]) * TILE_SIZE - scroll_vertical))
+		screen.blit(img_list[world_data[obj_data]["id"]]["img"], (int(cords[0]) * TILE_SIZE_X - scroll, int(cords[1]) * TILE_SIZE_Y - scroll_vertical))
 
 
 
@@ -142,7 +143,7 @@ while run:
 				file_path = file_dialog.GetPath()
 		if file_path:
 			with open(file_path, 'w') as file:
-				file.write(f"#!#Scale#@# {TILE_SIZE} {TILE_SIZE}\n")
+				file.write(f"#!#Scale#@# {TILE_SIZE_X} {TILE_SIZE_Y}\n")
 				file.write(f"#!#vertex_shaders#@# {vertex_shaders}\n")
 				file.write(f"#!#fragment_shaders#@# {fragment_shaders}\n")
 				for i in world_data:
@@ -230,8 +231,8 @@ while run:
 	#add new tiles to the screen
 	#get mouse position
 	pos = pygame.mouse.get_pos()
-	x = (pos[0] + scroll) // TILE_SIZE
-	y = (pos[1] + scroll_vertical) // TILE_SIZE
+	x = (pos[0] + scroll) // TILE_SIZE_X
+	y = (pos[1] + scroll_vertical) // TILE_SIZE_Y
 
 	#check that the coordinates are within the tile area
 	if pos[0] < SCREEN_WIDTH and pos[1] < SCREEN_HEIGHT:
