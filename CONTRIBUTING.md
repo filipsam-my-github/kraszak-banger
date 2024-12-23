@@ -27,7 +27,7 @@ To ensure consistency across the codebase, please follow these style guidelines:
 - Separate words with underscores for better readability (e.g., `example_variable`).
 
 ### Files names
-- Use **lowercase** for function names (e.g., `example_file`).
+- Use **lowercase** for file names (e.g., `example_file`).
 
 ### Classes
 - Use **PascalCase** for class names (e.g., `MyClassName`).
