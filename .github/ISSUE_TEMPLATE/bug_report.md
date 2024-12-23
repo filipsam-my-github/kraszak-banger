@@ -1,7 +1,6 @@
 ---
 name: Bug report
 about: Create a report to help with eliminating bugs
-Complexity: 'straightforward/complicated'
 title: ''
 labels: bug
 assignees: ''
@@ -9,6 +8,9 @@ assignees: ''
 
 **Describe the bug**
 A clear and concise description of what the bug is.
+
+**Complexity**
+straightforward/complicated
 
 **To Reproduce**
 Steps to reproduce the behavior:
