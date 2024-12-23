@@ -26,6 +26,8 @@ from camera import Camera
 import moderngl
 from array import array
 
+import data_interpetator
+
 gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF)
 screen = pygame.Surface((640,360))
 ctx = moderngl.create_context()
@@ -36,6 +38,9 @@ print(MONITOR_SIZE)
 print(MONITOR_PROPORTIONS)
 full_screen = False
 
+DARK_BACKGROUND = (16.5,15.7,25.1)
+LIGHT_BACKGROUND = (144, 201, 120)
+
 quad_buffer = ctx.buffer(data=array('f', [
     -1.0, 1.0, 0.0, 0.0,
     1.0, 1.0, 1.0, 0.0,
@@ -43,13 +48,11 @@ quad_buffer = ctx.buffer(data=array('f', [
     1.0, -1.0, 1.0, 1.0,
 ]))
 
-def load_shader(file_path):
-    with open(file_path, 'r') as file:
-        return file.read()
 
-vert_shader = load_shader("vertex_shaders/vert_normal.glsl")
 
-frag_shader = load_shader("fragment_shaders/farg_dark_forest.glsl")#load_shader("fragment_shaders/frag_normal.glsl")
+vert_shader = data_interpetator.LoadShader("vertex_shaders/vert_normal.glsl")
+frag_shader = data_interpetator.LoadShader("fragment_shaders/farg_darker_forest.glsl")#load_shader("fragment_shaders/frag_normal.glsl")
+
 
 def SurfToTexture(surf):
     tex = ctx.texture(surf.get_size(), 4)
@@ -170,7 +173,7 @@ def Main():
 
         keys = pygame.key.get_pressed()
 
-        screen.fill((16.5,15.7,25.1))
+        screen.fill(LIGHT_BACKGROUND)
 
         HandelPygameEvents(camera,keys,1/60,player)
 
