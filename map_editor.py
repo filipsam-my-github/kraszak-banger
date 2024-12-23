@@ -52,8 +52,8 @@ for image in ImageLoader.images.keys():
 
 save_img = pygame.image.load('mob_animation/save_btn.png').convert_alpha()
 load_img = pygame.image.load('mob_animation/load_btn.png').convert_alpha()
-vertex_shaders_img = pygame.image.load('graphics/Icon-For-Vert_Shaders.png').convert_alpha()
-fragment_shaders_img = pygame.image.load('graphics/Icon-For-Frag_Shaders.png').convert_alpha()
+vertex_shaders_img = pygame.image.load('graphics/icon_for_vert_shaders.png').convert_alpha()
+fragment_shaders_img = pygame.image.load('graphics/icon_for_frag_shaders.png').convert_alpha()
 
 
 #define colours
@@ -135,7 +135,7 @@ while run:
 
 	#save and load data
 	if save_button.Draw(screen):
-		with wx.FileDialog(None,"Create a New File",wildcard="Text files (*.krl)|*.krl",style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT) as file_dialog:
+		with wx.FileDialog(None,"Create a New File",wildcard="Text files (*.ksl)|*.ksl",style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT) as file_dialog:
 			if file_dialog.ShowModal() == wx.ID_CANCEL:
 				print("No file selected.")
 				file_path = None
@@ -152,7 +152,7 @@ while run:
      
 	if load_button.Draw(screen):
 		with wx.FileDialog(
-			None, "Select a File", wildcard="Text files (*.krl)|*.krl",
+			None, "Select a File", wildcard="Text files (*.ksl)|*.ksl",
 			style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
 		) as file_dialog:
 
