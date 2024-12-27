@@ -1,3 +1,6 @@
+"""
+	Allows to edit and create levels idelly all levels will be made here.
+"""
 import pygame
 import button
 import csv
@@ -80,6 +83,9 @@ def DrawText(text, font, text_col, x, y):
 
 #create function for drawing background
 def DrawBg():
+	"""
+		Draws background
+    """
 	screen.fill(GREEN)
 #draw grid
 def DrawGrid():
