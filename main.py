@@ -9,7 +9,7 @@
     
     Game idea
     1. Plot unclear yet
-    2. It's a platformer game
+    2. It's a top-dwon game
     3. Probably relaxing orientated game
 """
 
@@ -24,14 +24,19 @@ from pyautogui import size as screen_size
 from camera import Camera
 
 import moderngl
+#data structer like list but faster
 from array import array
 
+#handling loading files including shaders files
 import data_interpetator
 
+#creates gl_screen which is real screen and creates pygame surface so we can draw everything as usual
 gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF)
 screen = pygame.Surface((640,360))
+#ctx is core fundament of shaders
 ctx = moderngl.create_context()
 
+#variables for resizing screen
 MONITOR_SIZE = screen_size()
 MONITOR_PROPORTIONS = [MONITOR_SIZE[0]/640, MONITOR_SIZE[1]/360]
 print(MONITOR_SIZE)
@@ -41,6 +46,7 @@ full_screen = False
 DARK_BACKGROUND = (16.5,15.7,25.1)
 LIGHT_BACKGROUND = (144, 201, 120)
 
+#sync shaders x y axis with pygame x y axis so down is +y; up is -y; left is -x; right is +x
 quad_buffer = ctx.buffer(data=array('f', [
     -1.0, 1.0, 0.0, 0.0,
     1.0, 1.0, 1.0, 0.0,
@@ -51,10 +57,11 @@ quad_buffer = ctx.buffer(data=array('f', [
 
 
 vert_shader = data_interpetator.LoadShader("vertex_shaders/vert_normal.glsl")
-frag_shader = data_interpetator.LoadShader("fragment_shaders/farg_darker_forest.glsl")#load_shader("fragment_shaders/frag_normal.glsl")
+frag_shader = data_interpetator.LoadShader("fragment_shaders/frag_normal.glsl")#load_shader("fragment_shaders/frag_normal.glsl")
 
 
-def SurfToTexture(surf):
+#darwing pygame surface on accual screen with shaders applied
+def SurfToTexture(surf) -> moderngl.Texture:
     tex = ctx.texture(surf.get_size(), 4)
     tex.filter = (moderngl.NEAREST, moderngl.NEAREST)
     tex.swizzle = 'BGRA'
@@ -62,6 +69,7 @@ def SurfToTexture(surf):
     
     return tex
 
+#essential variables for shaders
 program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
 render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
@@ -77,20 +85,20 @@ def InitaliezProgram():
     pygame.mixer.init()
     ImageLoader.init()
 
-def HandelPygameEvents(camera:Camera, keys, dt,*args):
+def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
+    """
+    Handle pygame events and key events.
+    @parameter camera for resizing screen perpouses
+    @parameter keys for proper input for obj 
+    @parameter dt for sync movment and animation between different frame rates
+    @parameter *args for object with Tick method
+    
+    """
     global full_screen
     global screen
     global gl_screen
     global ctx
-    """
-    Handle pygame events and key events
-    It is likely that lines like
-    player.Tick(keys,1/60)
     
-    because of dt mostly imputing hadlying st
-    
-    
-    """
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -104,6 +112,7 @@ def HandelPygameEvents(camera:Camera, keys, dt,*args):
                     screen = pygame.Surface(MONITOR_SIZE)
                     ImageLoader.CheangSize(MONITOR_PROPORTIONS)
                     camera.ChangedScale(MONITOR_PROPORTIONS)
+                    #setting viewport of size of screen so the images will be on full screen not only a part of it 
                     ctx.clear()
                     ctx.viewport  = (0, 0, MONITOR_SIZE[0], MONITOR_SIZE[1])
                     
@@ -112,6 +121,7 @@ def HandelPygameEvents(camera:Camera, keys, dt,*args):
                     screen = pygame.Surface((640,360))
                     ImageLoader.CheangSize([1,1])
                     camera.ChangedScale([1,1])
+                    #setting viewport of size of screen so the images will be on full screen not out of it
                     ctx.clear()
                     ctx.viewport  = (0, 0, 640, 360)
     
@@ -125,7 +135,7 @@ def HandelPygameEvents(camera:Camera, keys, dt,*args):
 
 def Main():
     """
-    Sets game properties to defult
+    Sets game variables to defult
     and runs the game in the loop
     """
     
@@ -175,7 +185,7 @@ def Main():
 
         screen.fill(LIGHT_BACKGROUND)
 
-        HandelPygameEvents(camera,keys,1/60,player)
+        HandelPygameEventsAndObjTick(camera,keys,1/60,player)
 
 
         #COLISIONS
@@ -195,12 +205,12 @@ def Main():
         camera.Draw(player,blocks,screen=screen)
         screen.blit(pygame.font.Font.render(pygame.font.SysFont("arial",40),f"x:{(camera.x_cord)},y:{(camera.y_cord)}",True,(255, 255, 255)),(350,0))
         
-
+        #rendering shaders
         frame_tex = SurfToTexture(screen)
         frame_tex.use(0)
         program['tex'] = 0
         render_object.render(mode=moderngl.TRIANGLE_STRIP)
-        
+        #preventing memory leek
         frame_tex.release()
 
         pygame.display.flip()
@@ -210,4 +220,4 @@ def Main():
 
 if __name__ == "__main__":
     InitaliezProgram()
-    Main()#640,360  now 640, 480 -> 64,48
+    Main()
