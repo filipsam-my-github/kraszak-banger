@@ -6,20 +6,18 @@ from graphic_handlerer import ImageLoader
 
 class PhysicsCollider(ABC):
     """
-        sinc detection of colision
-        
-        purpouse:
-            let's say we have 0.05 fps so delta is 20
-            so player in next frame will be at
-            self.cord_x + its_speed*20
-            so than it is likekly that object will
-            be able to teleport behind other object
-            with out interaction, 
-            this module ensure that colision will be
-            detected even if it even technicaly touched
-            one to another
-            
-    """ 
+    Represents a base class for physics-based collision handling.
+    The `PhysicsCollider` class manages collision detection and resolution with other objects.
+
+    API:
+        `@method Collide` handles collision detection and resolution with other objects.
+    PRIVATE:
+        `@method _CollisionTest` identifies objects colliding with the current instance.
+        `@method _CreateVector` creates a movement vector based on position and rectangle alignment.
+        `@method _SetCordsToRectPosition` synchronizes positional coordinates with the rectangle's position.
+        `@method __TriggerCollideForObjWhichCollisedWithSelf` triggers collision for objects colliding with the current instance.
+        `@method __ProperlyTriggerCollideForObj` ensures proper collision handling for a specified object.
+    """
     
     def __init__(self, rect:pygame.Rect = None, x_cord:int = None, y_cord:int = None, movement_vector:list = None, movement_strength:int = None):
         if rect != None:
@@ -47,7 +45,19 @@ class PhysicsCollider(ABC):
         if not hasattr(self, 'collision_types'):
             raise NotImplementedError(f"{self.__class__.__name__} must define 'self.collision_types' in __init__.")
         
-    def CollisionTest(self,tiles):
+    def _CollisionTest(self,tiles):
+        """
+        Tests for collisions between the current object and a list of tiles.
+        
+        USE:
+            `collisions = self._CollisionTest(tiles)`
+        
+        ARGS:
+            `@parameter tiles` list of objects to test for collisions.
+        
+        RETURNS:
+            A list of objects colliding with the current instance.
+        """
         collisions = []
         for tile in tiles:
             if self.rect.colliderect(tile.rect):
@@ -59,7 +69,14 @@ class PhysicsCollider(ABC):
                     collisions.append(tile)
         return collisions
 
-    def CreateVector(self):
+    def _CreateVector(self):
+        """
+        Creates a movement vector based on the difference between the rectangle's position
+        and the object's coordinates.
+        
+        USE:
+            `self._CreateVector()`
+        """
         self.movement_vector = [0,0]
         if int(self.x_cord) != self.rect.x:
             self.movement_vector[0] = self.rect.x - self.x_cord 
@@ -67,13 +84,29 @@ class PhysicsCollider(ABC):
             self.movement_vector[1] =  self.rect.y - self.y_cord
         
     
-    def SetCordsToRectPosition(self):
+    def _SetCordsToRectPosition(self):
+        """
+        Synchronizes the object's positional coordinates with the rectangle's position.
         
+        USE:
+            `self._SetCordsToRectPosition()`
+        """
         self.x_cord = self.rect.x
         self.y_cord = self.rect.y
     
     def __TriggerCollideForObjWhichCollisedWithSelf(self,tiles,x=0,y=0):
-        hit_list = self.CollisionTest(tiles)
+        """
+        Triggers collision responses for objects that have collided with the current instance.
+        
+        USE:
+            `self.__TriggerCollideForObjWhichCollisedWithSelf(tiles, x, y)`
+        
+        ARGS:
+            `@parameter tiles` list of objects to test for collisions.
+            `@parameter x` horizontal adjustment factor for collision response.
+            `@parameter y` vertical adjustment factor for collision response.
+        """
+        hit_list = self._CollisionTest(tiles)
                     
         movement_vector = self.movement_vector.copy()
         if int(self.x_cord) != self.rect.x:
@@ -86,21 +119,43 @@ class PhysicsCollider(ABC):
             i.Collide([self])
     
     def __ProperlyTriggerCollideForObj(self,obj,tiles):
-        obj.CreateVector()
-        obj.SetCordsToRectPosition()
+        """
+        Ensures proper collision handling for a specified object by updating its vector and coordinates.
+        
+        USE:
+            `self.__ProperlyTriggerCollideForObj(obj, tiles)`
+        
+        ARGS:
+            `@parameter obj` the object to handle collision for.
+            `@parameter tiles` list of objects to test for collisions.
+        """
+        obj._CreateVector()
+        obj._SetCordsToRectPosition()
         tiles.append(self)
         obj.Collide(tiles)
         tiles.pop(-1)
      
-    def Collide(self,tiles): # movement = [5,2]
+    def Collide(self,tiles):
+        """
+        Handles collision detection and resolution with a list of tiles or objects.
+        
+        USE:
+            `self.Collide(tiles)`
+        
+        ARGS:
+            `@parameter tiles` list of objects to test for collisions.
+        
+        NOTE:
+            Resolves positional adjustments to prevent overlapping objects and updates collision types.
+        """
         collision_types = {'top': 0, 'bottom': 0, 'right': 0, 'left': 0}
-        suspected_tiles = self.CollisionTest(tiles)
+        suspected_tiles = self._CollisionTest(tiles)
 
         self.rect.x -= self.movement_vector[0]
         self.rect.y -= self.movement_vector[1]   
         
         self.rect.x += self.movement_vector[0]
-        hit_list = self.CollisionTest(suspected_tiles)
+        hit_list = self._CollisionTest(suspected_tiles)
         
         for obj in hit_list:
             tile = obj.rect
@@ -127,7 +182,7 @@ class PhysicsCollider(ABC):
                     
                     
         self.rect.y += self.movement_vector[1]
-        hit_list = self.CollisionTest(tiles)
+        hit_list = self._CollisionTest(tiles)
         
         for obj in hit_list:
             tile = obj.rect
@@ -159,12 +214,32 @@ class PhysicsCollider(ABC):
         self.collision_types = collision_types
         for i in self.collision_types.keys():
             if self.collision_types[i]:
-                self.SetCordsToRectPosition()
+                self._SetCordsToRectPosition()
                 break
         
 
 class Block(PhysicsCollider):
+    """
+    Represents a generic block entity in the game, inheriting from `PhysicsCollider`.
+    The `Block` class serves as a base class for various types of blocks, providing collision handling and rendering functionality.
+
+    API:
+        `@method Draw` Renders the block on the screen (pygame surface).
+        `@method GetImageSize` Returns the dimensions of the block's image.
+
+    INHERITANCE:
+        Base class for block-like objects such as `WoodenBox`.
+    """
     def __init__(self, x_cord:int, y_cord:int, image_name, movement_strength):
+        """
+        Initializes a `Block` instance with its position, image, and movement strength.
+        
+        ARGS:
+            `@parameter x_cord` (int): The X-coordinate of the block.
+            `@parameter y_cord` (int): The Y-coordinate of the block.
+            `@parameter image_name` (str): The name of the image representing the block.
+            `@parameter movement_strength` (int): The block's strength affecting collision behavior.
+        """
         super().__init__(rect = pygame.Rect(x_cord, y_cord, 64, 64),
                          x_cord = x_cord,
                          y_cord = y_cord,
@@ -173,16 +248,35 @@ class Block(PhysicsCollider):
         self.image_name = image_name
     
     def Draw(self, screen, x_cord = None, y_cord = None, width_scaling = 1, height_scaling = 1):
+        """
+        Renders the block on a pygame surface.
+        
+        USE:
+            `block.Draw(screen, x_cord, y_cord, width_scaling, height_scaling)`
+        
+        ARGS:
+            `@parameter screen` (pygame.Surface): The surface to draw on.
+            `@parameter x_cord` (int, optional): The X-coordinate for rendering. Defaults to the block's current X-coordinate.
+            `@parameter y_cord` (int, optional): The Y-coordinate for rendering. Defaults to the block's current Y-coordinate.
+            `@parameter width_scaling` (float, optional): Scale factor for width adjustment. Defaults to 1.
+            `@parameter height_scaling` (float, optional): Scale factor for height adjustment. Defaults to 1.
+        """
         if x_cord == None:
             x_cord = self.x_cord
         if y_cord == None:
             y_cord = self.y_cord
             
-        ImageLoader.DarwEntityImage(screen,self.image_name, x_cord, y_cord)
+        ImageLoader.DarwImage(screen,self.image_name, x_cord, y_cord)
 
         pygame.draw.rect(screen, (230,230,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
         
-    def GetImageSize(self):
+    def GetImageSize(self) -> tuple[int,int]:
+        """
+        Retrieves the dimensions of the block's associated image.
+        
+        RETURNS:
+            (tuple[int, int]): Width and height of the block's image.
+        """
         return ImageLoader.images[self.image_name].get_size()
 
 
