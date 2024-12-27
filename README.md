@@ -12,6 +12,7 @@ School Project
    ```Comand prompt
    pip install pygame-ce
    pip install moderngl
+   pip install wxPython
 
 5. Run the game by opening it from direct folder
 or by following comands in comand prompt
