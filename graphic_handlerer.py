@@ -1,19 +1,47 @@
+
+"""
+    file for handling files like .png and in future files like .mp3 (probably)
+    API:
+        `@module ImageLoader` it is for handling all images memory in the same place 
+        
+"""
 import pygame
 from math import ceil
 
 class ImageLoader:
     """
-        A class for loading and displaying images.
+        A module for loading and displaying images.
+        init() is all lowercase because pygame use pygame.inti() so it would be not confiusing to have
+        `pyagme.init()
+        ImageLoader.Init()`.
+        
+        API:
+            USE:
+                `@method ImageLoader.init()` to load images in certain scale.
+                `@method ImageLoader.CheangSize(list_2d)` is for changing scale
+                `@method GetSize` returns scale for exsample is images are 16,16 than it returns (16,16)
+                `@method GetScale` gets orginal scal 
+            Change variable _SCALE inside this module to change orginal scale that every thing is relative to.
+            `ImageLoader.CheangSize([1,1])` goes balck to this orginal scale.
+            
+            
 
-        Note: The init() method must be called before any other
+        Note: The init() method must be called before any other method that is for displaying images
         usage of this module to ensure proper functionality.
     """
+    #orginal sizze of standard img from big png file
+    __IMAGE_WIDTH = 16
+    __IMAGE_HEIGHT = 16
+    
+    #scales width and height by certain constant
     _SCALE = 4
-    _standard_size_of_image_height = 16 * _SCALE
-    _standard_size_of_image_width = 16 * _SCALE
-    _big_image_scale_height = _SCALE
-    _big_image_scale_width = _SCALE
-
+    _scale_only_width = _SCALE
+    _scale_only_height = _SCALE
+    
+    #calculated width and height
+    _standard_size_of_image_height = __IMAGE_WIDTH * _SCALE
+    _standard_size_of_image_width = __IMAGE_HEIGHT * _SCALE
+    
     _MOBS_ASSET = None
     _MAP_ASSET = None
 
@@ -22,7 +50,15 @@ class ImageLoader:
     @classmethod
     def init(cls):
         """
-            Loads the essential images required for running any other methods.
+            Loads the essential images required for running any other methods that darws it on screen.
+            Restarts variables to default  val
+            
+            USE:
+                `ImageLoader.init()`
+                or
+                `ImageLoader.init()`
+                `ImageLoader.CheangSize([2,2])` now ims will be 2 times widther and heighter ImageLoader.CheangSize
+                    
         """
         pygame.init()
         if not pygame.display.get_surface():
@@ -33,11 +69,11 @@ class ImageLoader:
 
         
         cls._MOBS_ASSET = pygame.image.load("mob_animation/Atlas.png")
-        cls._MOBS_ASSET = pygame.transform.scale(cls._MOBS_ASSET, (cls._MOBS_ASSET.get_width() * cls._big_image_scale_width, cls._MOBS_ASSET.get_height() * cls._big_image_scale_height))
+        cls._MOBS_ASSET = pygame.transform.scale(cls._MOBS_ASSET, (cls._MOBS_ASSET.get_width() * cls._scale_only_height, cls._MOBS_ASSET.get_height() * cls._scale_only_width))
         cls._MOBS_ASSET.convert_alpha()
 
         cls._MAP_ASSET = pygame.image.load("mob_animation/tilemap.png")
-        cls._MAP_ASSET = pygame.transform.scale(cls._MAP_ASSET, (cls._MAP_ASSET.get_width() * cls._big_image_scale_width, cls._MAP_ASSET.get_height() * cls._big_image_scale_height))
+        cls._MAP_ASSET = pygame.transform.scale(cls._MAP_ASSET, (cls._MAP_ASSET.get_width() * cls._scale_only_height, cls._MAP_ASSET.get_height() * cls._scale_only_width))
         cls._MAP_ASSET.convert_alpha()
 
         cls.images = {}
@@ -46,12 +82,12 @@ class ImageLoader:
             for j in ["down","left","up","right"]:
                 kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszaks_heading_{j}/kraszaks_heading_{j}_{i}.png")
                 
-                cls.images[f"kraszak_heading_{j}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._big_image_scale_width, kraszak_heading_something.get_height() * cls._big_image_scale_height))
+                cls.images[f"kraszak_heading_{j}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
         
         for i in ["level_exit", "dialog_trigger"]:
             kraszak_heading_something = pygame.image.load(f"graphics//{i}.png")
                     
-            cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._big_image_scale_width, kraszak_heading_something.get_height() * cls._big_image_scale_height))
+            cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
             
 
 
@@ -96,28 +132,42 @@ class ImageLoader:
     
     @classmethod
     def CheangSize(cls, new_proportion):
-        cls._standard_size_of_image_width = int(16 * cls._SCALE * new_proportion[0])
-        cls._standard_size_of_image_height = int(16 * cls._SCALE * new_proportion[1])
-        cls._big_image_scale_width = int(cls._standard_size_of_image_width/16)
-        cls._big_image_scale_height = int(cls._standard_size_of_image_height/16)
+        """
+            Changes Scale of imgs relativly to __SCALE
+            
+            USE:
+                `ImageLoader.CheangSize([2,2])` it 2 times widther and heighter
+        """
+        cls._standard_size_of_image_width = int(cls.__IMAGE_WIDTH * cls._SCALE * new_proportion[0])
+        cls._standard_size_of_image_height = int(cls.__IMAGE_HEIGHT * cls._SCALE * new_proportion[1])
+        cls._scale_only_height = int(cls._standard_size_of_image_width/16)
+        cls._scale_only_width = int(cls._standard_size_of_image_height/16)
         
-        print(cls._big_image_scale_width, cls._big_image_scale_height)
+        print(cls._scale_only_height, cls._scale_only_width)
         cls.init()
     
     @classmethod
     def GetSize(cls):
-        return (cls._big_image_scale_width, cls._big_image_scale_height)
+        """
+            gets default  imgs size in pixels (2d tuple)
+            USE:
+                `images_size = ImageLoader.GetSize()`
+        """
+        return (cls._scale_only_height, cls._scale_only_width)
         
     @classmethod
-    def DarwEntityImage(cls, screen: pygame.display, name, x_cord, y_cord, rotation_angle=0):
+    def DarwImage(cls, screen: pygame.display, name, x_cord, y_cord, rotation_angle=0):
         """
-            Draws ONLY the Entity (from _MOBS_ASSET) on the screen. 
+            Works only if `ImageLoader.init()` was previously called. 
     
-            @param rotation_angle: The rotation angle in degrees (not radians).
+            `@parameter rotation_angle`: The rotation angle in degrees (not radians).
                                 Positive values (+) rotate left (counter-clockwise),
                                 and negative values (-) rotate right (clockwise).
             The rotation_angle is static and always calculated relative to angle 0, 
             regardless of the previous angle.
+            
+            note:
+                This function when `rotation_angle != 0` needs to perform pygame.transform.rotate thus is slower when `rotation_angle != 0`.
         """
         if rotation_angle != 0:            
             screen.blit(pygame.transform.rotate(cls.images[name], rotation_angle), (x_cord, y_cord))
@@ -126,19 +176,10 @@ class ImageLoader:
 
     @classmethod
     def GetScale(cls):
+        """
+            gets _SCALE
+            USE:
+                `images_scale = ImageLoader.GetScale()`
+        """
         return cls._SCALE
     
-    def DrawSceneryImage(self,x_cord,y_cord,wight,height):
-        pygame.sprite.Sprite.__init__(self)
-        self.image= pygame.Surface([wight,height]) #placeholder for Pixel x and y 
-        self.rect= self.image.get_rect()
-        self.rect.topleft=()#requaired adisional X and Y; X and Y set only for that#
-# class Animacions:
-#     def AttackAnimations(self,):
-#         for event in pygame.event.get():
-#             if event.type == pygame.KEYDOWN():
-#                 if event.key == pygame.K_RIGHT:
-#                     player.Player.item.Swing(True)
-#             elif event.type == pygame.KEYUP():
-#                 if event.key == pygame.K_RIGHT:
-#                     player.Player.item.Swing(False)
