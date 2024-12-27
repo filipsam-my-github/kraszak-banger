@@ -7,7 +7,7 @@ import graphic_handlerer as gh
 class Item(ABC):
     """
         CHANE ME AFTER CHANGES IN THIS CODE 
-        For now it's just residue of rogue-like game
+        For now it's just residue of roguelike game
     """
 
     def __init__(self, image_name, cords):
