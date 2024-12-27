@@ -1,15 +1,33 @@
+"""
+    file for functions that loads data from files except files like .png .mp3 .mp4 ect
+    API:
+        `@method LoadShader` loads shader
+        `@method LoadLevel` loads data from level it isn't obvious how to use so recomendated reading docstring of this function 
+        
+"""
 from player import Player
 from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox
 
 def LoadShader(file_path):
+    """
+    this function loads shader
+    USE: `frag_shader = LoadShader("shaders/frag_shader.glsl")`
+    DATAOUTPUT: string(from file(file.read()))
+    """
     with open(file_path, 'r') as file:
         return file.read()
 
 def LoadLevel(level_name):
     """
-    OUTPUT: vertex shaders, fragment shaders, Player, blocks
+    ARG:
+        `@parameter level_name` it is the name of the level without path nor .ksl
+    OUTPUT: vertex shaders, fragment shaders, Player, blocks, (in future) npcs, dialogs
+    USE: `vert_shader, frag_shader, player, blocks = LoadLevel("Exsample")`
+    
     """
     with open(f"levels/{level_name}.krl", "r") as file:
+        #data is separated by \n and args are spepareted by space in file .ksl
+        #some may have wird name because there are not class in game but a parameter (like #!#Scale#@#)
         data = file.read().split('\n')
 
         data[0] = data[0].split(' ')
@@ -17,6 +35,7 @@ def LoadLevel(level_name):
         if data[0][0] != "#!#Scale#@#" and len(data[0]) == 3:
             raise KeyError(f".krl file should contain #!#Scale#@# in first line insted it contains {data[0]} and have lenght 3 it has {len(data[0])}")
         
+        #reads multiplayer for cords given in file (helps translates one position system into another)
         scale_x = float(data[0][1])
         scale_y = float(data[0][2])
         
