@@ -38,7 +38,7 @@ scroll_left = False
 scroll_right = False
 scroll_down = False
 scroll_up = False
-scroll = 0
+scroll_horizontal = 0
 scroll_vertical = 0
 scroll_speed = 1
 
@@ -51,7 +51,7 @@ fragment_shaders = "fragment_shaders/frag_normal.glsl"
 img_list = []
 for image in ImageLoader.images.keys():
 
-    img_list.append({"img":ImageLoader.images[image],"name":image})
+    img_list.append({"img":ImageLoader.images[image],"name":image, "meta_data":""})
 
 save_img = pygame.image.load('mob_animation/save_btn.png').convert_alpha()
 load_img = pygame.image.load('mob_animation/load_btn.png').convert_alpha()
@@ -91,8 +91,8 @@ def DrawBg():
 def DrawGrid():
 	#vertical lines
 	for c in range(-4,MAX_COLS+4):
-		bonus = scroll//192.5
-		pygame.draw.line(screen, WHITE, (c * TILE_SIZE_X - scroll + bonus*192.5, 0), (c * TILE_SIZE_X - scroll + bonus*192.5, SCREEN_HEIGHT))
+		bonus = scroll_horizontal//192.5
+		pygame.draw.line(screen, WHITE, (c * TILE_SIZE_X - scroll_horizontal + bonus*192.5, 0), (c * TILE_SIZE_X - scroll_horizontal + bonus*192.5, SCREEN_HEIGHT))
 	#horizontal lines
 	for c in range(-4,ROWS + 4):
 		bonus = scroll_vertical//190
@@ -103,8 +103,56 @@ def DrawGrid():
 def DrawWorld():
 	for obj_data in world_data.keys():
 		cords = obj_data.split('x')
-		screen.blit(img_list[world_data[obj_data]["id"]]["img"], (int(cords[0]) * TILE_SIZE_X - scroll, int(cords[1]) * TILE_SIZE_Y - scroll_vertical))
+		screen.blit(img_list[world_data[obj_data]["id"]]["img"], (int(cords[0]) * TILE_SIZE_X - scroll_horizontal, int(cords[1]) * TILE_SIZE_Y - scroll_vertical))
 
+
+def MouseUpdate(mouse = None):
+    get_pos = pygame.mouse.get_pos()
+    get_pressed = pygame.mouse.get_pressed()
+    if mouse:
+        return {
+        "position_xy":get_pos,
+        "state":{
+                "left": get_pressed[0],
+                "middle": get_pressed[1],
+                "right": get_pressed[2]
+            },
+        "clicked":{
+            "up":{
+                "left": get_pressed[0]!=mouse["state"]["left"] and mouse["state"]["left"]==True,
+                "middle": get_pressed[1]!=mouse["state"]["middle"] and mouse["state"]["middle"]==True,
+                "right": get_pressed[2]!=mouse["state"]["right"] and mouse["state"]["right"]==True
+            },
+            "down":{
+                "left": get_pressed[0]!=mouse["state"]["left"] and get_pressed[0]==True,
+                "middle": get_pressed[1]!=mouse["state"]["middle"] and get_pressed[1]==True,
+                "right": get_pressed[2]!=mouse["state"]["right"] and get_pressed[2]==True
+            }
+
+        }
+        }
+    
+    return {
+        "position_xy":get_pos,
+        "state":{
+                "left": get_pressed[0],
+                "middle": get_pressed[1],
+                "right": get_pressed[2]
+            },
+        "clicked":{
+            "up":{
+                "left": False,
+                "middle": False,
+                "right": False
+            },
+            "down":{
+                "left": False,
+                "middle": False,
+                "right": False
+            }
+
+        }
+        }
 
 
 #create buttons
@@ -112,6 +160,9 @@ save_button = button.Button(SCREEN_WIDTH // 2, SCREEN_HEIGHT + LOWER_MARGIN - 50
 load_button = button.Button(SCREEN_WIDTH // 2 + 200, SCREEN_HEIGHT + LOWER_MARGIN - 50, load_img, 1)
 vertex_shaders_button = button.Button(SCREEN_WIDTH // 2 -200, SCREEN_HEIGHT + LOWER_MARGIN - 50, vertex_shaders_img, 1)
 fragment_shaders_button = button.Button(SCREEN_WIDTH // 2 - 400, SCREEN_HEIGHT + LOWER_MARGIN - 50, fragment_shaders_img, 1)
+meta_data_button = button.Button(-100, -100, None, 1)
+meta_data_button.ChangeRectTO(pygame.rect.Rect(-100,-100,TILE_SIZE_X,TILE_SIZE_Y)) 
+
 #make a button list
 entities_to_place = []
 button_col = 0
@@ -126,12 +177,12 @@ for i in range(len(img_list)):
 
 
 run = True
+mouse = MouseUpdate()
 
- 
 while run:
-
+	mouse = MouseUpdate(mouse)
 	clock.tick(FPS)
-
+	#draw scene
 	DrawBg()
 	DrawGrid()
 	DrawWorld()
@@ -141,6 +192,7 @@ while run:
 
 	#save and load data
 	if save_button.Draw(screen):
+		#open window for saving data
 		with wx.FileDialog(None,"Create a New File",wildcard="Text files (*.ksl)|*.ksl",style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT) as file_dialog:
 			if file_dialog.ShowModal() == wx.ID_CANCEL:
 				print("No file selected.")
@@ -149,14 +201,17 @@ while run:
 				file_path = file_dialog.GetPath()
 		if file_path:
 			with open(file_path, 'w') as file:
+				#saves 3 essential things
 				file.write(f"#!#Scale#@# {TILE_SIZE_X} {TILE_SIZE_Y}\n")
 				file.write(f"#!#vertex_shaders#@# {vertex_shaders}\n")
 				file.write(f"#!#fragment_shaders#@# {fragment_shaders}\n")
+				#saves actual level's content
 				for i in world_data:
-					cords = i.split('x')
-					file.write(f"{world_data[i]['name']} {cords[0]} {cords[1]}\n")
+					obj_cords = i.split('x')
+					file.write(f"{world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {world_data[i]['meta_data']}\n")
      
 	if load_button.Draw(screen):
+     	#open window for saving loading data
 		with wx.FileDialog(
 			None, "Select a File", wildcard="Text files (*.ksl)|*.ksl",
 			style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
@@ -168,22 +223,34 @@ while run:
 				file_path = file_dialog.GetPath()
 				print(f"Selected file: {file_path}")
 				with open(file_path, "r") as file_path:
+					#clears level editor level data
 					world_data = {}
+					#reads file
 					data = file_path.read().split('\n')
 					for i,e in enumerate(data):
-						cords = e.split(' ')[1:]
-						id = None
-						name = e.split(' ')[0]
+						obj_cords = e.split(' ')[1:]
+						#obj_id is the index where obj_id has img in img_list (list of dictionaries)
+						obj_id = None
+						obj_name = e.split(' ')[0]
       
 						for i,e in enumerate(img_list):
-							if e["name"] == name:
-								id = i 
+							if e["name"] == obj_name:
+								obj_id = i 
 								break
 						else:
 							continue
+   
+						meta_data = ""
+						print(obj_cords)
+						if len(obj_cords) > 2:
+							meta_data = obj_cords[2:]
+							print("sec",meta_data)
+							meta_data = " ".join(meta_data)
+							print("thr",meta_data)
 
 		
-						world_data[f"{int(cords[0])}x{int(cords[1])}"] = {"id":id, "name":name}
+						world_data[f"{int(obj_cords[0])}x{int(obj_cords[1])}"] = {"id":obj_id, "name":obj_name, "meta_data":meta_data}
+						print(world_data[f"{int(obj_cords[0])}x{int(obj_cords[1])}"])
     
 	if fragment_shaders_button.Draw(screen):
 		with wx.FileDialog(
@@ -209,8 +276,24 @@ while run:
 				file_path = file_dialog.GetPath()
 				vertex_shaders = file_path
 
+	if meta_data_button.Draw(screen):
+		x = (pos[0] + scroll_horizontal) // TILE_SIZE_X
+		y = (pos[1] + scroll_vertical) // TILE_SIZE_Y
+		with wx.TextEntryDialog(
+        None, 
+        "Edit the text below:", 
+        "Input Dialog", 
+        value=world_data[f"{x}x{y}"]["meta_data"]  # Initial data for the text box
+    ) as dialog:
+			if dialog.ShowModal() == wx.ID_OK:
+				user_input = dialog.GetValue()
+       
 				
-	screen.blit(pygame.font.Font.render(pygame.font.SysFont("arial",40),f"x:{(scroll)},y:{(scroll_vertical)}",True,(255, 255, 255)),(350,0))
+				world_data[f"{x}x{y}"]["meta_data"] = user_input
+			else:
+				print("No input provided.")  # Handle the case when dialog is canceled
+				
+	screen.blit(pygame.font.Font.render(pygame.font.SysFont("arial",40),f"x:{(scroll_horizontal)},y:{(scroll_vertical)}",True,(255, 255, 255)),(350,0))
 	#draw tile panel and tiles
 	pygame.draw.rect(screen, GREEN, (SCREEN_WIDTH, 0, SIDE_MARGIN, SCREEN_HEIGHT))
 
@@ -226,9 +309,9 @@ while run:
 
 	#scroll the map
 	if scroll_left == True:
-		scroll -= 5 * scroll_speed
+		scroll_horizontal -= 5 * scroll_speed
 	if scroll_right == True:
-		scroll += 5 * scroll_speed
+		scroll_horizontal += 5 * scroll_speed
 	if scroll_up == True:
 		scroll_vertical -= 5 * scroll_speed
 	if scroll_down == True:
@@ -237,19 +320,23 @@ while run:
 	#add new tiles to the screen
 	#get mouse position
 	pos = pygame.mouse.get_pos()
-	x = (pos[0] + scroll) // TILE_SIZE_X
+	x = (pos[0] + scroll_horizontal) // TILE_SIZE_X
 	y = (pos[1] + scroll_vertical) // TILE_SIZE_Y
 
 	#check that the coordinates are within the tile area
 	if pos[0] < SCREEN_WIDTH and pos[1] < SCREEN_HEIGHT:
 		#update tile value
+		if mouse["clicked"]["down"]["middle"] and f"{x}x{y}" in world_data.keys():
+			meta_data_button.ChangeCordsTO(x*TILE_SIZE_X - scroll_horizontal,y*TILE_SIZE_Y - scroll_vertical)
 		if pygame.mouse.get_pressed()[0] == 1:
 			if not f"{x}x{y}" in world_data.keys():
-				world_data[f"{x}x{y}"] = {"id":current_tile ,"name": img_list[current_tile]["name"]}
+				world_data[f"{x}x{y}"] = {"id":current_tile ,"name": img_list[current_tile]["name"], "meta_data":""}
 		if pygame.mouse.get_pressed()[2] == 1:
 			if f"{x}x{y}" in world_data.keys():
 				del world_data[f"{x}x{y}"]
+				meta_data_button.ChangeCordsTO(-100,-100)
 
+				
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:

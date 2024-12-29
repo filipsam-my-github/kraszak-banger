@@ -83,6 +83,7 @@ def InitaliezProgram():
     """
     pygame.init()
     pygame.mixer.init()
+    #init isn't spelt Init because pyagme use .init()
     ImageLoader.init()
 
 def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
@@ -125,7 +126,8 @@ def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
                     ctx.clear()
                     ctx.viewport  = (0, 0, 640, 360)
     
-    
+    #going through arguments and executing Tick method
+    #TODO filipsam 29/12/2024 some object doesn't relly need 'keys' but yet it still is given
     for arg in args:
         if arg == list or arg == tuple:
             for obj in arg:
@@ -140,6 +142,8 @@ def Main():
     """
     
     clock = pygame.time.Clock()
+    
+    #creating debug colision room
     player = Player(100,300)
     blocks = []#[WoodenBox(400,50), HeavySteelBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
     # for i in range(12):
@@ -166,27 +170,13 @@ def Main():
     blocks.append(WoodenBox(400,-50))
     
     
-    
-
-    
-    
-    player.PickAnItem(Sword("wooden_sword", (0,0)))
-    player.item.Swing()
-    #player.Animacions.AttackAnimations() #<- wywyołać funkje attack animaciona
-    items = []
     camera = Camera((640, 480),0,0)
-    x=0
 
-    while True:
-        
+    while True:    
         clock.tick(60)
-
         keys = pygame.key.get_pressed()
-
         screen.fill(LIGHT_BACKGROUND)
-
         HandelPygameEventsAndObjTick(camera,keys,1/60,player)
-
 
         #COLISIONS
         
@@ -197,8 +187,6 @@ def Main():
         #         block.Colide([other_block])
 
         player.Collide(blocks)
-        
-        
         
         camera.Center(int(player.x_cord+15),int(player.y_cord))
         
