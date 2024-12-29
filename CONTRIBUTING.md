@@ -35,6 +35,10 @@ To ensure consistency across the codebase, please follow these style guidelines:
 ### Functions
 - Use **PascalCase** for function names (e.g., `MyFunctionName`).
 
+### Preferred language
+- As it is standart in industry to write code in English so **Preferred is English** in all cases.
+- That means TODO comments, docstrings, comments, files, ect.
+- Because this is a Polish project **Polish is acceptable in TODO commentsh** as there are temporary anyway.
 
 
 ### General
