@@ -1,10 +1,10 @@
 """
-	Allows to edit and create levels idelly all levels will be made here.
+	Allows to edit and create levels ideally all levels will be made here.
 """
 import pygame
 import button
 import csv
-from graphic_handlerer import ImageLoader
+from graphic_handler import ImageLoader
 import wx
 
 app = wx.App(False)
@@ -90,13 +90,13 @@ def DrawBg():
 #draw grid
 def DrawGrid():
 	#vertical lines
-	for c in range(-4,MAX_COLS+4):
-		bonus = scroll_horizontal//192.5
-		pygame.draw.line(screen, WHITE, (c * TILE_SIZE_X - scroll_horizontal + bonus*192.5, 0), (c * TILE_SIZE_X - scroll_horizontal + bonus*192.5, SCREEN_HEIGHT))
+	for c in range(-6,MAX_COLS+6):
+		bonus = scroll_horizontal//(TILE_SIZE_X*2)
+		pygame.draw.line(screen, WHITE, (c * TILE_SIZE_X - scroll_horizontal + bonus*(TILE_SIZE_X*2), 0), (c * TILE_SIZE_X - scroll_horizontal + bonus*(TILE_SIZE_X*2), SCREEN_HEIGHT))
 	#horizontal lines
 	for c in range(-4,ROWS + 4):
-		bonus = scroll_vertical//190
-		pygame.draw.line(screen, WHITE, (0, c * TILE_SIZE_Y - scroll_vertical + bonus*190), (SCREEN_WIDTH, c * TILE_SIZE_Y - scroll_vertical + bonus*190))
+		bonus = scroll_vertical//(TILE_SIZE_Y*3)
+		pygame.draw.line(screen, WHITE, (0, c * TILE_SIZE_Y - scroll_vertical + bonus*(TILE_SIZE_Y*3)), (SCREEN_WIDTH, c * TILE_SIZE_Y - scroll_vertical + bonus*(TILE_SIZE_Y*3)))
 
 
 #function for drawing the world tiles
@@ -241,16 +241,12 @@ while run:
 							continue
    
 						meta_data = ""
-						print(obj_cords)
 						if len(obj_cords) > 2:
 							meta_data = obj_cords[2:]
-							print("sec",meta_data)
 							meta_data = " ".join(meta_data)
-							print("thr",meta_data)
 
 		
 						world_data[f"{int(obj_cords[0])}x{int(obj_cords[1])}"] = {"id":obj_id, "name":obj_name, "meta_data":meta_data}
-						print(world_data[f"{int(obj_cords[0])}x{int(obj_cords[1])}"])
     
 	if fragment_shaders_button.Draw(screen):
 		with wx.FileDialog(
@@ -277,8 +273,10 @@ while run:
 				vertex_shaders = file_path
 
 	if meta_data_button.Draw(screen):
+		#calculating position of the mouse
 		x = (pos[0] + scroll_horizontal) // TILE_SIZE_X
 		y = (pos[1] + scroll_vertical) // TILE_SIZE_Y
+		#opens 1line textbox
 		with wx.TextEntryDialog(
         None, 
         "Edit the text below:", 
@@ -349,26 +347,26 @@ while run:
 			if event.key == pygame.MOUSEBUTTONUP:
 				for i in entities_to_place:
 					i.rect.y += 10
-			if event.key == pygame.K_UP:
+			if event.key == pygame.K_UP or event.key == pygame.K_w:
 				scroll_up = True
-			if event.key == pygame.K_DOWN:
+			if event.key == pygame.K_DOWN or event.key == pygame.K_s:
 				scroll_down = True
-			if event.key == pygame.K_LEFT:
+			if event.key == pygame.K_LEFT or event.key == pygame.K_a:
 				scroll_left = True
-			if event.key == pygame.K_RIGHT:
+			if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
 				scroll_right = True
 			if event.key == pygame.K_RSHIFT:
 				scroll_speed = 5
 
 
 		if event.type == pygame.KEYUP:
-			if event.key == pygame.K_LEFT:
+			if event.key == pygame.K_LEFT or event.key == pygame.K_a:
 				scroll_left = False
-			if event.key == pygame.K_RIGHT:
+			if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
 				scroll_right = False
-			if event.key == pygame.K_DOWN:
+			if event.key == pygame.K_DOWN or event.key == pygame.K_s:
 				scroll_down = False
-			if event.key == pygame.K_UP:
+			if event.key == pygame.K_UP or event.key == pygame.K_w:
 				scroll_up = False
 			if event.key == pygame.K_RSHIFT:
 				scroll_speed = 1

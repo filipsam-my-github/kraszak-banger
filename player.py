@@ -1,23 +1,24 @@
 import pygame
 from math import sqrt
-from graphic_handlerer import ImageLoader
+from graphic_handler import ImageLoader
 from items import Item
 from blocks import PhysicsCollider
+from camera import CameraDrawable
 
-class Player(PhysicsCollider):
+class Player(PhysicsCollider, CameraDrawable):
     """
     Represents a player entity in the game, inheriting from `PhysicsCollider`.
     The `Player` class provides Tick, Collisions and Animations
 
     API:
         `@method PickAnItem` unimplemented (it was for holding item in hand)
-        `@method Draw` draws player on the screen (pyagme surface)
-        `@method Tick performs` nessesery actions in every frame
-        `@method AnimationTick` uppdates animation frame
+        `@method Draw` draws player on the screen (pygame surface)
+        `@method Tick performs` necessary actions in every frame
+        `@method AnimationTick` updates animation frame
     PRIVATE:
         `@method __AnimationStanding` sets frame where player stands
-        `@method __AnimationDirectionUppdate` uppdates animation direction in which player is heading
-        `@method __AnimationClockTick` uppdates moving frame 
+        `@method __AnimationDirectionUpdate` updates animation direction in which player is heading
+        `@method __AnimationClockTick` updates moving frame 
     """
     
     HIEGHT = 50
@@ -114,9 +115,9 @@ class Player(PhysicsCollider):
         self.image_name = "_".join(new_image_name)
                 
     
-    def __AnimationDirectionUppdate(self):
+    def __AnimationDirectionUpdate(self):
         """
-            use when you want to uppdate direction of animation (top-down-left-bottom)
+            use when you want to update direction of animation (top-down-left-bottom)
             USE:
                 `self.__AnimationStanding()`
                 
@@ -149,7 +150,7 @@ class Player(PhysicsCollider):
     
     def __AnimationClockTick(self,dt):
         """
-            uppades number of frame (moving frame)
+            updates number of frame (moving frame)
             USE:
                 `self.__AnimationClockTick(dt)`
         """
@@ -169,11 +170,11 @@ class Player(PhysicsCollider):
         
     def AnimationTick(self,dt):
         """
-            Uppdates animation frame
+            Updates animation frame
             USE:
                 `player.AnimationTick(dt)`
         """
-        self.__AnimationDirectionUppdate()
+        self.__AnimationDirectionUpdate()
         if self.movement_vector[0] != 0 or self.movement_vector[1] != 0:
             self.__AnimationClockTick(dt)
         else:
@@ -212,7 +213,7 @@ class Player(PhysicsCollider):
         if y_cord == None:
             y_cord = self.y_cord
         
-        ImageLoader.DarwImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
+        ImageLoader.DrawImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
         if Player.HITBOX:
             pygame.draw.rect(screen, (230,50,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
     

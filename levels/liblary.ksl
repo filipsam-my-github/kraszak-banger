@@ -1,7 +1,62 @@
 #!#Scale#@# 64 80
 #!#vertex_shaders#@# vertex_shaders/vert_normal.glsl
 #!#fragment_shaders#@# fragment_shaders/frag_normal.glsl
-level_exit 6 5
-heavy_golden_box 7 5
-heavy_golden_box 5 5
-kraszak_heading_down_0 6 4
+kraszak_heading_down_0 7 2 None
+dialog_trigger 7 3 letter_from_father1
+dialog_trigger 8 2 letter_from_father1
+dialog_trigger 6 2 letter_from_father1
+dialog_trigger 7 1 letter_from_father1
+level_exit 7 5 
+level_exit 8 5 
+level_exit 6 5 
+heavy_golden_box 9 5 
+heavy_golden_box 5 5 
+heavy_golden_box 10 5 
+heavy_golden_box 11 5 
+heavy_golden_box 4 5 
+heavy_golden_box 3 5 
+heavy_golden_box 3 4 
+heavy_golden_box 3 3 
+heavy_golden_box 3 2 
+heavy_golden_box 3 1 
+heavy_golden_box 3 0 
+heavy_golden_box 12 0 
+heavy_golden_box 12 1 
+heavy_golden_box 12 2 
+heavy_golden_box 12 3 
+heavy_golden_box 12 4 
+heavy_golden_box 12 5 
+heavy_golden_box 10 1 
+heavy_golden_box 10 2 
+heavy_golden_box 10 3 
+heavy_golden_box 5 1 
+heavy_golden_box 5 2 
+heavy_golden_box 5 3 
+heavy_golden_box 3 -1 
+heavy_golden_box 3 -2 
+heavy_golden_box 3 -3 
+heavy_golden_box 3 -4 
+heavy_golden_box 12 -3 
+heavy_golden_box 12 -4 
+heavy_golden_box 12 -2 
+heavy_golden_box 12 -1 
+heavy_golden_box 5 -1 
+heavy_golden_box 6 -1 
+heavy_golden_box 7 -1 
+heavy_golden_box 8 -1 
+heavy_golden_box 9 -1 
+heavy_golden_box 5 -3 
+heavy_golden_box 6 -3 
+heavy_golden_box 12 -5 
+heavy_golden_box 11 -5 
+heavy_golden_box 10 -5 
+heavy_golden_box 3 -5 
+heavy_golden_box 4 -5 
+heavy_golden_box 5 -5 
+heavy_golden_box 6 -5 
+heavy_golden_box 7 -5 
+heavy_golden_box 8 -5 
+heavy_golden_box 9 -5 
+player5 5 -4 static
+player4 11 2 static
+kraszak_heading_up_4 7 4 hallway_liblary_math_class

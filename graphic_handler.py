@@ -11,25 +11,25 @@ from math import ceil
 class ImageLoader:
     """
         A module for loading and displaying images.
-        init() is all lowercase because pygame use pygame.inti() so it would be not confiusing to have
+        init() is all lowercase because pygame use pygame.inti() so it would be not confusing to have
         `pyagme.init()
         ImageLoader.Init()`.
         
         API:
             USE:
                 `@method ImageLoader.init()` to load images in certain scale.
-                `@method ImageLoader.CheangSize(list_2d)` is for changing scale
-                `@method GetSize` returns scale for exsample is images are 16,16 than it returns (16,16)
-                `@method GetScale` gets orginal scal 
-            Change variable _SCALE inside this module to change orginal scale that every thing is relative to.
-            `ImageLoader.CheangSize([1,1])` goes balck to this orginal scale.
+                `@method ImageLoader.ChangeSize(list_2d)` is for changing scale
+                `@method GetSize` returns scale for original is images are 16,16 than it returns (16,16)
+                `@method GetScale` gets original scale
+            Change variable _SCALE inside this module to change original scale that every thing is relative to.
+            `ImageLoader.ChangeSize([1,1])` goes back to this original scale.
             
             
 
         Note: The init() method must be called before any other method that is for displaying images
         usage of this module to ensure proper functionality.
     """
-    #orginal sizze of standard img from big png file
+    #original size of standard img from big png file
     __IMAGE_WIDTH = 16
     __IMAGE_HEIGHT = 16
     
@@ -50,14 +50,14 @@ class ImageLoader:
     @classmethod
     def init(cls):
         """
-            Loads the essential images required for running any other methods that darws it on screen.
+            Loads the essential images required for running any other methods that draws it on screen.
             Restarts variables to default  val
             
             USE:
                 `ImageLoader.init()`
                 or
                 `ImageLoader.init()`
-                `ImageLoader.CheangSize([2,2])` now ims will be 2 times widther and heighter ImageLoader.CheangSize
+                `ImageLoader.ChangeSize([2,2])` now ims will be 2 times wider and higher ImageLoader.ChangeSize
                     
         """
         pygame.init()
@@ -84,7 +84,7 @@ class ImageLoader:
                 
                 cls.images[f"kraszak_heading_{j}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
         
-        for i in ["level_exit", "dialog_trigger"]:
+        for i in ["level_exit", "dialog_trigger", "game_event"]:
             kraszak_heading_something = pygame.image.load(f"graphics//{i}.png")
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
@@ -131,12 +131,12 @@ class ImageLoader:
         cls._MAP_ASSET = None
     
     @classmethod
-    def CheangSize(cls, new_proportion):
+    def ChangeSize(cls, new_proportion):
         """
             Changes Scale of imgs relativly to __SCALE
             
             USE:
-                `ImageLoader.CheangSize([2,2])` it 2 times widther and heighter
+                `ImageLoader.ChangeSize([2,2])` it 2 times widther and heighter
         """
         cls._standard_size_of_image_width = int(cls.__IMAGE_WIDTH * cls._SCALE * new_proportion[0])
         cls._standard_size_of_image_height = int(cls.__IMAGE_HEIGHT * cls._SCALE * new_proportion[1])
@@ -156,7 +156,7 @@ class ImageLoader:
         return (cls._scale_only_height, cls._scale_only_width)
         
     @classmethod
-    def DarwImage(cls, screen: pygame.display, name, x_cord, y_cord, rotation_angle=0):
+    def DrawImage(cls, screen: pygame.display, name, x_cord, y_cord, rotation_angle=0):
         """
             Works only if `ImageLoader.init()` was previously called. 
     

@@ -17,11 +17,12 @@
 import pygame
 import sys
 from player import Player
-from graphic_handlerer import ImageLoader
+from graphic_handler import ImageLoader
 from items import *
 from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox
 from pyautogui import size as screen_size
 from camera import Camera
+import fonts
 
 import moderngl
 #data structer like list but faster
@@ -111,7 +112,7 @@ def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
                 if full_screen:
                     gl_screen = pygame.display.set_mode(MONITOR_SIZE,pygame.FULLSCREEN | pygame.OPENGL | pygame.DOUBLEBUF)
                     screen = pygame.Surface(MONITOR_SIZE)
-                    ImageLoader.CheangSize(MONITOR_PROPORTIONS)
+                    ImageLoader.ChangeSize(MONITOR_PROPORTIONS)
                     camera.ChangedScale(MONITOR_PROPORTIONS)
                     #setting viewport of size of screen so the images will be on full screen not only a part of it 
                     ctx.clear()
@@ -120,7 +121,7 @@ def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
                 else:
                     gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF)
                     screen = pygame.Surface((640,360))
-                    ImageLoader.CheangSize([1,1])
+                    ImageLoader.ChangeSize([1,1])
                     camera.ChangedScale([1,1])
                     #setting viewport of size of screen so the images will be on full screen not out of it
                     ctx.clear()
@@ -146,6 +147,9 @@ def Main():
     #creating debug colision room
     player = Player(100,300)
     blocks = []#[WoodenBox(400,50), HeavySteelBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
+    dialogs = []
+    game_events = []
+    level_exits = []
     # for i in range(12):
     #     if i == 5:
     #         continue
@@ -191,7 +195,7 @@ def Main():
         camera.Center(int(player.x_cord+15),int(player.y_cord))
         
         camera.Draw(player,blocks,screen=screen)
-        screen.blit(pygame.font.Font.render(pygame.font.SysFont("arial",40),f"x:{(camera.x_cord)},y:{(camera.y_cord)}",True,(255, 255, 255)),(350,0))
+        screen.blit(pygame.font.Font.render(fonts.cursive_pixelated_font,f"x:{(camera.x_cord)},y:{(camera.y_cord)}",True,(255, 255, 255)),(350,0))
         
         #rendering shaders
         frame_tex = SurfToTexture(screen)

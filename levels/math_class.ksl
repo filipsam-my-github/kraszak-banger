@@ -1,0 +1,76 @@
+#!#Scale#@# 64 80
+#!#vertex_shaders#@# vertex_shaders/vert_normal.glsl
+#!#fragment_shaders#@# fragment_shaders/frag_normal.glsl
+kraszak_heading_right_1 1 2 
+level_exit 0 2 
+level_exit 0 1 
+level_exit 0 3 
+heavy_golden_box 0 4 
+heavy_golden_box 0 0 
+heavy_golden_box 0 5 
+heavy_golden_box 1 5 
+heavy_golden_box 2 5 
+heavy_golden_box 3 5 
+heavy_golden_box 4 5 
+heavy_golden_box 5 5 
+heavy_golden_box 6 5 
+heavy_golden_box 7 5 
+heavy_golden_box 8 5 
+heavy_golden_box 9 5 
+heavy_golden_box 10 5 
+heavy_golden_box 11 5 
+heavy_golden_box 11 4 
+heavy_golden_box 0 -1 
+heavy_golden_box 0 -2 
+heavy_golden_box 1 -2 
+heavy_golden_box 2 -2 
+heavy_golden_box 3 -2 
+heavy_golden_box 4 -2 
+heavy_golden_box 5 -2 
+heavy_golden_box 6 -2 
+heavy_golden_box 7 -2 
+heavy_golden_box 8 -2 
+heavy_golden_box 9 -2 
+heavy_golden_box 10 -2 
+heavy_golden_box 11 -2 
+heavy_golden_box 11 -1 
+heavy_golden_box 11 1 
+heavy_golden_box 11 2 
+heavy_golden_box 11 3 
+heavy_golden_box 11 0 
+heavy_golden_box 3 -1 
+heavy_golden_box 3 0 
+heavy_golden_box 3 3 
+heavy_golden_box 3 4 
+heavy_golden_box 5 3 
+heavy_golden_box 5 4 
+heavy_golden_box 7 3 
+heavy_golden_box 7 4 
+heavy_golden_box 9 3 
+heavy_golden_box 9 4 
+heavy_golden_box 9 -1 
+heavy_golden_box 9 0 
+heavy_golden_box 7 -1 
+heavy_golden_box 7 0 
+heavy_golden_box 5 -1 
+heavy_golden_box 5 0 
+dialog_trigger 2 3 I_need_take_my_seat
+dialog_trigger 2 2 
+dialog_trigger 1 1 I_need_take_my_seat
+dialog_trigger 1 4 I_need_take_my_seat
+player2 1 0 static
+player5 4 0 static
+player6 6 0 static
+zombiee 6 -1 static
+dark_knight 4 -1 static
+skeleton 8 0 static
+player4 8 -1 
+player1 10 0 static
+player5 10 -1 
+skeleton 4 3 static
+cyan_bat 4 4 static
+blue_bat 6 3 static
+player4 6 4 static
+player1 10 4 static
+game_event 8 3 cut_scene_and_the_dream
+game_event 10 3 cut_scene_and_the_dream
