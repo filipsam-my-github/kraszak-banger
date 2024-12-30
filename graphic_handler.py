@@ -40,7 +40,9 @@ class ImageLoader:
     
     #calculated width and height
     _standard_size_of_image_height = __IMAGE_WIDTH * _SCALE
+    print(_standard_size_of_image_height)
     _standard_size_of_image_width = __IMAGE_HEIGHT * _SCALE
+    print(_standard_size_of_image_width)
     
     _MOBS_ASSET = None
     _MAP_ASSET = None
@@ -153,8 +155,18 @@ class ImageLoader:
             USE:
                 `images_size = ImageLoader.GetSize()`
         """
-        return (cls._scale_only_height, cls._scale_only_width)
+        return (cls._standard_size_of_image_width, cls._standard_size_of_image_height)
         
+    @classmethod
+    def GetScalingMultiplier(cls):
+        """
+            gets default  imgs size in pixels (2d tuple)
+            USE:
+                `images_size = ImageLoader.GetSize()`
+        """
+        return (cls._scale_only_height, cls._scale_only_width)
+     
+
     @classmethod
     def DrawImage(cls, screen: pygame.display, name, x_cord, y_cord, rotation_angle=0):
         """
@@ -182,4 +194,5 @@ class ImageLoader:
                 `images_scale = ImageLoader.GetScale()`
         """
         return cls._SCALE
-    
+
+

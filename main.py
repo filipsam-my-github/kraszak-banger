@@ -22,7 +22,8 @@ from items import *
 from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox
 from pyautogui import size as screen_size
 from camera import Camera
-import fonts
+from fonts import Font
+from activation_triggers import Dialog
 
 import moderngl
 #data structer like list but faster
@@ -76,7 +77,7 @@ render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texco
 
 #TODO documentation
 
-def InitaliezProgram():
+def InitializeProgram():
     """
     Initialize modules so they
     can load things or set configs
@@ -86,6 +87,7 @@ def InitaliezProgram():
     pygame.mixer.init()
     #init isn't spelt Init because pyagme use .init()
     ImageLoader.init()
+    Dialog.init(MONITOR_PROPORTIONS)
 
 def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
     """
@@ -128,7 +130,7 @@ def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
                     ctx.viewport  = (0, 0, 640, 360)
     
     #going through arguments and executing Tick method
-    #TODO filipsam 29/12/2024 some object doesn't relly need 'keys' but yet it still is given
+    #TODO filipsam 29/12/2024 some object doesn't really need 'keys' but yet it still is given (perhaps something like type(obj)==Player)
     for arg in args:
         if arg == list or arg == tuple:
             for obj in arg:
@@ -138,7 +140,7 @@ def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
 
 def Main():
     """
-    Sets game variables to defult
+    Sets game variables to default
     and runs the game in the loop
     """
     
@@ -147,7 +149,7 @@ def Main():
     #creating debug colision room
     player = Player(100,300)
     blocks = []#[WoodenBox(400,50), HeavySteelBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
-    dialogs = []
+    dialogs = [Dialog(0,0,"hi mate")]
     game_events = []
     level_exits = []
     # for i in range(12):
@@ -175,6 +177,8 @@ def Main():
     
     
     camera = Camera((640, 480),0,0)
+    
+    texts = {"camera_cords":Font(text="",original_font_size=25,cursive=False,x_cord=350,y_cord=0)}
 
     while True:    
         clock.tick(60)
@@ -193,9 +197,9 @@ def Main():
         player.Collide(blocks)
         
         camera.Center(int(player.x_cord+15),int(player.y_cord))
+        texts["camera_cords"].ChangeText(f"x:{(camera.x_cord)},y:{(camera.y_cord)}")
+        camera.Draw(texts,dialogs,player,blocks,screen=screen)
         
-        camera.Draw(player,blocks,screen=screen)
-        screen.blit(pygame.font.Font.render(fonts.cursive_pixelated_font,f"x:{(camera.x_cord)},y:{(camera.y_cord)}",True,(255, 255, 255)),(350,0))
         
         #rendering shaders
         frame_tex = SurfToTexture(screen)
@@ -211,5 +215,5 @@ def Main():
 
 
 if __name__ == "__main__":
-    InitaliezProgram()
+    InitializeProgram()
     Main()

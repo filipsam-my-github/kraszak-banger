@@ -1,7 +1,7 @@
 import pygame
 from abc import ABC , abstractmethod 
-from graphic_handlerer import ImageLoader
-
+from graphic_handler import ImageLoader
+from camera import CameraDrawable
 
 
 class PhysicsCollider(ABC):
@@ -31,6 +31,9 @@ class PhysicsCollider(ABC):
         if movement_strength != None:
             self.movement_strength = movement_strength
         self.collision_types = {'top': 0, 'bottom': 0, 'right': 0, 'left': 0}
+    
+        #because gui_images shouldn't have collisions with other object
+        self.gui_image = False
     
         if not hasattr(self, 'rect'):
             raise NotImplementedError(f"{self.__class__.__name__} must define 'self.rect' in __init__.")
@@ -66,7 +69,7 @@ class PhysicsCollider(ABC):
                     print(1)
                     pass
                 else:
-                    collisions.append(tile)
+                    collisions.append(tile)#TODO repere bug here
         return collisions
 
     def _CreateVector(self):
@@ -218,7 +221,7 @@ class PhysicsCollider(ABC):
                 break
         
 
-class Block(PhysicsCollider):
+class Block(PhysicsCollider, CameraDrawable):
     """
     Represents a generic block entity in the game, inheriting from `PhysicsCollider`.
     The `Block` class serves as a base class for various types of blocks, providing collision handling and rendering functionality.
@@ -266,7 +269,7 @@ class Block(PhysicsCollider):
         if y_cord == None:
             y_cord = self.y_cord
             
-        ImageLoader.DarwImage(screen,self.image_name, x_cord, y_cord)
+        ImageLoader.DrawImage(screen,self.image_name, x_cord, y_cord)
 
         pygame.draw.rect(screen, (230,230,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
         

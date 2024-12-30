@@ -44,6 +44,8 @@ class Player(PhysicsCollider, CameraDrawable):
         self.item = None
         
         self._animation_clock = 0
+        
+        self.gui_image = False
 
         super().__init__(movement_strength=26)
     
