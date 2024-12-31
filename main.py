@@ -23,7 +23,7 @@ from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox
 from pyautogui import size as screen_size
 from camera import Camera
 from fonts import Font
-from activation_triggers import Dialog
+from activation_triggers import Dialog, LevelExit, EventActivator
 
 import moderngl
 #data structer like list but faster
@@ -150,8 +150,8 @@ def Main():
     player = Player(100,300)
     blocks = []#[WoodenBox(400,50), HeavySteelBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
     dialogs = [Dialog(0,0,"hi mate")]
-    game_events = []
-    level_exits = []
+    game_events = [EventActivator(64,0)]
+    level_exits = [LevelExit(128,0)]
     # for i in range(12):
     #     if i == 5:
     #         continue
@@ -198,7 +198,7 @@ def Main():
         
         camera.Center(int(player.x_cord+15),int(player.y_cord))
         texts["camera_cords"].ChangeText(f"x:{(camera.x_cord)},y:{(camera.y_cord)}")
-        camera.Draw(texts,dialogs,player,blocks,screen=screen)
+        camera.Draw(texts,dialogs,game_events,level_exits,player,blocks,screen=screen)
         
         
         #rendering shaders

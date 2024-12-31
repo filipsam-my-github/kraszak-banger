@@ -12,6 +12,7 @@ class Dialog(CameraDrawable):
     full_screen_multiplier = None    
     
     HITBOX = True
+    COLOR = (245, 176, 214)
     
     
     def __init__(self, x_cord, y_cord, text_content):
@@ -41,7 +42,8 @@ class Dialog(CameraDrawable):
                 pygame.draw.rect(screen,self.background_color,Dialog.box_rect_full_screen)
     
         if Dialog.HITBOX:
-            pygame.draw.rect(screen, (230,50,50), ((self.activation_rect.x + x_cord)*width_scaling, (self.activation_rect.y + y_cord)*height_scaling, self.activation_rect.width*width_scaling, self.activation_rect.height*height_scaling),width=2)
+            pygame.draw.rect(screen, Dialog.COLOR, ((self.activation_rect.x + x_cord)*width_scaling, (self.activation_rect.y + y_cord)*height_scaling, self.activation_rect.width*width_scaling, self.activation_rect.height*height_scaling),width=2)
+    
     def GetImageSize(self):
         return (self.box_rect.width, self.box_rect.height)
 
@@ -51,10 +53,38 @@ class Dialog(CameraDrawable):
             cls.box_rect_full_screen = pygame.rect.Rect(cls.box_rect_normal.x*full_screen_multiplier[0], cls.box_rect_normal.y*full_screen_multiplier[1], cls.box_rect_normal.width*full_screen_multiplier[0], cls.box_rect_normal.height*full_screen_multiplier[1])
             cls.full_screen_multiplier = full_screen_multiplier
 
-class LevelExit:
-    ...
-
-class EventActivator:
-    ...
+class LevelExit(CameraDrawable):
     
-print(ImageLoader.GetScalingMultiplier())
+    HITBOX = True
+    COLOR = (169, 6, 214)
+    
+    def __init__(self, x_cord, y_cord):
+        super().__init__(x_cord, y_cord, False)
+        
+        self.activation_rect = pygame.rect.Rect(x_cord, y_cord, ImageLoader.GetSize()[0], ImageLoader.GetSize()[1])
+        
+    
+    def Draw(self, screen, x_cord=None, y_cord=None, width_scaling=1, height_scaling=1):#TODO filipsam 31/12/2024 fix hitbox displaying (when hitbox touches right window edge)
+        if LevelExit.HITBOX:
+            pygame.draw.rect(screen, LevelExit.COLOR, ((self.activation_rect.x + x_cord)*width_scaling, (self.activation_rect.y + y_cord)*height_scaling, self.activation_rect.width*width_scaling, self.activation_rect.height*height_scaling),width=2)
+    
+    def GetImageSize(self):
+        return (self.activation_rect.width, self.activation_rect.height)
+class EventActivator(CameraDrawable):
+    HITBOX = True
+    COLOR = (242, 2, 134)
+    
+    def __init__(self, x_cord, y_cord):
+        super().__init__(x_cord, y_cord, False)
+        
+        self.activation_rect = pygame.rect.Rect(x_cord, y_cord, ImageLoader.GetSize()[0], ImageLoader.GetSize()[1])
+        
+    
+    def Draw(self, screen, x_cord=None, y_cord=None, width_scaling=1, height_scaling=1):#TODO filipsam 31/12/2024 fix hitbox displaying (when hitbox touches right window edge)
+        if EventActivator.HITBOX:
+            pygame.draw.rect(screen, EventActivator.COLOR, ((self.activation_rect.x + x_cord)*width_scaling, (self.activation_rect.y + y_cord)*height_scaling, self.activation_rect.width*width_scaling, self.activation_rect.height*height_scaling),width=2)
+    
+    
+    def GetImageSize(self):
+        return (self.activation_rect.width, self.activation_rect.height)
+    
