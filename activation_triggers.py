@@ -5,6 +5,19 @@ from graphic_handler import ImageLoader
 
 
 class Dialog(CameraDrawable):
+    """
+        A class that represents dialogs in game
+        
+        API:
+            USE:
+                `@method dialog.init()` creates instant of this class.
+                `@method dialog.Draw(screen)` draws it no pygame surface.
+                `@method dialog.GetImageSize(screen)` returns size of main rect.            
+
+        CONSTANTS:
+            `HITBOX` if true then game will show hitbox of all instances.
+            `COLOR` color of the hitbox.
+    """
     
     box_rect_normal = pygame.rect.Rect(100,100,200,100)
     box_rect_full_screen = None
@@ -54,6 +67,19 @@ class Dialog(CameraDrawable):
             cls.full_screen_multiplier = full_screen_multiplier
 
 class LevelExit(CameraDrawable):
+    """
+        A class that represents doors between levels the way out of the level
+        
+        API:
+            USE:
+                `@method dialog.init()` creates instant of this class.
+                `@method dialog.Draw(screen)` draws it no pygame surface.
+                `@method dialog.GetImageSize(screen)` returns size of main rect.            
+
+        CONSTANTS:
+            `HITBOX` if true then game will show hitbox of all instances.
+            `COLOR` color of the hitbox.
+    """
     
     HITBOX = True
     COLOR = (169, 6, 214)
@@ -71,6 +97,20 @@ class LevelExit(CameraDrawable):
     def GetImageSize(self):
         return (self.activation_rect.width, self.activation_rect.height)
 class EventActivator(CameraDrawable):
+    """
+        A class that represents events but this class does not contain what event does only (in future) new of the event and if it's active
+        Event will be able to cast cut-scene, cut-scene with dialogs and sometimes unique transitions to other levels.
+        
+        API:
+            USE:
+                `@method dialog.init()` creates instant of this class.
+                `@method dialog.Draw(screen)` draws it no pygame surface.
+                `@method dialog.GetImageSize(screen)` returns size of main rect.            
+
+        CONSTANTS:
+            `HITBOX` if true then game will show hitbox of all instances.
+            `COLOR` color of the hitbox.
+    """
     HITBOX = True
     COLOR = (242, 2, 134)
     
