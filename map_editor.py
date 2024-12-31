@@ -6,6 +6,7 @@ import button
 import csv
 from graphic_handler import ImageLoader
 import wx
+import sys
 
 app = wx.App(False)
 
@@ -38,9 +39,11 @@ scroll_left = False
 scroll_right = False
 scroll_down = False
 scroll_up = False
+lctrl = False
 scroll_horizontal = 0
 scroll_vertical = 0
 scroll_speed = 1
+current_file = "None"
 
 
 vertex_shaders = "vertex_shaders/vert_normal.glsl"
@@ -155,6 +158,17 @@ def MouseUpdate(mouse = None):
         }
 
 
+def SaveFile(file_path):
+	with open(file_path, 'w') as file:
+		file.write(f"#!#Scale#@# {TILE_SIZE_X} {TILE_SIZE_Y}\n")
+		file.write(f"#!#vertex_shaders#@# {vertex_shaders}\n")
+		file.write(f"#!#fragment_shaders#@# {fragment_shaders}\n")
+		#saves actual level's content
+		for i in world_data:
+			obj_cords = i.split('x')
+			file.write(f"{world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {world_data[i]['meta_data']}\n")
+
+
 #create buttons
 save_button = button.Button(SCREEN_WIDTH // 2, SCREEN_HEIGHT + LOWER_MARGIN - 50, save_img, 1)
 load_button = button.Button(SCREEN_WIDTH // 2 + 200, SCREEN_HEIGHT + LOWER_MARGIN - 50, load_img, 1)
@@ -199,18 +213,25 @@ while run:
 				file_path = None
 			else:
 				file_path = file_dialog.GetPath()
+				current_file = file_path
 		if file_path:
-			with open(file_path, 'w') as file:
-				#saves 3 essential things
-				file.write(f"#!#Scale#@# {TILE_SIZE_X} {TILE_SIZE_Y}\n")
-				file.write(f"#!#vertex_shaders#@# {vertex_shaders}\n")
-				file.write(f"#!#fragment_shaders#@# {fragment_shaders}\n")
-				#saves actual level's content
-				for i in world_data:
-					obj_cords = i.split('x')
-					file.write(f"{world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {world_data[i]['meta_data']}\n")
+			SaveFile(file_path)
      
 	if load_button.Draw(screen):
+		if current_file != "None":
+					with wx.MessageDialog(
+						None,
+						f"before loading new file. Do you wish to save level in file: {current_file}",
+						"Custom Yes/No Dialog",  # Title of the dialog
+						wx.YES_NO | wx.ICON_QUESTION
+					) as dialog:
+						result = dialog.ShowModal()
+    
+						if result == wx.ID_YES:
+							SaveFile(current_file)
+						else:
+							print("User chose NO")
+		
      	#open window for saving loading data
 		with wx.FileDialog(
 			None, "Select a File", wildcard="Text files (*.ksl)|*.ksl",
@@ -221,6 +242,7 @@ while run:
 				print("No file selected.")
 			else:
 				file_path = file_dialog.GetPath()
+				current_file = file_path
 				print(f"Selected file: {file_path}")
 				with open(file_path, "r") as file_path:
 					#clears level editor level data
@@ -339,6 +361,38 @@ while run:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			run = False
+
+			if current_file != "None":
+					with wx.MessageDialog(
+						None,
+						f"Level might be unsaved do you wish to save it as {current_file}",
+						"Custom Yes/No Dialog",  # Title of the dialog
+						wx.YES_NO | wx.ICON_QUESTION
+					) as dialog:
+						result = dialog.ShowModal()
+    
+						if result == wx.ID_YES:
+							SaveFile(current_file)
+							pygame.quit()
+							sys.exit()
+						else:
+							print("User chose NO")
+							pygame.quit()
+							sys.exit()
+			else:
+				with wx.MessageDialog(
+						None,
+						f"This file hasn't been saved. Do you wish to close level editor anyway?",
+						"Custom Yes/No Dialog",  # Title of the dialog
+						wx.YES_NO | wx.ICON_QUESTION
+					) as dialog:
+						result = dialog.ShowModal()
+    
+						if result == wx.ID_YES:
+							pygame.quit()
+							sys.exit()
+						else:
+							run = True
 		if event.type == pygame.MOUSEWHEEL:
 			for i in entities_to_place:
 				i.rect.y += event.y*10
@@ -355,8 +409,24 @@ while run:
 				scroll_left = True
 			if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
 				scroll_right = True
+			if event.key ==  pygame.K_LCTRL:
+				lctrl = True
 			if event.key == pygame.K_RSHIFT:
 				scroll_speed = 5
+			if (event.key == pygame.K_s and lctrl) or (event.key == pygame.K_LCTRL and scroll_down):
+				if current_file != "None":
+					with wx.MessageDialog(
+						None,
+						f"Do you wish to save level in file: {current_file}",
+						"Custom Yes/No Dialog",  # Title of the dialog
+						wx.YES_NO | wx.ICON_QUESTION
+					) as dialog:
+						result = dialog.ShowModal()
+    
+						if result == wx.ID_YES:
+							SaveFile(current_file)
+						else:
+							print("User chose NO")
 
 
 		if event.type == pygame.KEYUP:
@@ -368,6 +438,8 @@ while run:
 				scroll_down = False
 			if event.key == pygame.K_UP or event.key == pygame.K_w:
 				scroll_up = False
+			if event.key ==  pygame.K_LCTRL:
+				lctrl = False
 			if event.key == pygame.K_RSHIFT:
 				scroll_speed = 1
 
