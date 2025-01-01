@@ -2,21 +2,21 @@
     Main file.
     It runs the game by using all other files.
     
-    @method InitaliezProgram
+    @method InitializeProgram
     @method HandelPygameEvents
     @method Main
-    are esential to run the program
+    are essential to run the program
     
     Game idea
     1. Plot unclear yet
-    2. It's a top-dwon game
+    2. It's a top-down game
     3. Probably relaxing orientated game
 """
 
 
 import pygame
 import sys
-from player import Player
+from entities import Player
 from graphic_handler import ImageLoader
 from items import *
 from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox
@@ -26,11 +26,11 @@ from fonts import Font
 from activation_triggers import Dialog, LevelExit, EventActivator
 
 import moderngl
-#data structer like list but faster
+#data structure like list but faster
 from array import array
 
 #handling loading files including shaders files
-import data_interpetator
+import data_interpreter
 
 #creates gl_screen which is real screen and creates pygame surface so we can draw everything as usual
 gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF)
@@ -58,11 +58,11 @@ quad_buffer = ctx.buffer(data=array('f', [
 
 
 
-vert_shader = data_interpetator.LoadShader("vertex_shaders/vert_normal.glsl")
-frag_shader = data_interpetator.LoadShader("fragment_shaders/frag_normal.glsl")#load_shader("fragment_shaders/frag_normal.glsl")
+vert_shader = data_interpreter.LoadShader("vertex_shaders/vert_normal.glsl")
+frag_shader = data_interpreter.LoadShader("fragment_shaders/frag_normal.glsl")#load_shader("fragment_shaders/frag_normal.glsl")
 
 
-#darwing pygame surface on accual screen with shaders applied
+#drawing pygame surface on actual screen with shaders applied
 def SurfToTexture(surf) -> moderngl.Texture:
     tex = ctx.texture(surf.get_size(), 4)
     tex.filter = (moderngl.NEAREST, moderngl.NEAREST)
@@ -92,9 +92,9 @@ def InitializeProgram():
 def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
     """
     Handle pygame events and key events.
-    @parameter camera for resizing screen perpouses
+    @parameter camera for resizing screen purposes
     @parameter keys for proper input for obj 
-    @parameter dt for sync movment and animation between different frame rates
+    @parameter dt for sync movement and animation between different frame rates
     @parameter *args for object with Tick method
     
     """
@@ -139,6 +139,8 @@ def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
             arg.Tick(keys, dt)
 
 def Main():
+    global vert_shader
+    global frag_shader
     """
     Sets game variables to default
     and runs the game in the loop
@@ -147,11 +149,13 @@ def Main():
     clock = pygame.time.Clock()
     
     #creating debug colision room
-    player = Player(100,300)
+    player = Player(0,0)
     blocks = []#[WoodenBox(400,50), HeavySteelBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
     dialogs = [Dialog(0,0,"hi mate")]
-    game_events = [EventActivator(64,0)]
-    level_exits = [LevelExit(128,0)]
+    game_events = [EventActivator(64,0,"")]
+    level_exits = [LevelExit(128,0,"","")]
+    activations_triggers = []
+    npcs = []
     # for i in range(12):
     #     if i == 5:
     #         continue
@@ -179,6 +183,8 @@ def Main():
     camera = Camera((640, 480),0,0)
     
     texts = {"camera_cords":Font(text="",original_font_size=25,cursive=False,x_cord=350,y_cord=0)}
+    
+    vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("library","hallway_liblary_math_class")
 
     while True:    
         clock.tick(60)
@@ -195,10 +201,11 @@ def Main():
         #         block.Colide([other_block])
 
         player.Collide(blocks)
+        player.Collide(npcs)
         
         camera.Center(int(player.x_cord+15),int(player.y_cord))
         texts["camera_cords"].ChangeText(f"x:{(camera.x_cord)},y:{(camera.y_cord)}")
-        camera.Draw(texts,dialogs,game_events,level_exits,player,blocks,screen=screen)
+        camera.Draw(texts,dialogs,activations_triggers, npcs, game_events,level_exits,player,blocks,screen=screen)
         
         
         #rendering shaders

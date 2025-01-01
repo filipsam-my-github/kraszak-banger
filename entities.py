@@ -21,11 +21,11 @@ class Player(PhysicsCollider, CameraDrawable):
         `@method __AnimationClockTick` updates moving frame 
     """
     
-    HIEGHT = 50
+    HEIGHT = 50
     WIDTH = 20
     HITBOX = True    
     
-    def __init__(self, cord_x, cord_y) -> object:
+    def __init__(self, x_cord, y_cord) -> object:
         self.image_name = f"kraszak_heading_down_1"
 
         self._ROOT_SPEED = 120
@@ -33,10 +33,10 @@ class Player(PhysicsCollider, CameraDrawable):
         self.speed_multiplier = 1
         self.entity_speed = self.__SpeedUpdate()
 
-        self.x_cord = cord_x
-        self.y_cord = cord_y
+        self.x_cord = x_cord
+        self.y_cord = y_cord
         self.movement_vector = [0,0]
-        self.rect = pygame.Rect(cord_x, cord_y, 14*ImageLoader.GetScale(), 11*ImageLoader.GetScale())
+        self.rect = pygame.Rect(x_cord, y_cord, 14*ImageLoader.GetScale(), 11*ImageLoader.GetScale())
 
         self._skin_x = -ImageLoader.GetScale()*1
         self._skin_y = -ImageLoader.GetScale()*11
@@ -202,9 +202,9 @@ class Player(PhysicsCollider, CameraDrawable):
         """
             Draws player on the pyagme surface
             USE:
-                `player.Draw(screen, x_corde, y_cord, width_scaling, height_scaling)`
+                `player.Draw(screen, x_cord, y_cord, width_scaling, height_scaling)`
             ARGS:
-                `@parameter screen` pyagem surface.
+                `@parameter screen` pygame surface.
                 `@parameter x_cord` x cord where draw.
                 `@parameter y_cord` y cord where draw.
                 `@parameter width_scaling` width scaling for scaling with the fullscreen.
@@ -218,6 +218,51 @@ class Player(PhysicsCollider, CameraDrawable):
         ImageLoader.DrawImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
         if Player.HITBOX:
             pygame.draw.rect(screen, (230,50,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
+    
+    def GetImageSize(self) -> tuple[int,int]:
+        return ImageLoader.images[self.image_name].get_size()
+
+
+class Npc(PhysicsCollider, CameraDrawable):
+    ALL_NPC_NAMES = ["zombiee", "skeleton", "dark_knight", "meth_man", "cyclop",
+                                "blue_bat", "green_bat", "cyan_bat", "red_bat"]
+    
+    for i in range(7):
+        ALL_NPC_NAMES.append(f"player{i}")
+        
+    HITBOX = True
+    COLOR = (207, 173, 62)
+    
+    
+    def __init__(self, image_name ,x_cord, y_cord, movement_strength):
+        super().__init__(pygame.Rect(x_cord, x_cord, 7*ImageLoader.GetScale(), 8*ImageLoader.GetScale()), x_cord, y_cord, movement_vector=[0,0], movement_strength=movement_strength)
+        
+        self._skin_x = -ImageLoader.GetScale()*4
+        self._skin_y = -ImageLoader.GetScale()*7
+
+        self.image_name = image_name
+    
+    def Draw(self, screen, x_cord = None, y_cord = None, width_scaling = 1, height_scaling = 1):
+        """
+            Draws player on the pyagme surface
+            USE:
+                `player.Draw(screen, x_cord, y_cord, width_scaling, height_scaling)`
+            ARGS:
+                `@parameter screen` pygame surface.
+                `@parameter x_cord` x cord where draw.
+                `@parameter y_cord` y cord where draw.
+                `@parameter width_scaling` width scaling for scaling with the fullscreen.
+                `@parameter height_scaling` height scaling for scaling with the fullscreen.
+        """
+        if x_cord == None:
+            x_cord = self.x_cord
+        if y_cord == None:
+            y_cord = self.y_cord
+        
+        ImageLoader.DrawImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
+        if Player.HITBOX:
+            pygame.draw.rect(screen, (230,50,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
+    
     
     def GetImageSize(self) -> tuple[int,int]:
         return ImageLoader.images[self.image_name].get_size()

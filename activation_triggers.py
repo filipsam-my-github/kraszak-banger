@@ -84,10 +84,13 @@ class LevelExit(CameraDrawable):
     HITBOX = True
     COLOR = (169, 6, 214)
     
-    def __init__(self, x_cord, y_cord):
+    def __init__(self, x_cord, y_cord, level_path_entering, level_path_left):
         super().__init__(x_cord, y_cord, False)
         
         self.activation_rect = pygame.rect.Rect(x_cord, y_cord, ImageLoader.GetSize()[0], ImageLoader.GetSize()[1])
+        
+        self.level_path_entering = level_path_entering#TODO filipsam 01/01/2025 implement these 2 variables 
+        self.level_path_left = level_path_left
         
     
     def Draw(self, screen, x_cord=None, y_cord=None, width_scaling=1, height_scaling=1):#TODO filipsam 31/12/2024 fix hitbox displaying (when hitbox touches right window edge)
@@ -114,8 +117,11 @@ class EventActivator(CameraDrawable):
     HITBOX = True
     COLOR = (242, 2, 134)
     
-    def __init__(self, x_cord, y_cord):
+    def __init__(self, x_cord, y_cord, event_name):
         super().__init__(x_cord, y_cord, False)
+        
+        self.event_name = event_name#TODO filipsam 01/01/2025 implement these 2 variables
+        self.event_active_status = False
         
         self.activation_rect = pygame.rect.Rect(x_cord, y_cord, ImageLoader.GetSize()[0], ImageLoader.GetSize()[1])
         

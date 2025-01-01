@@ -94,7 +94,7 @@ class ImageLoader:
 
 
         for i in range(7):
-            cls.images[f"player{i}"] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, 0, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
+            cls.images[f"player{i}"]= cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, 0, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
 
         _mobs_names_in_order = ["zombiee", "skeleton", "dark_knight", "meth_man", "cyclop",
                                 "blue_bat", "green_bat", "cyan_bat", "red_bat"]
@@ -112,7 +112,7 @@ class ImageLoader:
                                  "chary", "cheese", "cucumber"]
 
         for i, name in enumerate(_foods_names_in_order):
-            cls.images[name] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, cls._standard_size_of_image_height * 3, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
+            cls.images[name] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, cls._standard_size_of_image_height * 3, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy() 
 
         _potions_names_in_order = ["flask_of_healing", "flask_of_suffering",
                                    "bottle_of_healing", "bottle_of_suffering",
@@ -122,11 +122,11 @@ class ImageLoader:
         for i, name in enumerate(_potions_names_in_order):
             cls.images[name] = cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, cls._standard_size_of_image_height * 4, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
 
-        _boxs_names_in_order = ["wooden_box", "heavy_wooden_box",
+        _boxes_names_in_order = ["wooden_box", "heavy_wooden_box",
                                 "steel_box", "heavy_steel_box",
                                 "golden_box", "heavy_golden_box", ]
 
-        for i, name in enumerate(_boxs_names_in_order):
+        for i, name in enumerate(_boxes_names_in_order):
             cls.images[name] = cls._MAP_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, cls._standard_size_of_image_height * 5, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
 
         cls._MOBS_ASSET = None #free memory that is not needed anymore
@@ -135,10 +135,10 @@ class ImageLoader:
     @classmethod
     def ChangeSize(cls, new_proportion):
         """
-            Changes Scale of imgs relativly to __SCALE
+            Changes Scale of imgs relatively to __SCALE
             
             USE:
-                `ImageLoader.ChangeSize([2,2])` it 2 times widther and heighter
+                `ImageLoader.ChangeSize([2,2])` it 2 times wider and higher
         """
         cls._standard_size_of_image_width = int(cls.__IMAGE_WIDTH * cls._SCALE * new_proportion[0])
         cls._standard_size_of_image_height = int(cls.__IMAGE_HEIGHT * cls._SCALE * new_proportion[1])
