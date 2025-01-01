@@ -1,8 +1,8 @@
 #!#Scale#@# 64 80
 #!#vertex_shaders#@# vertex_shaders/vert_normal.glsl
 #!#fragment_shaders#@# fragment_shaders/frag_normal.glsl
-level_exit 0 2 liblary
-level_exit 0 3 liblary
+level_exit 0 2 library
+level_exit 0 3 library
 dialog_trigger 5 2 
 dialog_trigger 5 3 
 heavy_golden_box 0 4 

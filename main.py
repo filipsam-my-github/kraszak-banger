@@ -184,7 +184,7 @@ def Main():
     
     texts = {"camera_cords":Font(text="",original_font_size=25,cursive=False,x_cord=350,y_cord=0)}
     
-    vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("library","hallway_liblary_math_class")
+    vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("library","hallway_library_math_class")
 
     while True:    
         clock.tick(60)
