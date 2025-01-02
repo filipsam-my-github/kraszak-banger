@@ -145,7 +145,6 @@ class ImageLoader:
         cls._scale_only_height = int(cls._standard_size_of_image_width/16)
         cls._scale_only_width = int(cls._standard_size_of_image_height/16)
         
-        print(cls._scale_only_height, cls._scale_only_width)
         cls.init()
     
     @classmethod
@@ -194,5 +193,7 @@ class ImageLoader:
                 `images_scale = ImageLoader.GetScale()`
         """
         return cls._SCALE
+
+
 
 

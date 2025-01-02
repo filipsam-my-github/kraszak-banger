@@ -36,7 +36,6 @@ class Font:
         self.UpdateFontMemoryAndImage()
     
     def UpdateFontMemoryAndImage(self):
-        print(str(self.original_font_size))
         if self.cursive:
             if str(self.original_font_size) in Font.cursive_pixelated_fonts.keys():
                 self.text_image = Font.cursive_pixelated_fonts[str(self.original_font_size)].render(self.text_content,True,Font.COLOR)
