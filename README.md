@@ -13,10 +13,11 @@ School Project
    pip install pygame-ce
    pip install moderngl
    pip install wxPython
+   pip install pytest
 
 5. Run the game by opening it from direct folder
-or by following comands in comand prompt
-    ```Comand prompt
+or by following commands in command prompt
+    ```Command prompt
     cd YOUR_PATH_TO_GAMES_FOLDER
     python main.py
 
