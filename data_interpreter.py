@@ -107,7 +107,7 @@ def LoadLevel(level_name, level_before="None"):
                     activations_triggers.append(EventActivator(float(local_data[1])*scale_x, float(local_data[2])*scale_y, " ".join(local_data[3:])))
                 
             if local_data[0] in Npc.ALL_NPC_NAMES:
-                if len(local_data) == 3:
+                if len(local_data) == 3 or (len(local_data) == 4 and local_data[-1] == ""):
                     npcs.append(Npc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,30))
                 elif local_data[3] == "static":
                     npcs.append(Npc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf")))
