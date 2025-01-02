@@ -16,7 +16,7 @@
 
 import pygame
 import sys
-from entities import Player
+from entities import Player, Npc
 from graphic_handler import ImageLoader
 from items import *
 from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox
@@ -150,12 +150,12 @@ def Main():
     
     #creating debug colision room
     player = Player(0,0)
-    blocks = []#[WoodenBox(400,50), HeavySteelBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
+    blocks = [HeavyGoldenBox(-64,0)]#[WoodenBox(400,50), HeavySteelBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
     dialogs = [Dialog(0,0,"hi mate")]
-    game_events = [EventActivator(64,0,"")]
-    level_exits = [LevelExit(128,0,"","")]
+    game_events = []
+    level_exits = []
     activations_triggers = []
-    npcs = []
+    npcs = [Npc(Npc.ALL_NPC_NAMES[0],64,0,float('inf'))]
     # for i in range(12):
     #     if i == 5:
     #         continue
@@ -184,7 +184,11 @@ def Main():
     
     texts = {"camera_cords":Font(text="",original_font_size=25,cursive=False,x_cord=350,y_cord=0)}
     
-    vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("library","hallway_library_math_class")
+    # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("library","None")
+    # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("hallway_library_math_class","None")
+    # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("math_class","None")
+    vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("dream_forest","None")
+    frag_shader = data_interpreter.l
 
     while True:    
         clock.tick(60)

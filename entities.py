@@ -32,14 +32,19 @@ class Player(PhysicsCollider, CameraDrawable):
         self.speed_bonuses = 0
         self.speed_multiplier = 1
         self.entity_speed = self.__SpeedUpdate()
+        
+        image_skin_cord_x = 1
+        image_skin_cord_y = 11
+        
+        self._skin_x = -ImageLoader.GetScalingMultiplier()[0]*image_skin_cord_x
+        self._skin_y = -ImageLoader.GetScalingMultiplier()[1]*image_skin_cord_y
 
-        self.x_cord = x_cord
-        self.y_cord = y_cord
+        self.x_cord = x_cord-self._skin_x
+        self.y_cord = y_cord-self._skin_y
         self.movement_vector = [0,0]
-        self.rect = pygame.Rect(x_cord, y_cord, 14*ImageLoader.GetScale(), 11*ImageLoader.GetScale())
+        self.rect = pygame.Rect(self.x_cord, self.y_cord, 14*ImageLoader.GetScalingMultiplier()[0], 11*ImageLoader.GetScalingMultiplier()[1])
 
-        self._skin_x = -ImageLoader.GetScale()*1
-        self._skin_y = -ImageLoader.GetScale()*11
+        
         
         self.item = None
         
@@ -235,10 +240,18 @@ class Npc(PhysicsCollider, CameraDrawable):
     
     
     def __init__(self, image_name ,x_cord, y_cord, movement_strength):
-        super().__init__(pygame.Rect(x_cord, x_cord, 7*ImageLoader.GetScale(), 8*ImageLoader.GetScale()), x_cord, y_cord, movement_vector=[0,0], movement_strength=movement_strength)
+        image_skin_cord_x = 4
+        image_skin_cord_y = 7
         
-        self._skin_x = -ImageLoader.GetScale()*4
-        self._skin_y = -ImageLoader.GetScale()*7
+        self._skin_x = -ImageLoader.GetScalingMultiplier()[0]*image_skin_cord_x
+        self._skin_y = -ImageLoader.GetScalingMultiplier()[1]*image_skin_cord_y
+        
+        x_cord += -self._skin_x#because skin_x and skin_y are negative numbers
+        y_cord += -self._skin_y
+       
+       
+        super().__init__(pygame.Rect(x_cord+image_skin_cord_x, y_cord+image_skin_cord_y, 7*ImageLoader.GetScalingMultiplier()[0], 8*ImageLoader.GetScalingMultiplier()[1]), x_cord+image_skin_cord_x, y_cord+image_skin_cord_y, movement_vector=[0,0], movement_strength=movement_strength)
+        
 
         self.image_name = image_name
     
@@ -266,3 +279,7 @@ class Npc(PhysicsCollider, CameraDrawable):
     
     def GetImageSize(self) -> tuple[int,int]:
         return ImageLoader.images[self.image_name].get_size()
+
+    
+    def GetImageCords():
+        return 
