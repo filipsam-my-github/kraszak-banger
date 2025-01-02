@@ -102,6 +102,8 @@ def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
     global screen
     global gl_screen
     global ctx
+    global render_object
+    global program
     
     
     for event in pygame.event.get():
@@ -188,7 +190,8 @@ def Main():
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("hallway_library_math_class","None")
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("math_class","None")
     vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("dream_forest","None")
-    frag_shader = data_interpreter.l
+    program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
+    render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
     while True:    
         clock.tick(60)
