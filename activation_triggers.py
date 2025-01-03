@@ -125,7 +125,6 @@ class LevelExit(CameraDrawable):
         if current_level != LevelExit.load_level_status[1]["go_to"] and LevelExit.transposition_shader_multiplayer <= 0:
             LevelExit.load_level_status[0] = True
         elif LevelExit.transposition_shader_multiplayer < -1:
-            print('done')
             LevelExit.transposition_status = False
             LevelExit.transposition_shader_multiplayer = 1
             LevelExit.load_level_status = [False, {"go_to":"None"}]

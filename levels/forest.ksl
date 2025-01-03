@@ -1,6 +1,6 @@
-#!#Scale#@# 64 80
-#!#vertex_shaders#@# vertex_shaders/vert_normal.glsl
-#!#fragment_shaders#@# C:\Users\2018h\OneDrive\Dokumenty\gry-indi-ktore-wspul-tworze\game-github\kraszak-banger\fragment_shaders\farg_darker_forest.glsl
+#!#Scale#@# 64 96
+#!#vertex_shaders#@# vertex_shaders\vert_normal.glsl
+#!#fragment_shaders#@# fragment_shaders\frag_normal.glsl
 kraszak_heading_down_0 9 1 
 game_event 9 3 
 dialog_trigger 8 3 

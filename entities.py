@@ -257,7 +257,7 @@ class Npc(PhysicsCollider, CameraDrawable):
     
     
     def __init__(self, image_name ,x_cord, y_cord, movement_strength):
-        image_skin_cord_x = 4
+        image_skin_cord_x = 5
         image_skin_cord_y = 7
         
         self._skin_x = -ImageLoader.GetScalingMultiplier()[0]*image_skin_cord_x

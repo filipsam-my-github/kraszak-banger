@@ -31,7 +31,7 @@ ImageLoader.init()
 ROWS = 5
 MAX_COLS = 10
 TILE_SIZE_X = 16*4
-TILE_SIZE_Y = 20*4
+TILE_SIZE_Y = 24*4
 TILE_TYPES = 21
 level = 0
 current_tile = 0
@@ -52,6 +52,7 @@ fragment_shaders = "fragment_shaders\\frag_normal.glsl"
 
 #store tiles in a list
 img_list = []
+print(ImageLoader.images["kraszak_heading_down_0"].get_size())
 for image in ImageLoader.images.keys():
 
     img_list.append({"img":ImageLoader.images[image],"name":image, "meta_data":""})
