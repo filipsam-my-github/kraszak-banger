@@ -6,7 +6,7 @@
         
 """
 from entities import Player, Npc
-from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox
+from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox, Block
 from activation_triggers import Dialog, LevelExit, EventActivator
 
 def LoadShader(file_path):
@@ -18,7 +18,7 @@ def LoadShader(file_path):
     with open(file_path, 'r') as file:
         return file.read()
 
-def LoadLevel(level_name, level_before="None"):
+def LoadLevel(level_name, level_before="None") -> tuple[str, str, Player, list[Block], list[Dialog], list[LevelExit], list[EventActivator], list[Npc]]:
     """
     ARG:
         `@parameter level_name` it is the name of the level without path nor .ksl
@@ -83,7 +83,7 @@ def LoadLevel(level_name, level_before="None"):
                 elif local_data[3] == level_before and current_player_meta_data[3] != level_before:
                     current_player_meta_data = local_data
                     player = Player(float(local_data[1])*scale_x, float(local_data[2])*scale_y)
-                    
+                    player.image_name = local_data[0]
                 
             match local_data[0]:
                 case "heavy_golden_box":
