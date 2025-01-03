@@ -213,8 +213,7 @@ def Main():
 
         player.Collide(blocks)
         player.Collide(npcs)
-        
-        
+        player.AnimationTick(1/60)
         
         if LevelExit.load_level_status[0]:
             vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel(LevelExit.load_level_status[1]["go_to"],current_level)
@@ -226,8 +225,7 @@ def Main():
         camera.Center(int(player.x_cord+15),int(player.y_cord))
         texts["camera_cords"].ChangeText(f"x:{(camera.x_cord)},y:{(camera.y_cord)}")
         camera.Draw(texts,dialogs,activations_triggers, npcs, game_events,level_exits,player,blocks,screen=screen)
-        for level_exit in level_exits:
-            print('3ds', level_exit.activated_status)
+
         #rendering shaders
         frame_tex = SurfToTexture(screen)
         frame_tex.use(0)
@@ -240,8 +238,7 @@ def Main():
         pygame.display.flip()
         ctx.clear()
         
-        for level_exit in level_exits:
-            print('4ds', level_exit.activated_status)
+
     
 
 

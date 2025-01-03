@@ -77,7 +77,7 @@ def test_EasyMovementBlockedByBlock():
     
     player1.Tick(keyboard,1)
     player1.Collide([block])#if you add AnimationTick in main loop then add it here as it is in main loop
-    
+    player1.AnimationTick(1/60)
     
     
     assert player1.image_name.split(' ')[3] == "0"
@@ -94,6 +94,7 @@ def test_Hard2MovementBlockedByBlock():
     
     player1.Tick(keyboard,1/244)
     player1.Collide([block])#if you add AnimationTick in main loop then add it here as it is in main loop
+    player1.AnimationTick(1/60)
     
     
     
@@ -109,3 +110,6 @@ def test_LevelExit():
         level_exit.Tick(player, current_level, 1/60)
     
     assert level_exit.level_path_entering == LevelExit.load_level_status[1]["go_to"]
+
+
+test_EasyMovementBlockedByBlock()

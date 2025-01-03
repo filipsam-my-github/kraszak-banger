@@ -110,6 +110,10 @@ class Player(PhysicsCollider, CameraDrawable):
         self.movement_vector[0] = self.x_cord - old_x_cord
         self.movement_vector[1] = self.y_cord - old_y_cord
         
+        self.x_cord_for_animation = self.x_cord
+        self.y_cord_for_animation = self.y_cord
+        
+        
         self.AnimationTick(dt)
             
     def __AnimationStanding(self):
@@ -183,11 +187,15 @@ class Player(PhysicsCollider, CameraDrawable):
             USE:
                 `player.AnimationTick(dt)`
         """
+        are_cords_different = (self.x_cord_for_animation == self.x_cord and self.y_cord_for_animation == self.y_cord)
         self.__AnimationDirectionUpdate()
-        if self.movement_vector[0] != 0 or self.movement_vector[1] != 0:
+        if (self.movement_vector[0] != 0 or self.movement_vector[1] != 0) and are_cords_different:
             self.__AnimationClockTick(dt)
         else:
             self.__AnimationStanding()
+        
+        self.x_cord_for_animation = self.x_cord
+        self.y_cord_for_animation = self.y_cord
     
     def AddMetEvent(self, name_of_the_event:str):
         self.met_events.append(name_of_the_event)
