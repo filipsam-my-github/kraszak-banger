@@ -46,8 +46,8 @@ scroll_speed = 1
 current_file = "None"
 
 
-vertex_shaders = "vertex_shaders/vert_normal.glsl"
-fragment_shaders = "fragment_shaders/frag_normal.glsl"
+vertex_shaders = "vertex_shaders\\vert_normal.glsl"
+fragment_shaders = "fragment_shaders\\frag_normal.glsl"
 
 
 #store tiles in a list
@@ -157,16 +157,37 @@ def MouseUpdate(mouse = None):
         }
         }
 
+def ConvertPathToRelativeIfPossible(path):
+	new_path = path.split('\\')
+	relative_index = 0
+	for i in new_path:
+		match i:
+			case "levels":
+				return path.split('\\')[-1][:-4]
+			case "vertex_shaders":
+				break
+			case "fragment_shaders":
+				break
+		relative_index += 1
+	new_path = "\\".join(new_path[relative_index:])
+	
+	print(path.split('\\'), len(path.split('\\')))
+	if relative_index == len(path.split('\\')):
+		return path
+	return new_path
 
 def SaveFile(file_path):
 	with open(file_path, 'w') as file:
 		file.write(f"#!#Scale#@# {TILE_SIZE_X} {TILE_SIZE_Y}\n")
-		file.write(f"#!#vertex_shaders#@# {vertex_shaders}\n")
-		file.write(f"#!#fragment_shaders#@# {fragment_shaders}\n")
+		file.write(f"#!#vertex_shaders#@# {ConvertPathToRelativeIfPossible(vertex_shaders)}\n")
+		file.write(f"#!#fragment_shaders#@# {ConvertPathToRelativeIfPossible(fragment_shaders)}\n")
 		#saves actual level's content
 		for i in world_data:
 			obj_cords = i.split('x')
-			file.write(f"{world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {world_data[i]['meta_data']}\n")
+			if world_data[i]['name'] == "level_exit":
+				file.write(f"{world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {world_data[i]['meta_data'].split(' ')[0]}\n")#{ConvertPathToRelativeIfPossible(current_file)}
+			else:
+				file.write(f"{world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {world_data[i]['meta_data']}\n")
 
 
 #create buttons

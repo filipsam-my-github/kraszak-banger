@@ -189,7 +189,8 @@ def Main():
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("library","None")
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("hallway_library_math_class","None")
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("math_class","None")
-    vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("dream_forest","None")
+    current_level = "library"
+    vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel(current_level,"None")
     program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
     render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
@@ -198,6 +199,9 @@ def Main():
         keys = pygame.key.get_pressed()
         screen.fill(LIGHT_BACKGROUND)
         HandelPygameEventsAndObjTick(camera,keys,1/60,player)
+        for level_exit in level_exits:
+            level_exit.Tick(player)
+        LevelExit.TickClass(current_level, 1/60)            
 
         #COLISIONS
         
@@ -210,21 +214,34 @@ def Main():
         player.Collide(blocks)
         player.Collide(npcs)
         
+        
+        
+        if LevelExit.load_level_status[0]:
+            vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel(LevelExit.load_level_status[1]["go_to"],current_level)
+            program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
+            render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
+            current_level = LevelExit.load_level_status[1]["go_to"]
+            LevelExit.load_level_status[0] = False
+        
         camera.Center(int(player.x_cord+15),int(player.y_cord))
         texts["camera_cords"].ChangeText(f"x:{(camera.x_cord)},y:{(camera.y_cord)}")
         camera.Draw(texts,dialogs,activations_triggers, npcs, game_events,level_exits,player,blocks,screen=screen)
-        
-        
+        for level_exit in level_exits:
+            print('3ds', level_exit.activated_status)
         #rendering shaders
         frame_tex = SurfToTexture(screen)
         frame_tex.use(0)
         program['tex'] = 0
+        program['transposition_shader_multiplayer'] = float(abs(LevelExit.transposition_shader_multiplayer))
         render_object.render(mode=moderngl.TRIANGLE_STRIP)
         #preventing memory leek
         frame_tex.release()
 
         pygame.display.flip()
         ctx.clear()
+        
+        for level_exit in level_exits:
+            print('4ds', level_exit.activated_status)
     
 
 

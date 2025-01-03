@@ -100,9 +100,9 @@ def LoadLevel(level_name, level_before="None"):
                     blocks.append(WoodenBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 
                 case "level_exit":
-                    level_exits.append(LevelExit(float(local_data[1])*scale_x, float(local_data[2])*scale_y, " ".join(local_data[3:]), level_before))
+                    level_exits.append(LevelExit(float(local_data[1])*scale_x, float(local_data[2])*scale_y, local_data[3]))
                 case "dialog_trigger":
-                    level_exits.append(Dialog(float(local_data[1])*scale_x, float(local_data[2])*scale_y, " ".join(local_data[3:])))
+                    dialogs.append(Dialog(float(local_data[1])*scale_x, float(local_data[2])*scale_y, " ".join(local_data[3:])))
                 case "game_event":
                     activations_triggers.append(EventActivator(float(local_data[1])*scale_x, float(local_data[2])*scale_y, " ".join(local_data[3:])))
                 

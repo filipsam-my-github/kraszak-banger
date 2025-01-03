@@ -2,6 +2,7 @@ from fonts import Font
 from camera import CameraDrawable
 import pygame
 from graphic_handler import ImageLoader
+from entities import Player
 
 
 class Dialog(CameraDrawable):
@@ -84,21 +85,53 @@ class LevelExit(CameraDrawable):
     HITBOX = True
     COLOR = (169, 6, 214)
     
-    def __init__(self, x_cord, y_cord, level_path_entering, level_path_left):
+    transposition_status = False
+    transposition_shader_multiplayer = 1#defult in shader use as abs(transposition_shader_multiplayer)
+    load_level_status = [False, {"go_to":"None"}]
+    
+    def __init__(self, x_cord, y_cord, level_path_entering):
         super().__init__(x_cord, y_cord, False)
         
         self.activation_rect = pygame.rect.Rect(x_cord, y_cord, ImageLoader.GetSize()[0], ImageLoader.GetSize()[1])
         
         self.level_path_entering = level_path_entering#TODO filipsam 01/01/2025 implement these 2 variables 
-        self.level_path_left = level_path_left
+        
+        self.activated_status = False
         
     
     def Draw(self, screen, x_cord=None, y_cord=None, width_scaling=1, height_scaling=1):
         if LevelExit.HITBOX:
             pygame.draw.rect(screen, LevelExit.COLOR, (x_cord, y_cord, self.activation_rect.width*width_scaling, self.activation_rect.height*height_scaling),width=2)
     
+    def __CheckIfActivateThroughCollisions(self, obj):
+        if self.activation_rect.colliderect(obj.rect):
+            LevelExit.transposition_status =  True
+            self.activated_status = True
+            
+    
+    def Tick(self, obj):
+        if not self.activated_status and not LevelExit.transposition_status:
+            self.__CheckIfActivateThroughCollisions(obj)
+            LevelExit.load_level_status[1]["go_to"] = self.level_path_entering
+            
+            
+    
     def GetImageSize(self):
         return (self.activation_rect.width, self.activation_rect.height)
+
+    
+    @classmethod
+    def TickClass(cls, current_level ,dt):
+        if current_level != LevelExit.load_level_status[1]["go_to"] and LevelExit.transposition_shader_multiplayer <= 0:
+            LevelExit.load_level_status[0] = True
+        elif LevelExit.transposition_shader_multiplayer < -1:
+            print('done')
+            LevelExit.transposition_status = False
+            LevelExit.transposition_shader_multiplayer = 1
+            LevelExit.load_level_status = [False, {"go_to":"None"}]
+            
+        if LevelExit.transposition_status:
+            LevelExit.transposition_shader_multiplayer -= dt*2
 class EventActivator(CameraDrawable):
     """
         A class that represents events but this class does not contain what event does only (in future) new of the event and if it's active

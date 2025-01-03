@@ -44,7 +44,9 @@ class Player(PhysicsCollider, CameraDrawable):
         self.movement_vector = [0,0]
         self.rect = pygame.Rect(self.x_cord, self.y_cord, 14*ImageLoader.GetScalingMultiplier()[0], 11*ImageLoader.GetScalingMultiplier()[1])
 
-        
+        self.plot_state = 0#how far is player in plot of this game might be helpful when dialog is going to be after certain event but not before
+        self.met_events = []
+        self.met_dialogs = []
         
         self.item = None
         
@@ -186,6 +188,12 @@ class Player(PhysicsCollider, CameraDrawable):
             self.__AnimationClockTick(dt)
         else:
             self.__AnimationStanding()
+    
+    def AddMetEvent(self, name_of_the_event:str):
+        self.met_events.append(name_of_the_event)
+    
+    def AddMetDialog(self, name_of_the_dialog:str):
+        self.met_dialogs.append(name_of_the_dialog)
         
         
             

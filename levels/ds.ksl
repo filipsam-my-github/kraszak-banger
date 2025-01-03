@@ -1,0 +1,3 @@
+#!#Scale#@# 64 80
+#!#vertex_shaders#@# vertex_shaders/vert_normal.glsl
+#!#fragment_shaders#@# fragment_shaders/frag_normal.glsl

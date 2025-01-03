@@ -1,11 +1,15 @@
 #version 330 core
 
 uniform sampler2D tex;
+uniform float transposition_shader_multiplayer;
+
 
 in vec2 uvs;
 out vec4 f_color;
 
 void main(){
+    float adjusted_multiplayer = abs(transposition_shader_multiplayer);
+
     vec2 circle_centre;
     circle_centre = vec2(0.5, 0.7);
     
@@ -25,7 +29,7 @@ void main(){
         disc = 1;
     }
     
-    disc = abs(disc - 1.0);
+    disc = abs(disc - 1.0)*adjusted_multiplayer;
     
     f_color = vec4(red*disc, green*disc, blue*disc, 1.0);
 }

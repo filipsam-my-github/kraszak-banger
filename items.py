@@ -1,12 +1,12 @@
 """
-    It's code from tiem when this game was meant to be rogelike so this file is yet not integrated with other files (for now not important)
+    It's code from item when this game was meant to be roguelike so this file is yet not integrated with other files (for now not important)
 """
 from abc import ABC , abstractmethod
 import graphic_handler as gh
 
 class Item(ABC):
     """
-        CHANE ME AFTER CHANGES IN THIS CODE 
+        CHANGE ME AFTER CHANGES IN THIS CODE 
         For now it's just residue of roguelike game
     """
 
@@ -19,7 +19,7 @@ class Item(ABC):
 
         self.hitbox = None
 
-        self.ratation = 0
+        self.rotation = 0
 
     @abstractmethod
     def picked():
@@ -48,5 +48,5 @@ class Sword(Item):
     
     def Swing(self):
         self.in_swinging = False
-        self.ratation = -90
+        self.rotation = -90
     

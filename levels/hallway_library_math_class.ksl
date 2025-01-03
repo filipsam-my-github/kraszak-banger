@@ -1,6 +1,6 @@
 #!#Scale#@# 64 80
-#!#vertex_shaders#@# vertex_shaders/vert_normal.glsl
-#!#fragment_shaders#@# fragment_shaders/frag_normal.glsl
+#!#vertex_shaders#@# vertex_shaders\vert_normal.glsl
+#!#fragment_shaders#@# fragment_shaders\frag_normal.glsl
 level_exit 0 2 library
 level_exit 0 3 library
 dialog_trigger 5 2 
@@ -31,7 +31,7 @@ heavy_golden_box 11 1
 heavy_golden_box 12 1 
 heavy_golden_box 11 4 
 heavy_golden_box 12 4 
-level_exit 12 2 
-level_exit 12 3 
-kraszak_heading_left_0 11 2 
-kraszak_heading_right_4 1 2 
+level_exit 12 2 math_class
+level_exit 12 3 math_class
+kraszak_heading_left_0 11 2 math_class
+kraszak_heading_right_4 1 2 library

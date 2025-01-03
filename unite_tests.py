@@ -6,6 +6,7 @@
 import pytest
 from entities import Player, Npc
 from blocks import HeavyGoldenBox
+from activation_triggers import LevelExit
 import math
 
 
@@ -81,7 +82,7 @@ def test_EasyMovementBlockedByBlock():
     
     assert player1.image_name.split(' ')[3] == "0"
 
-def test_HardMovementBlockedByBlock():
+def test_Hard2MovementBlockedByBlock():
     keyboard = [False for i in range(200)] 
     #keys (s-115 w-119 a-97 d-100)
     keyboard[100] = True
@@ -97,4 +98,14 @@ def test_HardMovementBlockedByBlock():
     
     
     assert player1.image_name.split(' ')[3] == "0"
+
+
+def test_LevelExit():
+    level_exit = LevelExit(0,0,"hallway_library_math_class")
+    current_level = "library"
+    player = Player(0,0)
     
+    for i in range(int(60/4)):
+        level_exit.Tick(player, current_level, 1/60)
+    
+    assert level_exit.level_path_entering == LevelExit.load_level_status[1]["go_to"]

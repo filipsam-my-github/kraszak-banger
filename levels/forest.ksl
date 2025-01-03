@@ -1,0 +1,33 @@
+#!#Scale#@# 64 80
+#!#vertex_shaders#@# vertex_shaders/vert_normal.glsl
+#!#fragment_shaders#@# C:\Users\2018h\OneDrive\Dokumenty\gry-indi-ktore-wspul-tworze\game-github\kraszak-banger\fragment_shaders\farg_darker_forest.glsl
+kraszak_heading_down_0 9 1 
+game_event 9 3 
+dialog_trigger 8 3 
+level_exit 10 3 
+meth_man 11 3 
+player1 7 3 
+heavy_golden_box 6 1 
+heavy_golden_box 6 2 
+heavy_golden_box 2 1 
+heavy_golden_box 4 4 
+heavy_golden_box 7 5 
+heavy_golden_box 10 5 
+heavy_golden_box 11 1 
+heavy_golden_box 12 -1 
+heavy_golden_box 13 -1 
+heavy_golden_box 6 -2 
+heavy_golden_box 3 -1 
+heavy_golden_box -1 -2 
+heavy_golden_box -1 -1 
+heavy_golden_box 1 2 
+heavy_golden_box 1 3 
+heavy_golden_box 0 4 
+heavy_golden_box 0 5 
+heavy_golden_box 13 5 
+heavy_golden_box 14 2 
+heavy_golden_box 16 0 
+heavy_golden_box 14 -2 
+heavy_golden_box 14 -3 
+heavy_golden_box 9 -4 
+heavy_golden_box 9 -2 

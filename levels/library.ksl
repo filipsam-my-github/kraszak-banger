@@ -1,14 +1,14 @@
 #!#Scale#@# 64 80
-#!#vertex_shaders#@# vertex_shaders/vert_normal.glsl
-#!#fragment_shaders#@# fragment_shaders/frag_normal.glsl
+#!#vertex_shaders#@# vertex_shaders\vert_normal.glsl
+#!#fragment_shaders#@# fragment_shaders\frag_normal.glsl
 kraszak_heading_down_0 7 2 None
 dialog_trigger 7 3 letter_from_father1
 dialog_trigger 8 2 letter_from_father1
 dialog_trigger 6 2 letter_from_father1
 dialog_trigger 7 1 letter_from_father1
-level_exit 7 5 
-level_exit 8 5 
-level_exit 6 5 
+level_exit 7 5 hallway_library_math_class
+level_exit 8 5 hallway_library_math_class
+level_exit 6 5 hallway_library_math_class
 heavy_golden_box 9 5 
 heavy_golden_box 5 5 
 heavy_golden_box 10 5 
@@ -59,4 +59,4 @@ heavy_golden_box 8 -5
 heavy_golden_box 9 -5 
 player5 5 -4 static
 player4 11 2 static
-kraszak_heading_up_4 7 4 hallway_library_math_class
+kraszak_heading_up_4 7 4 
