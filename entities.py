@@ -50,9 +50,11 @@ class Player(PhysicsCollider, CameraDrawable):
         
         self.item = None
         
-        self._animation_clock = 0
-        
         self.gui_image = False
+        
+        self._animation_clock = 0
+        self.x_cord_for_animation = self.x_cord
+        self.y_cord_for_animation = self.y_cord
 
         super().__init__(movement_strength=26)
     
@@ -110,13 +112,10 @@ class Player(PhysicsCollider, CameraDrawable):
         self.movement_vector[0] = self.x_cord - old_x_cord
         self.movement_vector[1] = self.y_cord - old_y_cord
         
-        self.x_cord_for_animation = self.x_cord
-        self.y_cord_for_animation = self.y_cord
         
         
-        self.AnimationTick(dt)
             
-    def __AnimationStanding(self):
+    def __AnimationSetStanding(self):
         """
             Use when you want to set Standing frame.
             USE:
@@ -128,7 +127,7 @@ class Player(PhysicsCollider, CameraDrawable):
         self.image_name = "_".join(new_image_name)
                 
     
-    def __AnimationDirectionUpdate(self):
+    def __AnimationSetDirectionUpdate(self):
         """
             use when you want to update direction of animation (top-down-left-bottom)
             USE:
@@ -187,15 +186,17 @@ class Player(PhysicsCollider, CameraDrawable):
             USE:
                 `player.AnimationTick(dt)`
         """
-        are_cords_different = (self.x_cord_for_animation == self.x_cord and self.y_cord_for_animation == self.y_cord)
-        self.__AnimationDirectionUpdate()
+        are_cords_different = not (self.x_cord_for_animation == self.x_cord and self.y_cord_for_animation == self.y_cord)
+        self.__AnimationSetDirectionUpdate()
         if (self.movement_vector[0] != 0 or self.movement_vector[1] != 0) and are_cords_different:
             self.__AnimationClockTick(dt)
         else:
-            self.__AnimationStanding()
+            self.__AnimationSetStanding()
         
         self.x_cord_for_animation = self.x_cord
         self.y_cord_for_animation = self.y_cord
+        
+        
     
     def AddMetEvent(self, name_of_the_event:str):
         self.met_events.append(name_of_the_event)

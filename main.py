@@ -198,7 +198,8 @@ def Main():
         clock.tick(60)
         keys = pygame.key.get_pressed()
         screen.fill(LIGHT_BACKGROUND)
-        HandelPygameEventsAndObjTick(camera,keys,1/60,player)
+        if not LevelExit.transposition_status:
+            HandelPygameEventsAndObjTick(camera,keys,1/60,player)
         for level_exit in level_exits:
             level_exit.Tick(player)
         LevelExit.TickClass(current_level, 1/60)            

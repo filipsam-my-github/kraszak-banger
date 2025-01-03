@@ -77,6 +77,7 @@ def LoadLevel(level_name, level_before="None"):
                         current_player_meta_data.append("")#so I can recall 3 element without errors
                         
                     player = Player(float(local_data[1])*scale_x, float(local_data[2])*scale_y)
+                    player.image_name = local_data[0]
                 elif len(local_data) == 3:
                     pass
                 elif local_data[3] == level_before and current_player_meta_data[3] != level_before:
