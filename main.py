@@ -140,6 +140,17 @@ def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
         else:
             arg.Tick(keys, dt)
 
+clean_pygame_keyboard = [False for i in range(len(pygame.key.get_pressed()))]
+
+
+def RestSizes(camera):
+    ImageLoader.ChangeSize([1,1])
+    camera.ChangedScale([1,1])
+
+def FullScreenSize(camera):
+    ImageLoader.ChangeSize(MONITOR_PROPORTIONS)
+    camera.ChangedScale(MONITOR_PROPORTIONS)
+
 def Main():
     global vert_shader
     global frag_shader
@@ -194,12 +205,13 @@ def Main():
     program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
     render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
+    keys = pygame.key.get_pressed()
     while True:    
         clock.tick(60)
-        keys = pygame.key.get_pressed()
         screen.fill(LIGHT_BACKGROUND)
         if not LevelExit.transposition_status:
             HandelPygameEventsAndObjTick(camera,keys,1/60,player)
+            keys = pygame.key.get_pressed()
         for level_exit in level_exits:
             level_exit.Tick(player)
         LevelExit.TickClass(current_level, 1/60)            
@@ -217,12 +229,17 @@ def Main():
         player.AnimationTick(1/60)
         
         if LevelExit.load_level_status[0]:
+            #if you load things on not original display hit boxes get bugged so there is solution 
+            RestSizes(camera)
             vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel(LevelExit.load_level_status[1]["go_to"],current_level)
+            if full_screen:
+                FullScreenSize(camera)
+            
             program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
             render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
             current_level = LevelExit.load_level_status[1]["go_to"]
             LevelExit.load_level_status[0] = False
-        
+            keys = clean_pygame_keyboard
         camera.Center(int(player.x_cord+15),int(player.y_cord))
         texts["camera_cords"].ChangeText(f"x:{(camera.x_cord)},y:{(camera.y_cord)}")
         camera.Draw(texts,dialogs,activations_triggers, npcs, game_events,level_exits,player,blocks,screen=screen)
