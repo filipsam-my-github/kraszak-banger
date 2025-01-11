@@ -213,6 +213,7 @@ def Main():
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("math_class","None")
     current_level = "library"
     vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel(current_level,"None")
+    # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadSave(data_interpreter.ReadSavesNames()[0])
     
     program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
     render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])

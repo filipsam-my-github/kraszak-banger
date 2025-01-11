@@ -45,9 +45,6 @@ class Dialog(CameraDrawable):
     language = "English"
     
     def __init__(self, x_cord, y_cord, text_content):
-        if (Dialog.box_rect_full_screen == None or Dialog.full_screen_multiplier == None) and not Dialog.TESTING:
-            raise EOFError("there are undefine variables like Dialog.box_rect_full_screen and Dialog.full_screen_multiplier please do Dialog.init(full_screen_multiplier) to fix it")
-
         super().__init__(x_cord=x_cord, y_cord=y_cord, gui_image=True)        
         self.text_content = text_content
         

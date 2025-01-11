@@ -8,6 +8,7 @@
 from entities import Player, Npc
 from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox, Block
 from activation_triggers import Dialog, LevelExit, EventActivator
+import os
 
 def LoadShader(file_path):
     """
@@ -120,5 +121,38 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, Player, list[B
     #LoadShader, LoadShader because data 1 and 2 are names of shaders files
     return LoadShader(data[1]), LoadShader(data[2]), player, blocks, dialogs, level_exits, activations_triggers, npcs
 
+def ReadSavesNames() -> list:
+    return [i for i in os.listdir("data/saves")]
+
+def LoadSave(save_name) -> tuple[str, str, Player, list[Block], list[Dialog], list[LevelExit], list[EventActivator], list[Npc]]:
+    if not save_name in ReadSavesNames():
+        raise KeyError(f"Couldn't find file in data/saves/ director the file: {save_name}. All available files are {ReadSavesNames()}")
+    
+    with open(f"data/saves/{save_name}") as file:
+        data = file.read().split('\n')
+        room_name = None
+        last_room = None
+        player_met_dialogs = []
+        
+        for line in data:
+            compressed_line = line.replace(" ", "").replace("\t", "").replace("\b", "")#
+            
+            if compressed_line == "":
+                continue
+            
+            if compressed_line[:10] == "room_name=":
+                room_name = compressed_line[10:][:-4]
+            if compressed_line[:10] == "last_room=":
+                last_room = compressed_line[10:][:-4]
+            
+            if compressed_line[:19] == "player_met_dialogs=":
+                player_met_dialogs = compressed_line[20:][:-1].split(',')
+            
+        
+                
+    Player.met_dialogs = player_met_dialogs
+    return LoadLevel(room_name, last_room)
 
 
+        
+        

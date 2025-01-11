@@ -1,0 +1,5 @@
+room_name = library.ksl
+last_room = hallway_library_math_class.ksl
+
+                        
+player_met_dialogs = [letter_from_father,second_thought_on_hallway]
