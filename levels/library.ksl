@@ -2,10 +2,10 @@
 #!#vertex_shaders#@# vertex_shaders\vert_normal.glsl
 #!#fragment_shaders#@# fragment_shaders\frag_normal.glsl
 kraszak_heading_down_0 7 2 None
-dialog_trigger 7 3 letter_from_father1
-dialog_trigger 8 2 letter_from_father1
-dialog_trigger 6 2 letter_from_father1
-dialog_trigger 7 1 letter_from_father1
+dialog_trigger 7 3 letter_from_father
+dialog_trigger 8 2 letter_from_father
+dialog_trigger 6 2 letter_from_father
+dialog_trigger 7 1 letter_from_father
 level_exit 7 5 hallway_library_math_class
 level_exit 8 5 hallway_library_math_class
 level_exit 6 5 hallway_library_math_class

@@ -1,0 +1,27 @@
+{
+
+    "Polish":{
+        "test": "Test Was Spelt As It Was.",
+
+        "letter_from_father":"Masz iść zostać najleprzym lekrzem w tym kwaracię szechświata¬Inaczj niedostaniesz od nas ani grosza na twoje studia¬Ja Kraszwski mam zmarnować się na medycynie zmiastu uprawiąć magie słowa?¬I to dla kogo dla matki?\nW życiu.",
+    
+        "second_thought_on_hallway":"ta zostaneie pisarzem zamiest lekazem",
+
+        "math_test_and_youre_late": "bedziesz mial mniej czasu na napisanie testu odkat sie spuzniles¬To zapisz sobie pytania które ci podyktuje¬*Zapisales pytania ale czujesz sie wykonczony"
+    },
+
+
+
+    "English":{
+        "test": "Test Was Spelt As It Was.",
+        
+        "letter_from_father":"You shell become the greatest doctor in this square of the universe¬otherwise you will not get any money from us for you uni¬I, Kraszwski, have to waste my potential on mere medical knowledge instead of mastering the power of words¬There is no person for whom I would do such a thing.",
+
+        "second_thought_on_hallway":"Yeah I'll become a writer instead of becoming a doctor.",
+
+        "math_test_and_youre_late": "Since you late you will have less time to write your exam¬Listen closely because I'll read out loud question so you'll be able to write them down"
+
+
+
+    }
+}

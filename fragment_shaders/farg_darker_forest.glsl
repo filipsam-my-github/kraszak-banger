@@ -22,7 +22,7 @@ void main(){
     
     float disc = length(uvs - circle_centre);
     
-    disc = 4*disc;
+    disc = 2*disc;
     
     if (disc > 1){
         disc = 1;

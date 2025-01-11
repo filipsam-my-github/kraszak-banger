@@ -119,3 +119,6 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, Player, list[B
     
     #LoadShader, LoadShader because data 1 and 2 are names of shaders files
     return LoadShader(data[1]), LoadShader(data[2]), player, blocks, dialogs, level_exits, activations_triggers, npcs
+
+
+

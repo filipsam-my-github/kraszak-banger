@@ -22,7 +22,7 @@ from items import *
 from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox
 from pyautogui import size as screen_size
 from camera import Camera
-from fonts import Font
+from texts import Font
 from activation_triggers import Dialog, LevelExit, EventActivator
 
 import moderngl
@@ -32,6 +32,7 @@ from array import array
 #handling loading files including shaders files
 import data_interpreter
 
+from texts import FastGuiTextBox
 #creates gl_screen which is real screen and creates pygame surface so we can draw everything as usual
 gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF)
 screen = pygame.Surface((640,360))
@@ -61,9 +62,9 @@ quad_buffer = ctx.buffer(data=array('f', [
 vert_shader = data_interpreter.LoadShader("vertex_shaders/vert_normal.glsl")
 frag_shader = data_interpreter.LoadShader("fragment_shaders/frag_normal.glsl")#load_shader("fragment_shaders/frag_normal.glsl")
 
-
 #drawing pygame surface on actual screen with shaders applied
 def SurfToTexture(surf) -> moderngl.Texture:
+    #TODO filipsam 09/01/2025: add additional args they will be list[surf,alpha]
     tex = ctx.texture(surf.get_size(), 4)
     tex.filter = (moderngl.NEAREST, moderngl.NEAREST)
     tex.swizzle = 'BGRA'
@@ -140,6 +141,16 @@ def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
         else:
             arg.Tick(keys, dt)
 
+def GameTickWithOutKeys(dt, *args):
+    for arg in args:
+        if type(arg) == list or type(arg) == tuple:
+            for obj in arg:
+                obj.Tick(dt)
+        else:
+            arg.Tick(dt)
+
+
+
 clean_pygame_keyboard = [False for i in range(len(pygame.key.get_pressed()))]
 
 
@@ -202,6 +213,7 @@ def Main():
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("math_class","None")
     current_level = "library"
     vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel(current_level,"None")
+    
     program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
     render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
 
@@ -214,6 +226,9 @@ def Main():
             keys = pygame.key.get_pressed()
         for level_exit in level_exits:
             level_exit.Tick(player)
+        for dialog in dialogs:
+            dialog.Tick(player)
+        Dialog.ClassTick(1/60, keys)
         LevelExit.TickClass(current_level, 1/60)            
 
         #COLISIONS

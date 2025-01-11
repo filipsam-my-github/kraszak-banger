@@ -4,6 +4,7 @@ from graphic_handler import ImageLoader
 from items import Item
 from blocks import PhysicsCollider
 from camera import CameraDrawable
+from activation_triggers import Dialog
 
 class Player(PhysicsCollider, CameraDrawable):
     """
@@ -24,6 +25,10 @@ class Player(PhysicsCollider, CameraDrawable):
     HEIGHT = 50
     WIDTH = 20
     HITBOX = True    
+    NO_CLIP = True
+    
+    met_dialogs = []
+    met_events = []
     
     def __init__(self, x_cord, y_cord) -> object:
         self.image_name = f"kraszak_heading_down_1"
@@ -89,23 +94,24 @@ class Player(PhysicsCollider, CameraDrawable):
             diagonal_multiplier = 1#sqrt(self.entity_speed*dt)/(self.entity_speed*dt) when activated, bugs are appearing
 
         # Horizontal movement
-        if keys[pygame.K_d]:
-            self.x_cord += self.entity_speed * dt * diagonal_multiplier
-            self.movement_vector[0] = self.entity_speed * diagonal_multiplier *dt
-        elif keys[pygame.K_a]:
-            self.x_cord += -self.entity_speed * dt * diagonal_multiplier
-            self.movement_vector[0] = -self.entity_speed * dt * diagonal_multiplier
+        if not Dialog.dialog_active_status:
+            if keys[pygame.K_d]:
+                self.x_cord += self.entity_speed * dt * diagonal_multiplier
+                self.movement_vector[0] = self.entity_speed * diagonal_multiplier *dt
+            elif keys[pygame.K_a]:
+                self.x_cord += -self.entity_speed * dt * diagonal_multiplier
+                self.movement_vector[0] = -self.entity_speed * dt * diagonal_multiplier
 
-        if keys[pygame.K_w]:
-            self.y_cord += -self.entity_speed * dt * diagonal_multiplier
-            self.movement_vector[1] = -self.entity_speed * diagonal_multiplier *dt
+            if keys[pygame.K_w]:
+                self.y_cord += -self.entity_speed * dt * diagonal_multiplier
+                self.movement_vector[1] = -self.entity_speed * diagonal_multiplier *dt
 
-        elif keys[pygame.K_s]:
-            self.y_cord += self.entity_speed * dt * diagonal_multiplier
-            self.movement_vector[1] = self.entity_speed * diagonal_multiplier *dt
+            elif keys[pygame.K_s]:
+                self.y_cord += self.entity_speed * dt * diagonal_multiplier
+                self.movement_vector[1] = self.entity_speed * diagonal_multiplier *dt
         
-        self.rect.x = self.x_cord
-        self.rect.y = self.y_cord
+            self.rect.x = self.x_cord
+            self.rect.y = self.y_cord
 
         # Reset collision detection for next frame
 
@@ -186,6 +192,7 @@ class Player(PhysicsCollider, CameraDrawable):
             USE:
                 `player.AnimationTick(dt)`
         """
+        
         are_cords_different = not (self.x_cord_for_animation == self.x_cord and self.y_cord_for_animation == self.y_cord)
         self.__AnimationSetDirectionUpdate()
         if (self.movement_vector[0] != 0 or self.movement_vector[1] != 0) and are_cords_different:

@@ -3,8 +3,8 @@
 #!#fragment_shaders#@# fragment_shaders\frag_normal.glsl
 level_exit 0 2 library
 level_exit 0 3 library
-dialog_trigger 5 2 
-dialog_trigger 5 3 
+dialog_trigger 5 2 second_thought_on_hallway
+dialog_trigger 5 3 second_thought_on_hallway
 heavy_golden_box 0 4 
 heavy_golden_box 1 4 
 heavy_golden_box 2 4 

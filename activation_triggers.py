@@ -1,13 +1,13 @@
-from fonts import Font
+from texts import Font, FastGuiTextBox
 from camera import CameraDrawable
 import pygame
 from graphic_handler import ImageLoader
-from entities import Player
-
-
+import json_interpreter
+import entities
 class Dialog(CameraDrawable):
     """
         A class that represents dialogs in game
+        after finishing the dialog it will be save in Placer class so player won't have same dialog nor will be stack in dialog hitbox 
         
         API:
             USE:
@@ -20,17 +20,32 @@ class Dialog(CameraDrawable):
             `COLOR` color of the hitbox.
     """
     
-    box_rect_normal = pygame.rect.Rect(100,100,200,100)
+    box_rect_normal = pygame.rect.Rect(100,200,450,150)
     box_rect_full_screen = None
     
     full_screen_multiplier = None    
     
+    #For unit tests it skips this conditional (Dialog.box_rect_full_screen == None or Dialog.full_screen_multiplier == None) (it is safe to skip it because in unit tests we don't use Draw method)
+    TESTING = False
+    
     HITBOX = True
     COLOR = (245, 176, 214)
     
+    #variables for displaying box with text
+    dialog_active_status = False
+    __text_content_iterator_index = 0
+    __showed_text = FastGuiTextBox("hi Im here")
+    __showed_text.MoveTo(110,220)
+    __text_to_show:list = None  
+    __current_part_of_dialog = 0
+    __max_part_of_dialog:int = None
+
+    __DIALOGS_SEPARATOR_SYMBOL = "¬"
+    
+    language = "English"
     
     def __init__(self, x_cord, y_cord, text_content):
-        if Dialog.box_rect_full_screen == None or Dialog.full_screen_multiplier == None:
+        if (Dialog.box_rect_full_screen == None or Dialog.full_screen_multiplier == None) and not Dialog.TESTING:
             raise EOFError("there are undefine variables like Dialog.box_rect_full_screen and Dialog.full_screen_multiplier please do Dialog.init(full_screen_multiplier) to fix it")
 
         super().__init__(x_cord=x_cord, y_cord=y_cord, gui_image=True)        
@@ -38,28 +53,40 @@ class Dialog(CameraDrawable):
         
         self.background_color = (0,0,0)
         
-        self.showed_text = Font("")#TODO filipsam 30/12/2024 showing text progressively add option to skip it
-        self.__text_content_iterator_index = [0,0]
-        
         self.activation_rect = pygame.rect.Rect(x_cord, y_cord, ImageLoader.GetSize()[0], ImageLoader.GetSize()[1])
     
-        self.active = False
+        self.active_local_status = False
     
     def Draw(self, screen, x_cord=None, y_cord=None, width_scaling=1, height_scaling=1):
-        if self.active:
-            
-            if width_scaling == 1 and height_scaling == 1:    
+        if Dialog.HITBOX:
+            pygame.draw.rect(screen, Dialog.COLOR, (x_cord, y_cord, self.activation_rect.width*width_scaling, self.activation_rect.height*height_scaling),width=2)
+        
+        if self.active_local_status and Dialog.dialog_active_status:
+            if width_scaling == 1 and height_scaling == 1:  
                 pygame.draw.rect(screen,self.background_color,Dialog.box_rect_normal)
+                Dialog.__showed_text.Draw(screen, 0,0, width_scaling, height_scaling)
             else:
                 if [width_scaling, height_scaling] != Dialog.full_screen_multiplier:
                     Dialog.init((width_scaling, height_scaling))
                 pygame.draw.rect(screen,self.background_color,Dialog.box_rect_full_screen)
+                Dialog.__showed_text.Draw(screen, 0,0, width_scaling, height_scaling)
+                
     
-        if Dialog.HITBOX:
-            pygame.draw.rect(screen, Dialog.COLOR, (x_cord, y_cord, self.activation_rect.width*width_scaling, self.activation_rect.height*height_scaling),width=2)
+        
     
     def GetImageSize(self):
         return (self.activation_rect.width, self.activation_rect.height)
+    
+    def __CheckIfActivateThroughCollisions(self, obj):
+        if self.activation_rect.colliderect(obj.rect) and not self.text_content in entities.Player.met_dialogs:
+            entities.Player.met_dialogs.append(self.text_content)
+            Dialog.dialog_active_status = True
+            self.active_local_status = True
+            Dialog.__text_to_show = Dialog.FormatTextToList(json_interpreter.ReadDialog(Dialog.language,self.text_content))
+            Dialog.__max_part_of_dialog = len(Dialog.__text_to_show)
+    def Tick(self, obj):
+        if not self.active_local_status and not Dialog.dialog_active_status:
+            self.__CheckIfActivateThroughCollisions(obj)#TODO prob
 
     @classmethod
     def init(cls, full_screen_multiplier:tuple):
@@ -67,6 +94,51 @@ class Dialog(CameraDrawable):
             cls.box_rect_full_screen = pygame.rect.Rect(cls.box_rect_normal.x*full_screen_multiplier[0], cls.box_rect_normal.y*full_screen_multiplier[1], cls.box_rect_normal.width*full_screen_multiplier[0], cls.box_rect_normal.height*full_screen_multiplier[1])
             cls.full_screen_multiplier = full_screen_multiplier
 
+    @classmethod
+    def SetDialogsStatusRelatedValsToDefault(cls):
+        cls.dialog_active_status = False
+        cls.__text_content_iterator_index = 0
+        cls.__showed_text = FastGuiTextBox("")
+        cls.__showed_text.MoveTo(110,220)
+        cls.__text_to_show:list = None  
+        cls.__current_part_of_dialog = 0
+        cls.__max_part_of_dialog:int = None
+    
+    @classmethod
+    def ClassTick(cls, dt, keys):
+        if cls.dialog_active_status:
+            if cls.__text_content_iterator_index < len(cls.__text_to_show[cls.__current_part_of_dialog]):
+                cls.__text_content_iterator_index += dt*45
+            else:
+                if keys[pygame.K_w]:
+                    print('Done')
+                    if cls.__max_part_of_dialog - 1 == cls.__current_part_of_dialog:
+                        cls.SetDialogsStatusRelatedValsToDefault()
+                        return None
+                    else:
+                        print('...')
+                        cls.__current_part_of_dialog += 1
+                        cls.__text_content_iterator_index = 0
+            # if str(cls.__showed_text)[] == "" TODO make it so you can go to next one (probably #END# and #START# you will have to replace with single char each one)
+            if keys[pygame.K_LSHIFT]:
+                cls.__text_content_iterator_index = len(cls.__text_to_show[cls.__current_part_of_dialog])
+                cls.__showed_text.ChangeText(cls.__text_to_show[cls.__current_part_of_dialog][:int(cls.__text_content_iterator_index)], cls.__text_to_show[cls.__current_part_of_dialog])
+            else:
+                cls.__showed_text.ChangeText(cls.__text_to_show[cls.__current_part_of_dialog][:int(cls.__text_content_iterator_index)], cls.__text_to_show[cls.__current_part_of_dialog])
+
+            
+            
+    @classmethod
+    def ForTestingShowText(cls):
+        return cls.__text_to_show
+    
+    @classmethod
+    def MoveToCurrentFragment(cls, text:str):
+        return text.split(cls.__DIALOGS_SEPARATOR_SYMBOL)
+    
+    @classmethod
+    def FormatTextToList(cls,text):
+        return text.split(cls.__DIALOGS_SEPARATOR_SYMBOL)
 class LevelExit(CameraDrawable):
     """
         A class that represents doors between levels the way out of the level
@@ -86,7 +158,7 @@ class LevelExit(CameraDrawable):
     COLOR = (169, 6, 214)
     
     transposition_status = False
-    transposition_shader_multiplayer = 1#defult in shader use as abs(transposition_shader_multiplayer)
+    transposition_shader_multiplayer = 1#default in shader use as abs(transposition_shader_multiplayer)
     load_level_status = [False, {"go_to":"None"}]
     
     def __init__(self, x_cord, y_cord, level_path_entering):
