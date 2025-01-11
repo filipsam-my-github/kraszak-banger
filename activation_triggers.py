@@ -110,7 +110,7 @@ class Dialog(CameraDrawable):
             if cls.__text_content_iterator_index < len(cls.__text_to_show[cls.__current_part_of_dialog]):
                 cls.__text_content_iterator_index += dt*45
             else:
-                if keys[pygame.K_w]:
+                if keys[pygame.K_SPACE]:
                     print('Done')
                     if cls.__max_part_of_dialog - 1 == cls.__current_part_of_dialog:
                         cls.SetDialogsStatusRelatedValsToDefault()

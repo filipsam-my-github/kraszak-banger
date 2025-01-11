@@ -47,7 +47,7 @@ class PhysicsCollider(ABC):
             raise NotImplementedError(f"{self.__class__.__name__} must define 'self.movement_strength' in __init__.")
         if not hasattr(self, 'collision_types'):
             raise NotImplementedError(f"{self.__class__.__name__} must define 'self.collision_types' in __init__.")
-        
+    
     def _CollisionTest(self,tiles):
         """
         Tests for collisions between the current object and a list of tiles.
