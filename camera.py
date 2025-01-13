@@ -83,7 +83,7 @@ class Camera:
         """
         self.rooms.append((x_cord, y_cord, width, height))
     
-    def Draw(self,*args,screen:CameraDrawable):
+    def Draw(self,*args:list[CameraDrawable], screen:pygame.display):
         """
             all args except screen arg needs to have a Draw method except last arg which needs to be pygame surface
             USE:
@@ -134,4 +134,4 @@ class Camera:
             if obj.x_cord-self.x_cord <= self.original_screen_size[0] and obj.y_cord-self.y_cord <= self.original_screen_size[1]:
                 return True
         return False
-            
+

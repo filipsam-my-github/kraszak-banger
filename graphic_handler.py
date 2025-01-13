@@ -146,6 +146,7 @@ class ImageLoader:
         cls._scale_only_width = int(cls._standard_size_of_image_height/16)
         
         cls.init()
+        
     
     @classmethod
     def GetSize(cls):

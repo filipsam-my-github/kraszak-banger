@@ -258,7 +258,8 @@ def Main():
             keys = clean_pygame_keyboard
         camera.Center(int(player.x_cord+15),int(player.y_cord))
         texts["camera_cords"].ChangeText(f"x:{(camera.x_cord)},y:{(camera.y_cord)}")
-        camera.Draw(texts,dialogs,activations_triggers, npcs, game_events,level_exits,player,blocks,screen=screen)
+        
+        camera.Draw(texts,dialogs,activations_triggers, npcs,game_events,level_exits,player,blocks,screen=screen)
 
         #rendering shaders
         frame_tex = SurfToTexture(screen)
