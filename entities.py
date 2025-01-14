@@ -147,18 +147,19 @@ class Player(PhysicsCollider, CameraDrawable):
             NOTE:
                 top and down are prioritized over left and right
         """
-        if self.movement_vector[1] != 0:
-            if self.movement_vector[1] > 0:
+        cords_differences = (self.x_cord_for_animation - self.x_cord, self.y_cord - self.y_cord_for_animation)
+        if cords_differences[1] != 0:
+            if cords_differences[1] > 0:
                 new_image_name = self.image_name.split("_")
                 new_image_name[2] = "down"
                 
                 self.image_name = "_".join(new_image_name)
-            elif self.movement_vector[1] < 0:
+            elif cords_differences[1] < 0:
                 new_image_name = self.image_name.split("_")
                 new_image_name[2] = "up"
                 
                 self.image_name = "_".join(new_image_name)
-        elif self.movement_vector[0] != 0:
+        elif cords_differences[0] != 0:
             if self.movement_vector[0] > 0:
                 new_image_name = self.image_name.split("_")
                 new_image_name[2] = "right"
