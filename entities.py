@@ -65,6 +65,11 @@ class Player(PhysicsCollider, CameraDrawable):
     
     def __SpeedUpdate(self):
         return (self._ROOT_SPEED + self.speed_bonuses) * self.speed_multiplier
+#tutaj    
+    def HowFar(self,x_cord,y_cord):
+        return float (DistancePlayer=sqrt((x_cord)^2 + (y_cord)^2))
+#dodałem, ale usunalem x2 i y2 bo nwm jak mialbym to zaimplementowac
+
 
     def Tick(self, keys, dt):
         """
