@@ -7,6 +7,7 @@ import csv
 from graphic_handler import ImageLoader
 import wx
 import sys
+import math
 
 app = wx.App(False)
 
@@ -28,10 +29,11 @@ ImageLoader.init()
 
 
 #define game variables
-ROWS = 5
-MAX_COLS = 10
+
 TILE_SIZE_X = 16*4
-TILE_SIZE_Y = 24*4
+TILE_SIZE_Y = 8*4
+ROWS = (SCREEN_HEIGHT)//TILE_SIZE_Y + 1
+MAX_COLS = (SCREEN_WIDTH)//TILE_SIZE_X + 1
 TILE_TYPES = 21
 level = 0
 current_tile = 0
@@ -46,7 +48,7 @@ scroll_speed = 1
 current_file = "None"
 
 
-vertex_shaders = "vertex_shaders\\vert_normal.glsl"
+vertex_shaders = "vertex_shaders\\vert_normal.glsl" 
 fragment_shaders = "fragment_shaders\\frag_normal.glsl"
 
 
@@ -62,7 +64,7 @@ load_img = pygame.image.load('mob_animation/load_btn.png').convert_alpha()
 vertex_shaders_img = pygame.image.load('graphics/icon_for_vert_shaders.png').convert_alpha()
 fragment_shaders_img = pygame.image.load('graphics/icon_for_frag_shaders.png').convert_alpha()
 
-
+GHOST_ELEMENTS = ("school_floor", "grass", "rocks")
 #define colours
 GREEN = (144, 201, 120)
 WHITE = (255, 255, 255)
@@ -73,6 +75,7 @@ font = pygame.font.SysFont('Futura', 30)
 
 #create empty tile list
 world_data = {}
+ghost_world_data = []
 
 # #create ground
 # for tile in range(0, MAX_COLS):
@@ -84,6 +87,8 @@ def DrawText(text, font, text_col, x, y):
 	img = font.render(text, True, text_col)
 	screen.blit(img, (x, y))
 
+#TODO del
+saved = [float('inf')]
 
 #create function for drawing background
 def DrawBg():
@@ -105,9 +110,15 @@ def DrawGrid():
 
 #function for drawing the world tiles
 def DrawWorld():
+	for i, obj_data in enumerate(ghost_world_data):
+		cords = obj_data["cords"]
+		screen.blit(img_list[obj_data["id"]]["img"], (int(cords[0]) * TILE_SIZE_X - scroll_horizontal, int(cords[1]) * TILE_SIZE_Y - scroll_vertical)) 
+    
 	for obj_data in world_data.keys():
 		cords = obj_data.split('x')
 		screen.blit(img_list[world_data[obj_data]["id"]]["img"], (int(cords[0]) * TILE_SIZE_X - scroll_horizontal, int(cords[1]) * TILE_SIZE_Y - scroll_vertical))
+
+	
 
 
 def MouseUpdate(mouse = None):
@@ -190,6 +201,13 @@ def SaveFile(file_path):
 			else:
 				file.write(f"{world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {world_data[i]['meta_data']}\n")
 
+		for i, element in enumerate(ghost_world_data):
+			obj_cords = ghost_world_data[i]["cords"]
+			if ghost_world_data[i]['name'] == "level_exit":
+				file.write(f"{ghost_world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {ghost_world_data[i]['meta_data'].split(' ')[0]}\n")#{ConvertPathToRelativeIfPossible(current_file)}
+			else:
+				file.write(f"{ghost_world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {ghost_world_data[i]['meta_data']}\n")
+
 
 #create buttons
 save_button = button.Button(SCREEN_WIDTH // 2, SCREEN_HEIGHT + LOWER_MARGIN - 50, save_img, 1)
@@ -211,6 +229,20 @@ for i in range(len(img_list)):
 		button_row += 1
 		button_col = 0
 
+
+def colliding_with(graphics_data, point_cords) -> tuple[bool, tuple[int,int]]:
+    # drawing screen.blit(img_list[world_data[obj_data]["id"]]["img"], (int(cords[0]) * TILE_SIZE_X - scroll_horizontal, int(cords[1]) * TILE_SIZE_Y - scroll_vertical))
+    #graphic's data data look like this world_data[f"{int(obj_cords[0])}x{int(obj_cords[1])}"] = {"id":obj_id, "name":obj_name, "meta_data":meta_data}
+	for cords_in_string in graphics_data.keys():
+		rect = pygame.rect.Rect(
+			int(cords_in_string.split('x')[0]), 
+			int(cords_in_string.split('x')[1]),
+			math.ceil(img_list[graphics_data[cords_in_string]["id"]]["img"].get_width() / TILE_SIZE_X),
+			math.ceil(img_list[graphics_data[cords_in_string]["id"]]["img"].get_height() / TILE_SIZE_Y)
+		)
+		if rect.collidepoint(point_cords):
+			return (True, tuple(map(int,cords_in_string.split('x'))))
+	return (False, point_cords)
 
 run = True
 mouse = MouseUpdate()
@@ -269,10 +301,15 @@ while run:
 				with open(file_path, "r") as file_path:
 					#clears level editor level data
 					world_data = {}
+					ghost_world_data = []
 					#reads file
 					data = file_path.read().split('\n')
+					x_multiplayer = int(data[0].split(' ')[1]) / TILE_SIZE_X
+					y_multiplayer = int(data[0].split(' ')[2]) / TILE_SIZE_Y
 					for i,e in enumerate(data):
 						obj_cords = e.split(' ')[1:]
+						
+      
 						#obj_id is the index where obj_id has img in img_list (list of dictionaries)
 						obj_id = None
 						obj_name = e.split(' ')[0]
@@ -289,9 +326,13 @@ while run:
 							meta_data = obj_cords[2:]
 							meta_data = " ".join(meta_data)
 
-		
-						world_data[f"{int(obj_cords[0])}x{int(obj_cords[1])}"] = {"id":obj_id, "name":obj_name, "meta_data":meta_data}
-    
+						if not img_list[current_tile]["name"] in GHOST_ELEMENTS:
+							world_data[f"{int(int(obj_cords[0])*x_multiplayer)}x{int(int(obj_cords[1])*y_multiplayer)}"] = {"id":obj_id, "name":obj_name, "meta_data":meta_data}
+						else:
+							ghost_world_data.append({
+								"cords": (int(int(obj_cords[0])*x_multiplayer), int(int(obj_cords[1])*y_multiplayer)),
+								"id":obj_id, "name":obj_name, "meta_data":meta_data
+							})
 	if fragment_shaders_button.Draw(screen):
 		with wx.FileDialog(
 			None, "Select a File", wildcard="Text files (*.glsl)|*.glsl",
@@ -316,7 +357,10 @@ while run:
 				file_path = file_dialog.GetPath()
 				vertex_shaders = file_path
 
+	
+ 
 	if meta_data_button.Draw(screen):
+		is_colliding, cords_if_so =  colliding_with(world_data, (x,y))
 		#calculating position of the mouse
 		x = (pos[0] + scroll_horizontal) // TILE_SIZE_X
 		y = (pos[1] + scroll_vertical) // TILE_SIZE_Y
@@ -325,7 +369,7 @@ while run:
         None, 
         "Edit the text below:", 
         "Input Dialog", 
-        value=world_data[f"{x}x{y}"]["meta_data"]  # Initial data for the text box
+        value=world_data[f"{cords_if_so[0]}x{cords_if_so[1]}"]["meta_data"]  # Initial data for the text box
     ) as dialog:
 			if dialog.ShowModal() == wx.ID_OK:
 				user_input = dialog.GetValue()
@@ -368,15 +412,34 @@ while run:
 	#check that the coordinates are within the tile area
 	if pos[0] < SCREEN_WIDTH and pos[1] < SCREEN_HEIGHT:
 		#update tile value
-		if mouse["clicked"]["down"]["middle"] and f"{x}x{y}" in world_data.keys():
+		if mouse["clicked"]["down"]["middle"]:
+			pass
+		if mouse["clicked"]["down"]["middle"] or pygame.mouse.get_pressed()[0] == 1 or pygame.mouse.get_pressed()[2] == 1: 
+			is_colliding, cords_if_so =  colliding_with(world_data, (x,y))
+	
+		if mouse["clicked"]["down"]["middle"] and is_colliding:
 			meta_data_button.ChangeCordsTO(x*TILE_SIZE_X - scroll_horizontal,y*TILE_SIZE_Y - scroll_vertical)
 		if pygame.mouse.get_pressed()[0] == 1:
-			if not f"{x}x{y}" in world_data.keys():
+			if not is_colliding and not img_list[current_tile]["name"] in GHOST_ELEMENTS:
 				world_data[f"{x}x{y}"] = {"id":current_tile ,"name": img_list[current_tile]["name"], "meta_data":""}
+			elif img_list[current_tile]["name"] in GHOST_ELEMENTS:
+				exactly_the_same = False
+				for i, element in enumerate(ghost_world_data):
+					if element["cords"] == cords_if_so and element["name"] == img_list[current_tile]["name"]:
+						exactly_the_same = True
+				if not exactly_the_same:
+					ghost_world_data.append({
+								"cords": (x, y),"id":current_tile, "name":img_list[current_tile]["name"], "meta_data":""
+							})
 		if pygame.mouse.get_pressed()[2] == 1:
-			if f"{x}x{y}" in world_data.keys():
-				del world_data[f"{x}x{y}"]
+			if is_colliding:
+				print('hi')
+				del world_data[f"{cords_if_so[0]}x{cords_if_so[1]}"]
 				meta_data_button.ChangeCordsTO(-100,-100)
+			else:
+				for i, element in enumerate(ghost_world_data):
+					if element["cords"] == cords_if_so:
+						ghost_world_data.pop(i) 
 
 				
 
@@ -388,7 +451,7 @@ while run:
 					with wx.MessageDialog(
 						None,
 						f"Level might be unsaved do you wish to save it as {current_file}",
-						"Custom Yes/No Dialog",  # Title of the dialog
+						"Custom Yes/No Dialog",  # Title of the dialogF
 						wx.YES_NO | wx.ICON_QUESTION
 					) as dialog:
 						result = dialog.ShowModal()
@@ -467,5 +530,6 @@ while run:
 
 
 	pygame.display.update()
+	#TODO conclusion bug appears when place onto non-ghost block (dupe ghost block with same name and cords)
 
 pygame.quit()

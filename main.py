@@ -180,6 +180,7 @@ def Main():
     level_exits = []
     activations_triggers = []
     npcs = [Npc(Npc.ALL_NPC_NAMES[0],64,0,float('inf'))]
+    only_draw_low_layer_objs = []
     # for i in range(12):
     #     if i == 5:
     #         continue
@@ -211,12 +212,13 @@ def Main():
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("library","None")
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("hallway_library_math_class","None")
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("math_class","None")
-    current_level = "library"
-    vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel(current_level,"None")
+    current_level = "test_new_imgs"
+    vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs, only_draw_low_layer_objs  = data_interpreter.LoadLevel(current_level,"None")
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadSave(data_interpreter.ReadSavesNames()[0])
     
     program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
     render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
+
 
     keys = pygame.key.get_pressed()
     while True:    
@@ -247,7 +249,7 @@ def Main():
         if LevelExit.load_level_status[0]:
             #if you load things on not original display hit boxes get bugged so there is solution 
             RestSizes(camera)
-            vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel(LevelExit.load_level_status[1]["go_to"],current_level)
+            vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs, only_draw_low_layer_objs  = data_interpreter.LoadLevel(LevelExit.load_level_status[1]["go_to"],current_level)
             if full_screen:
                 FullScreenSize(camera)
             
@@ -259,7 +261,7 @@ def Main():
         camera.Center(int(player.x_cord+15),int(player.y_cord))
         texts["camera_cords"].ChangeText(f"x:{(camera.x_cord)},y:{(camera.y_cord)}")
         
-        camera.Draw(texts,dialogs,activations_triggers, npcs,game_events,level_exits,player,blocks,screen=screen)
+        camera.Draw(texts,dialogs,activations_triggers, npcs,game_events,level_exits,player,blocks,only_draw_low_layer_objs,screen=screen)
 
         #rendering shaders
         frame_tex = SurfToTexture(screen)

@@ -306,3 +306,18 @@ class GoldenBox(Block):
 class HeavyGoldenBox(Block):
     def __init__(self, x_cord: int, y_cord):
         super().__init__(x_cord, y_cord, image_name = "heavy_golden_box", movement_strength = 35)
+
+
+class SchoolWall(Block):
+    def __init__(self, x_cord, y_cord, direction = "None"):
+        if direction == "right":
+            super().__init__(x_cord, y_cord, "school_wall_floor_right", float('inf'))
+        elif direction == "left":
+            super().__init__(x_cord, y_cord, "school_wall_floor_left", float('inf'))
+        elif direction == "down":
+            super().__init__(x_cord, y_cord, "school_wall_floor_down", float('inf'))
+        elif direction == "up":
+            super().__init__(x_cord, y_cord, "school_wall_floor_up", float('inf'))
+        else:
+            super().__init__(x_cord, y_cord, "school_wall", float('inf'))
+

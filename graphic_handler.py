@@ -91,7 +91,24 @@ class ImageLoader:
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
             
+        #forest folder
+        for i in ["fern_flower", "grass", "rocks", "tree"]:
+            kraszak_heading_something = pygame.image.load(f"graphics//forest//{i}.png")
+                    
+            cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+            
+        #school
+        for i in ["school_door", "school_test", "school_floor", "school_wall"]:
+            kraszak_heading_something = pygame.image.load(f"graphics//school//{i}.png")
+                    
+            cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+        
+        for i, name in enumerate(["down","left", "up", "right"]):
+            kraszak_heading_something = pygame.image.load(f"graphics//school//school_wall_floor_down.png")
+                    
+            cls.images[f"school_wall_floor_{name}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
 
+            cls.images[f"school_wall_floor_{name}"] = pygame.transform.rotate(cls.images[f"school_wall_floor_{name}"], -90*i)
 
         for i in range(7):
             cls.images[f"player{i}"]= cls._MOBS_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, 0, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()

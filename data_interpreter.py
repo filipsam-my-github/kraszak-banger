@@ -6,9 +6,11 @@
         
 """
 from entities import Player, Npc
-from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox, Block
+from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox, Block, SchoolWall
+from ghost_blocks import SchoolPlanksFloor, SchoolDoor, ForestGrass, ForestRocks
 from activation_triggers import Dialog, LevelExit, EventActivator
 import os
+from camera import CameraDrawable
 
 def LoadShader(file_path):
     """
@@ -19,7 +21,7 @@ def LoadShader(file_path):
     with open(file_path, 'r') as file:
         return file.read()
 
-def LoadLevel(level_name, level_before="None") -> tuple[str, str, Player, list[Block], list[Dialog], list[LevelExit], list[EventActivator], list[Npc]]:
+def LoadLevel(level_name, level_before="None") -> tuple[str, str, Player, list[Block], list[Dialog], list[LevelExit], list[EventActivator], list[Npc], list[CameraDrawable]]:
     """
     ARG:
         `@parameter level_name` it is the name of the level without path nor .ksl
@@ -59,6 +61,7 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, Player, list[B
         activations_triggers = []
         blocks = []
         npcs = []
+        only_draw_low_layer_objs = []
         
         current_player_meta_data = []
         
@@ -108,6 +111,28 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, Player, list[B
                 case "game_event":
                     activations_triggers.append(EventActivator(float(local_data[1])*scale_x, float(local_data[2])*scale_y, " ".join(local_data[3:])))
                 
+                case "school_wall_floor_right":
+                    blocks.append(SchoolWall(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "right"))
+                case "school_wall_floor_down":
+                    blocks.append(SchoolWall(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "down"))
+                case "school_wall_floor_left":
+                    blocks.append(SchoolWall(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "left"))
+                case "school_wall_floor_up":
+                    blocks.append(SchoolWall(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "up"))
+                case "school_wall":
+                    blocks.append(SchoolWall(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "None"))
+                
+                case "school_floor":
+                    only_draw_low_layer_objs.append(SchoolPlanksFloor(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "school_door":
+                    only_draw_low_layer_objs.append(SchoolDoor(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "grass":
+                    only_draw_low_layer_objs.append(ForestGrass(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "rocks":
+                    only_draw_low_layer_objs.append(ForestRocks(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                
+                    
+                    
             if local_data[0] in Npc.ALL_NPC_NAMES:
                 if len(local_data) == 3 or (len(local_data) == 4 and local_data[-1] == ""):
                     npcs.append(Npc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,30))
@@ -119,7 +144,7 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, Player, list[B
                     npcs.append(Npc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float(local_data[3])))
     
     #LoadShader, LoadShader because data 1 and 2 are names of shaders files
-    return LoadShader(data[1]), LoadShader(data[2]), player, blocks, dialogs, level_exits, activations_triggers, npcs
+    return LoadShader(data[1]), LoadShader(data[2]), player, blocks, dialogs, level_exits, activations_triggers, npcs, only_draw_low_layer_objs
 
 def ReadSavesNames() -> list:
     return [i for i in os.listdir("data/saves")]
