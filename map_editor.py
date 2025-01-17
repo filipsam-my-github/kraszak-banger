@@ -326,7 +326,7 @@ while run:
 							meta_data = obj_cords[2:]
 							meta_data = " ".join(meta_data)
 
-						if not img_list[current_tile]["name"] in GHOST_ELEMENTS:
+						if not img_list[obj_id]["name"] in GHOST_ELEMENTS:
 							world_data[f"{int(int(obj_cords[0])*x_multiplayer)}x{int(int(obj_cords[1])*y_multiplayer)}"] = {"id":obj_id, "name":obj_name, "meta_data":meta_data}
 						else:
 							ghost_world_data.append({
@@ -358,7 +358,6 @@ while run:
 				vertex_shaders = file_path
 
 	
- 
 	if meta_data_button.Draw(screen):
 		is_colliding, cords_if_so =  colliding_with(world_data, (x,y))
 		#calculating position of the mouse
@@ -425,7 +424,7 @@ while run:
 			elif img_list[current_tile]["name"] in GHOST_ELEMENTS:
 				exactly_the_same = False
 				for i, element in enumerate(ghost_world_data):
-					if element["cords"] == cords_if_so and element["name"] == img_list[current_tile]["name"]:
+					if element["cords"] == (x, y) and element["name"] == img_list[current_tile]["name"]:
 						exactly_the_same = True
 				if not exactly_the_same:
 					ghost_world_data.append({
