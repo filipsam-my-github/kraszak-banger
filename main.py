@@ -150,9 +150,6 @@ def RestSizes(camera):
     ImageLoader.ChangeSize([1,1])
     camera.ChangedScale([1,1])
 
-def FullScreenSize(camera):
-    ImageLoader.ChangeSize(MONITOR_PROPORTIONS)
-    camera.ChangedScale(MONITOR_PROPORTIONS)
 
 def Main():
     global vert_shader
@@ -204,7 +201,7 @@ def Main():
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("library","None")
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("hallway_library_math_class","None")
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("math_class","None")
-    current_level = "test_new_imgs"
+    current_level = "library"
     vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs, only_draw_low_layer_objs  = data_interpreter.LoadLevel(current_level,"None")
     # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadSave(data_interpreter.ReadSavesNames()[0])
     
@@ -242,8 +239,6 @@ def Main():
             #if you load things on not original display hit boxes get bugged so there is solution 
             RestSizes(camera)
             vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs, only_draw_low_layer_objs  = data_interpreter.LoadLevel(LevelExit.load_level_status[1]["go_to"],current_level)
-            if full_screen:
-                FullScreenSize(camera)
             
             program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
             render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
