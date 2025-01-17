@@ -82,12 +82,12 @@ class ImageLoader:
         
         for i in range(5):
             for j in ["down","left","up","right"]:
-                kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszaks_heading_{j}/kraszaks_heading_{j}_{i}.png")
+                kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszaks_heading_{j}/kraszaks_heading_{j}_{i}.png").convert_alpha()
                 
                 cls.images[f"kraszak_heading_{j}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
         
         for i in ["level_exit", "dialog_trigger", "game_event"]:
-            kraszak_heading_something = pygame.image.load(f"graphics//{i}.png")
+            kraszak_heading_something = pygame.image.load(f"graphics//{i}.png").convert_alpha()
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
             
@@ -211,7 +211,6 @@ class ImageLoader:
                 `images_scale = ImageLoader.GetScale()`
         """
         return cls._SCALE
-
 
 
 

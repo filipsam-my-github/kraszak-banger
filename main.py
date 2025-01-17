@@ -34,7 +34,7 @@ import data_interpreter
 
 from texts import FastGuiTextBox
 #creates gl_screen which is real screen and creates pygame surface so we can draw everything as usual
-gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF)
+gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF | pygame.RESIZABLE)
 screen = pygame.Surface((640,360))
 #ctx is core fundament of shaders
 ctx = moderngl.create_context()
@@ -64,7 +64,6 @@ frag_shader = data_interpreter.LoadShader("fragment_shaders/frag_normal.glsl")#l
 
 #drawing pygame surface on actual screen with shaders applied
 def SurfToTexture(surf) -> moderngl.Texture:
-    #TODO filipsam 09/01/2025: add additional args they will be list[surf,alpha]
     tex = ctx.texture(surf.get_size(), 4)
     tex.filter = (moderngl.NEAREST, moderngl.NEAREST)
     tex.swizzle = 'BGRA'
@@ -114,21 +113,14 @@ def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_f:
                 full_screen = not full_screen
+                #turns out shaders resize images so they fit the window 
                 if full_screen:
                     gl_screen = pygame.display.set_mode(MONITOR_SIZE,pygame.FULLSCREEN | pygame.OPENGL | pygame.DOUBLEBUF)
-                    screen = pygame.Surface(MONITOR_SIZE)
-                    ImageLoader.ChangeSize(MONITOR_PROPORTIONS)
-                    camera.ChangedScale(MONITOR_PROPORTIONS)
-                    #setting viewport of size of screen so the images will be on full screen not only a part of it 
                     ctx.clear()
                     ctx.viewport  = (0, 0, MONITOR_SIZE[0], MONITOR_SIZE[1])
                     
                 else:
-                    gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF)
-                    screen = pygame.Surface((640,360))
-                    ImageLoader.ChangeSize([1,1])
-                    camera.ChangedScale([1,1])
-                    #setting viewport of size of screen so the images will be on full screen not out of it
+                    gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF | pygame.RESIZABLE)
                     ctx.clear()
                     ctx.viewport  = (0, 0, 640, 360)
     
