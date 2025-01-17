@@ -1,62 +1,181 @@
-#!#Scale#@# 64 96
+#!#Scale#@# 64 32
 #!#vertex_shaders#@# vertex_shaders\vert_normal.glsl
 #!#fragment_shaders#@# fragment_shaders\frag_normal.glsl
-kraszak_heading_down_0 7 2 None
+kraszak_heading_down_0 7 6 None
+dialog_trigger 7 9 letter_from_father
+dialog_trigger 8 6 letter_from_father
+dialog_trigger 6 6 letter_from_father
 dialog_trigger 7 3 letter_from_father
-dialog_trigger 8 2 letter_from_father
-dialog_trigger 6 2 letter_from_father
-dialog_trigger 7 1 letter_from_father
-level_exit 7 5 hallway_library_math_class
-level_exit 8 5 hallway_library_math_class
-level_exit 6 5 hallway_library_math_class
-heavy_golden_box 9 5 
-heavy_golden_box 5 5 
-heavy_golden_box 10 5 
-heavy_golden_box 11 5 
-heavy_golden_box 4 5 
-heavy_golden_box 3 5 
-heavy_golden_box 3 4 
-heavy_golden_box 3 3 
-heavy_golden_box 3 2 
-heavy_golden_box 3 1 
-heavy_golden_box 3 0 
-heavy_golden_box 12 0 
-heavy_golden_box 12 1 
-heavy_golden_box 12 2 
-heavy_golden_box 12 3 
-heavy_golden_box 12 4 
-heavy_golden_box 12 5 
-heavy_golden_box 10 1 
-heavy_golden_box 10 2 
+level_exit 7 15 hallway_library_math_class
+level_exit 8 15 hallway_library_math_class
+level_exit 6 15 hallway_library_math_class
 heavy_golden_box 10 3 
-heavy_golden_box 5 1 
-heavy_golden_box 5 2 
+heavy_golden_box 10 6 
+heavy_golden_box 10 9 
 heavy_golden_box 5 3 
-heavy_golden_box 3 -1 
-heavy_golden_box 3 -2 
-heavy_golden_box 3 -3 
-heavy_golden_box 3 -4 
-heavy_golden_box 12 -3 
-heavy_golden_box 12 -4 
-heavy_golden_box 12 -2 
-heavy_golden_box 12 -1 
-heavy_golden_box 5 -1 
-heavy_golden_box 6 -1 
-heavy_golden_box 7 -1 
-heavy_golden_box 8 -1 
-heavy_golden_box 9 -1 
+heavy_golden_box 5 6 
+heavy_golden_box 5 9 
 heavy_golden_box 5 -3 
 heavy_golden_box 6 -3 
-heavy_golden_box 12 -5 
-heavy_golden_box 11 -5 
-heavy_golden_box 10 -5 
-heavy_golden_box 3 -5 
-heavy_golden_box 4 -5 
-heavy_golden_box 5 -5 
-heavy_golden_box 6 -5 
-heavy_golden_box 7 -5 
-heavy_golden_box 8 -5 
-heavy_golden_box 9 -5 
-player5 5 -4 static
-player4 11 2 static
-kraszak_heading_up_4 7 4 hallway_library_math_class
+heavy_golden_box 7 -3 
+heavy_golden_box 8 -3 
+heavy_golden_box 9 -3 
+heavy_golden_box 5 -9 
+heavy_golden_box 6 -9 
+player5 5 -12 static
+player4 11 6 static
+kraszak_heading_up_4 7 12 hallway_library_math_class
+school_wall_floor_right 3 13 
+school_wall_floor_right 3 11 
+school_wall_floor_right 3 9 
+school_wall_floor_right 3 7 
+school_wall_floor_right 3 5 
+school_wall_floor_right 3 3 
+school_wall_floor_right 3 1 
+school_wall_floor_right 3 -1 
+school_wall_floor_right 3 -3 
+school_wall_floor_right 3 -5 
+school_wall_floor_right 3 -7 
+school_wall_floor_right 3 -9 
+school_wall_floor_right 3 -11 
+school_wall_floor_right 3 -13 
+school_wall_floor_down 4 -15 
+school_wall_floor_down 5 -15 
+school_wall_floor_down 6 -15 
+school_wall_floor_down 7 -15 
+school_wall_floor_down 8 -15 
+school_wall_floor_down 9 -15 
+school_wall_floor_down 10 -15 
+school_wall_floor_down 11 -15 
+school_wall_floor_left 12 -13 
+school_wall_floor_left 12 -11 
+school_wall_floor_left 12 -9 
+school_wall_floor_left 12 -7 
+school_wall_floor_left 12 -5 
+school_wall_floor_left 12 -3 
+school_wall_floor_left 12 -1 
+school_wall_floor_left 12 1 
+school_wall_floor_left 12 3 
+school_wall_floor_left 12 5 
+school_wall_floor_left 12 7 
+school_wall_floor_left 12 9 
+school_wall_floor_left 12 11 
+school_wall_floor_left 12 13 
+school_wall_floor_up 11 15 
+school_wall_floor_up 10 15 
+school_wall_floor_up 9 15 
+school_wall_floor_up 4 15 
+school_wall_floor_up 5 15 
+school_wall 3 15 
+school_wall 12 15 
+school_wall 12 -15 
+school_wall 3 -15 
+school_floor 11 13 
+school_floor 10 13 
+school_floor 9 13 
+school_floor 8 13 
+school_floor 7 13 
+school_floor 6 13 
+school_floor 5 13 
+school_floor 4 13 
+school_floor 4 11 
+school_floor 5 11 
+school_floor 6 11 
+school_floor 7 11 
+school_floor 8 11 
+school_floor 9 11 
+school_floor 10 11 
+school_floor 11 11 
+school_floor 11 9 
+school_floor 11 7 
+school_floor 11 5 
+school_floor 9 9 
+school_floor 8 9 
+school_floor 7 9 
+school_floor 6 9 
+school_floor 4 9 
+school_floor 4 7 
+school_floor 5 7 
+school_floor 6 7 
+school_floor 7 7 
+school_floor 8 7 
+school_floor 9 7 
+school_floor 10 7 
+school_floor 10 5 
+school_floor 9 5 
+school_floor 8 5 
+school_floor 7 5 
+school_floor 6 5 
+school_floor 5 5 
+school_floor 4 5 
+school_floor 4 3 
+school_floor 5 3 
+school_floor 6 3 
+school_floor 7 3 
+school_floor 8 3 
+school_floor 9 3 
+school_floor 10 3 
+school_floor 11 3 
+school_floor 11 1 
+school_floor 10 1 
+school_floor 9 1 
+school_floor 8 1 
+school_floor 7 1 
+school_floor 6 1 
+school_floor 5 1 
+school_floor 4 1 
+school_floor 4 -1 
+school_floor 5 -1 
+school_floor 6 -1 
+school_floor 7 -1 
+school_floor 8 -1 
+school_floor 9 -1 
+school_floor 10 -1 
+school_floor 11 -1 
+school_floor 11 -3 
+school_floor 10 -3 
+school_floor 11 -5 
+school_floor 10 -5 
+school_floor 9 -5 
+school_floor 8 -5 
+school_floor 7 -5 
+school_floor 6 -5 
+school_floor 5 -5 
+school_floor 4 -5 
+school_floor 4 -3 
+school_floor 4 -7 
+school_floor 5 -7 
+school_floor 6 -7 
+school_floor 7 -7 
+school_floor 8 -7 
+school_floor 9 -7 
+school_floor 10 -7 
+school_floor 11 -7 
+school_floor 11 -9 
+school_floor 10 -9 
+school_floor 9 -9 
+school_floor 8 -9 
+school_floor 7 -9 
+school_floor 4 -9 
+school_floor 4 -11 
+school_floor 5 -11 
+school_floor 6 -11 
+school_floor 7 -11 
+school_floor 8 -11 
+school_floor 9 -11 
+school_floor 10 -11 
+school_floor 11 -11 
+school_floor 11 -13 
+school_floor 10 -13 
+school_floor 9 -13 
+school_floor 8 -13 
+school_floor 7 -13 
+school_floor 6 -13 
+school_floor 5 -13 
+school_floor 4 -13 
+school_floor 8 15 
+school_floor 7 15 
+school_floor 6 15 
+school_floor 6 17 
+school_floor 7 17 
+school_floor 8 17 

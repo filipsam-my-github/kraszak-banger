@@ -31,8 +31,11 @@ void main(){
     
     
     disc = abs(disc - 1.0)*adjusted_multiplayer;
+    float old_disc = disc;
 
-    disc = sqrt(pow(disc,5));
+
+    disc = max(0.0,sqrt(pow(disc,5)));
+    disc = min(disc,sqrt(pow(old_disc,3)));
     
     f_color = vec4(red*disc, green*disc, blue*disc, 1.0);
 }
