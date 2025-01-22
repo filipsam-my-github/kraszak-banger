@@ -1,0 +1,10 @@
+#!#Scale#@# 64 32
+#!#vertex_shaders#@# vertex_shaders\vert_normal.glsl
+#!#fragment_shaders#@# fragment_shaders\frag_normal.glsl
+kraszak_heading_down_0 6 12 
+fern_flower 0 1
+
+player0 6 10 
+player3 5 10 
+tree 5 5
+

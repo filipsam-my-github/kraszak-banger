@@ -6,7 +6,7 @@
         
 """
 from entities import Player, Npc
-from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox, Block, SchoolWall
+from blocks import WoodenBox, HeavyWoodenBox, SteelBox, HeavySteelBox, GoldenBox, HeavyGoldenBox, Block, SchoolWall, Tree, FernFlower
 from ghost_blocks import SchoolPlanksFloor, SchoolDoor, ForestGrass, ForestRocks
 from activation_triggers import Dialog, LevelExit, EventActivator
 import os
@@ -61,7 +61,7 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, Player, list[B
         activations_triggers = []
         blocks = []
         npcs = []
-        only_draw_low_layer_objs = []
+        ghost_blocks = []
         
         current_player_meta_data = []
         
@@ -103,6 +103,10 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, Player, list[B
                     blocks.append(HeavyWoodenBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "wooden_box":
                     blocks.append(WoodenBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "tree":
+                    blocks.append(Tree(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "fern_flower":
+                    blocks.append(FernFlower(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 
                 case "level_exit":
                     level_exits.append(LevelExit(float(local_data[1])*scale_x, float(local_data[2])*scale_y, local_data[3]))
@@ -123,13 +127,13 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, Player, list[B
                     blocks.append(SchoolWall(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "None"))
                 
                 case "school_floor":
-                    only_draw_low_layer_objs.append(SchoolPlanksFloor(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                    ghost_blocks.append(SchoolPlanksFloor(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "school_door":
-                    only_draw_low_layer_objs.append(SchoolDoor(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                    ghost_blocks.append(SchoolDoor(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "grass":
-                    only_draw_low_layer_objs.append(ForestGrass(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                    ghost_blocks.append(ForestGrass(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "rocks":
-                    only_draw_low_layer_objs.append(ForestRocks(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                    ghost_blocks.append(ForestRocks(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 
                     
                     
@@ -144,7 +148,7 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, Player, list[B
                     npcs.append(Npc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float(local_data[3])))
     
     #LoadShader, LoadShader because data 1 and 2 are names of shaders files
-    return LoadShader(data[1]), LoadShader(data[2]), player, blocks, dialogs, level_exits, activations_triggers, npcs, only_draw_low_layer_objs
+    return LoadShader(data[1]), LoadShader(data[2]), player, blocks, dialogs, level_exits, activations_triggers, npcs, ghost_blocks
 
 def ReadSavesNames() -> list:
     return [i for i in os.listdir("data/saves")]

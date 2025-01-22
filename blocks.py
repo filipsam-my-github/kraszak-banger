@@ -320,4 +320,9 @@ class SchoolWall(Block):
             super().__init__(x_cord, y_cord, "school_wall_floor_up", float('inf'))
         else:
             super().__init__(x_cord, y_cord, "school_wall", float('inf'))
-
+class Tree(Block):
+    def __init__(self, x_cord, y_cord):        
+        super().__init__(x_cord, y_cord, "tree", float('inf'))
+class FernFlower(Block):
+     def __init__(self, x_cord, y_cord,):
+        super().__init__(x_cord, y_cord, "fern_flower", float('inf'))
