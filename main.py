@@ -1,19 +1,3 @@
-"""
-    Main file.
-    It runs the game by using all other files.
-    
-    @method InitializeProgram
-    @method HandelPygameEvents
-    @method Main
-    are essential to run the program
-    
-    Game idea
-    1. Plot unclear yet
-    2. It's a top-down game
-    3. Probably relaxing orientated game
-"""
-
-
 import pygame
 import sys
 from entities import Player, Npc
@@ -33,239 +17,226 @@ from array import array
 import data_interpreter
 
 from texts import FastGuiTextBox
-#creates gl_screen which is real screen and creates pygame surface so we can draw everything as usual
-gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF | pygame.RESIZABLE)
-screen = pygame.Surface((640,360))
-#ctx is core fundament of shaders
-ctx = moderngl.create_context()
+
+
 
 #variables for resizing screen
 MONITOR_SIZE = screen_size()
 MONITOR_PROPORTIONS = [MONITOR_SIZE[0]/640, MONITOR_SIZE[1]/360]
 print(MONITOR_SIZE)
 print(MONITOR_PROPORTIONS)
-full_screen = False
 
 DARK_BACKGROUND = (16.5,15.7,25.1)
 LIGHT_BACKGROUND = (144, 201, 120)
 
-#sync shaders x y axis with pygame x y axis so down is +y; up is -y; left is -x; right is +x
-quad_buffer = ctx.buffer(data=array('f', [
-    -1.0, 1.0, 0.0, 0.0,
-    1.0, 1.0, 1.0, 0.0,
-    -1.0, -1.0, 0.0, 1.0,
-    1.0, -1.0, 1.0, 1.0,
-]))
 
 
 
-vert_shader = data_interpreter.LoadShader("vertex_shaders/vert_normal.glsl")
-frag_shader = data_interpreter.LoadShader("fragment_shaders/frag_normal.glsl")#load_shader("fragment_shaders/frag_normal.glsl")
 
-#drawing pygame surface on actual screen with shaders applied
-def SurfToTexture(surf) -> moderngl.Texture:
-    tex = ctx.texture(surf.get_size(), 4)
-    tex.filter = (moderngl.NEAREST, moderngl.NEAREST)
-    tex.swizzle = 'BGRA'
-    tex.write(surf.get_view('1'))
+
+class ShaderScreen:
+    DEFAULT_VERT_SHADER_PATH = "vertex_shaders/vert_normal.glsl"
+    DEFAULT_FRAG_SHADER_PATH = "fragment_shaders/frag_normal.glsl"
+
+    def __init__(self, vert_shader=None, frag_shader=None):
+        self.gl_screen = pygame.display.set_mode((640, 360), pygame.OPENGL | pygame.DOUBLEBUF | pygame.RESIZABLE)
+        self.screen = pygame.Surface((640, 360))
+
+        self.screen.fill((255, 0, 0))
+
+        self.ctx = moderngl.create_context()
+
+        self.full_screen = False
+
+        # Vertex buffer: Maps OpenGL coordinates to texture coordinates
+        self.quad_buffer = self.ctx.buffer(data=array('f', [
+            -1.0, 1.0, 0.0, 0.0,
+            1.0, 1.0, 1.0, 0.0,
+            -1.0, -1.0, 0.0, 1.0,
+            1.0, -1.0, 1.0, 1.0,
+        ]))
+
+        self.vert_shader = vert_shader or data_interpreter.LoadShader(ShaderScreen.DEFAULT_VERT_SHADER_PATH)
+        self.frag_shader = frag_shader or data_interpreter.LoadShader(ShaderScreen.DEFAULT_FRAG_SHADER_PATH)
+
+        self.program = self.ctx.program(vertex_shader=self.vert_shader, fragment_shader=self.frag_shader)
+        self.render_object = self.ctx.vertex_array(self.program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
+
+    def SurfToTexture(self, surf) -> moderngl.Texture:
+        """Converts a Pygame surface to a ModernGL texture."""
+        tex = self.ctx.texture(surf.get_size(), 4)
+        tex.filter = (moderngl.NEAREST, moderngl.NEAREST)
+        tex.swizzle = 'BGRA'
+        tex.write(surf.get_view('1'))
+        return tex
+
+    def fill(self, color):
+        """Fills the Pygame surface with the specified color."""
+        self.screen.fill(color)
+
+    def blit(self, image, cords):
+        """Blits an image onto the Pygame surface."""
+        self.screen.blit(image, cords)
+
+    def DisplayScene(self):
+        """Renders the Pygame surface onto the OpenGL screen using shaders."""
+        frame_tex = self.SurfToTexture(self.screen)
+        frame_tex.use(0) 
+        self.program['tex'] = 0  
+        self.program["transposition_shader_multiplayer"] = float(abs(LevelExit.transposition_shader_multiplayer))
+        self.render_object.render(mode=moderngl.TRIANGLE_STRIP) 
+        frame_tex.release()  
+        pygame.display.flip() 
     
-    return tex
-
-#essential variables for shaders
-program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
-render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
-
-#TODO documentation
-
-def InitializeProgram():
-    """
-    Initialize modules so they
-    can load things or set configs
-    (without it program may crush)
-    """
-    pygame.init()
-    pygame.mixer.init()
-    #init isn't spelt Init because pyagme use .init()
-    ImageLoader.init()
-    Dialog.init(MONITOR_PROPORTIONS)
-
-def HandelPygameEventsAndObjTick(camera:Camera, keys, dt,*args):
-    """
-    Handle pygame events and key events.
-    @parameter camera for resizing screen purposes
-    @parameter keys for proper input for obj 
-    @parameter dt for sync movement and animation between different frame rates
-    @parameter *args for object with Tick method
-    
-    """
-    global full_screen
-    global screen
-    global gl_screen
-    global ctx
-    global render_object
-    global program
-    
-    
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
+    def UpdateFullscreen(self):
+        self.full_screen = not self.full_screen
+        #turns out shaders resize images so they fit the window 
+        if self.full_screen:
+            self.gl_screen = pygame.display.set_mode(MONITOR_SIZE,pygame.FULLSCREEN | pygame.OPENGL | pygame.DOUBLEBUF)
+            self.ctx.clear()
+            self.ctx.viewport  = (0, 0, MONITOR_SIZE[0], MONITOR_SIZE[1])
             
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_f:
-                full_screen = not full_screen
-                #turns out shaders resize images so they fit the window 
-                if full_screen:
-                    gl_screen = pygame.display.set_mode(MONITOR_SIZE,pygame.FULLSCREEN | pygame.OPENGL | pygame.DOUBLEBUF)
-                    ctx.clear()
-                    ctx.viewport  = (0, 0, MONITOR_SIZE[0], MONITOR_SIZE[1])
-                    
-                else:
-                    gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF | pygame.RESIZABLE)
-                    ctx.clear()
-                    ctx.viewport  = (0, 0, 640, 360)
-    
-    #going through arguments and executing Tick method
-    #TODO filipsam 29/12/2024 some object doesn't really need 'keys' but yet it still is given (perhaps something like type(obj)==Player)
-    for arg in args:
-        if arg == list or arg == tuple:
-            for obj in arg:
-                obj.Tick(keys,dt)
         else:
-            arg.Tick(keys, dt)
+            self.gl_screen = pygame.display.set_mode((640,360), pygame.OPENGL | pygame.DOUBLEBUF | pygame.RESIZABLE)
+            self.ctx.clear()
+            self.ctx.viewport  = (0, 0, 640, 360)
 
-def GameTickWithOutKeys(dt, *args):
-    for arg in args:
-        if type(arg) == list or type(arg) == tuple:
-            for obj in arg:
-                obj.Tick(dt)
-        else:
-            arg.Tick(dt)
-
-
-
-clean_pygame_keyboard = [False for i in range(len(pygame.key.get_pressed()))]
-
-
-def RestSizes(camera):
-    ImageLoader.ChangeSize([1,1])
-    camera.ChangedScale([1,1])
-
-
-def Main():
-    global vert_shader
-    global frag_shader
-    """
-    Sets game variables to default
-    and runs the game in the loop
-    """
-    
-    clock = pygame.time.Clock()
-    
-    #creating debug colision room
-    player = Player(0,0)
-    blocks = [HeavyGoldenBox(-64,0)]#[WoodenBox(400,50), HeavySteelBox(100,150),  HeavyGoldenBox(200,50), SteelBox(300,50), HeavyWoodenBox(100,50)]
-    dialogs = [Dialog(0,0,"hi mate")]
-    game_events = []
-    level_exits = []
-    activations_triggers = []
-    npcs = [Npc(Npc.ALL_NPC_NAMES[0],64,0,float('inf'))]
-    only_draw_low_layer_objs = []
-    # for i in range(12):
-    #     if i == 5:
-    #         continue
-    #     blocks.append(HeavyGoldenBox(i*64,400))
-    # blocks.append(GoldenBox(-32,-32))
-    # blocks.append(HeavyGoldenBox(1,465))
-    # blocks.append(HeavyGoldenBox(5*64,400-64))
-    # blocks.append(HeavyGoldenBox(8*64,400-64))
-
-    blocks.append(HeavyWoodenBox(500,150))
-    blocks.append(HeavySteelBox(600,150))
-
-    blocks.append(HeavyWoodenBox(200,150))
-    blocks.append(HeavySteelBox(300,150))
-    
-    blocks.append(HeavyGoldenBox(400,150))
-    
-    blocks.append(WoodenBox(400,250))
-    blocks.append(WoodenBox(400,350))
-    
-    blocks.append(WoodenBox(400,50))
-    blocks.append(WoodenBox(400,-50))
-    
-    
-    camera = Camera((640, 480),0,0)
-    
-    texts = {"camera_cords":Font(text="",original_font_size=25,cursive=False,x_cord=350,y_cord=0)}
-    
-    # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("library","None")
-    # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("hallway_library_math_class","None")
-    # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadLevel("math_class","None")
-    current_level = "library"
-    vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs, only_draw_low_layer_objs  = data_interpreter.LoadLevel(current_level,"None")
-    # vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs  = data_interpreter.LoadSave(data_interpreter.ReadSavesNames()[0])
-    
-    program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
-    render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
-
-
-    keys = pygame.key.get_pressed()
-    while True:    
-        clock.tick(60)
-        screen.fill(LIGHT_BACKGROUND)
-        if not LevelExit.transposition_status:
-            HandelPygameEventsAndObjTick(camera,keys,1/60,player)
-            keys = pygame.key.get_pressed()
-        for level_exit in level_exits:
-            level_exit.Tick(player)
-        for dialog in dialogs:
-            dialog.Tick(player)
-        Dialog.ClassTick(1/60, keys)
-        LevelExit.TickClass(current_level, 1/60)            
-
-        #COLISIONS
         
-        # for block in blocks:
-        #     for other_block in blocks:
-        #         if block == other_block:
-        #             continue
-        #         block.Colide([other_block])
+class ClearPygameKeyboard:
+    def __init__(self):
+        pass
+    
+    def __getitem__(self, key):
+        return False
 
-        player.Collide(blocks)
-        player.Collide(npcs)
-        player.AnimationTick(1/60)
+    
+
+class Game:
+    screen = ShaderScreen()
+    def __init__(self, game_state = "gameplay"):
+        Game.InitializeGame()
         
+        self.game_state = game_state
+        self.game_states = {"gameplay":Gameplay()}
+        
+        
+    
+    def GameLooping(self):
+        texts = {"camera_cords":Font(text="",original_font_size=25,cursive=False,x_cord=350,y_cord=0)}
+        clock = pygame.time.Clock()
+        
+        while True:    
+            clock.tick(60)
+            
+            self.game_states[self.game_state].Tick()
+            self.game_states[self.game_state].Draw()
+
+            #rendering shaders
+            Game.screen.DisplayScene()
+    
+    @classmethod
+    def InitializeGame(cls):
+        """
+        Initialize modules so they
+        can load things or set configs
+        (without it program may crush)
+        """
+        pygame.init()
+        pygame.mixer.init()
+        #init isn't spelt Init because pyagme use .init()
+        ImageLoader.init()
+        Dialog.init(MONITOR_PROPORTIONS)
+
+class GameState(ABC):
+    @abstractmethod
+    def PygameEvents(self):
+        pass
+  
+    @abstractmethod  
+    def Tick(self):
+        pass
+
+    @abstractmethod  
+    def Draw(self):
+        pass
+    
+    def SafeKeyInput(self):
+        return ClearPygameKeyboard() if LevelExit.transposition_status else pygame.key.get_pressed()
+
+class Gameplay(GameState):
+    def __init__(self):
+        self.player = Player(0,0)
+        self.blocks = []
+        self.dialogs = []
+        self.game_events = []
+        self.level_exits = []
+        self.activations_trigger = []
+        self.npcs = []
+        self.only_draw_low_layer_objs = []
+        
+        self.debug_texts = {"camera_cords":Font(text="",original_font_size=25,cursive=False,x_cord=350,y_cord=0)}
+        
+        self.camera = Camera((640, 480),0,0)
+        
+        self.key = ClearPygameKeyboard()        
+        
+        self.LoadLocation("library", "None")
+    
+    def PygameEvents(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_f:
+                    Game.screen.UpdateFullscreen()
+    
+    def Tick(self):
+        self.PygameEvents()        
+        self.keys = self.SafeKeyInput()
+        
+        self.player.Tick(self.keys, 1/60)
+        for level_exit in self.level_exits:
+            level_exit.Tick(self.player)
+        for dialog in self.dialogs:
+            dialog.Tick(self.player)
+            
+        Dialog.ClassTick(1/60, self.keys)
+        LevelExit.TickClass(self.current_level, 1/60)
+        
+        self.player.Collide(self.blocks)
+        self.player.Collide(self.npcs)
+        self.player.AnimationTick(1/60)
+        
+        self.camera.Center(int(self.player.x_cord+15),int(self.player.y_cord))
+        self.debug_texts["camera_cords"].ChangeText(f"x:{(self.camera.x_cord)},y:{(self.camera.y_cord)}")
+
         if LevelExit.load_level_status[0]:
-            #if you load things on not original display hit boxes get bugged so there is solution 
-            RestSizes(camera)
-            vert_shader, frag_shader, player, blocks, dialogs, level_exits, activations_triggers, npcs, only_draw_low_layer_objs  = data_interpreter.LoadLevel(LevelExit.load_level_status[1]["go_to"],current_level)
+            # ImageLoader.ChangeSize([1,1])
+            # self.camera.ChangedScale([1,1])
+            self.keys = ClearPygameKeyboard()
             
-            program = ctx.program(vertex_shader=vert_shader, fragment_shader=frag_shader)
-            render_object = ctx.vertex_array(program, [(quad_buffer, '2f 2f', 'vert', 'texcoord')])
-            current_level = LevelExit.load_level_status[1]["go_to"]
+            self.LoadLocation(LevelExit.load_level_status[1]["go_to"],self.current_level)
+            
+            LevelExit.transposition_status = True
             LevelExit.load_level_status[0] = False
-            keys = clean_pygame_keyboard
-        camera.Center(int(player.x_cord+15),int(player.y_cord))
-        texts["camera_cords"].ChangeText(f"x:{(camera.x_cord)},y:{(camera.y_cord)}")
-        
-        camera.Draw(texts,dialogs,activations_triggers, npcs,game_events,level_exits,player,blocks,only_draw_low_layer_objs,screen=screen)
-
-        #rendering shaders
-        frame_tex = SurfToTexture(screen)
-        frame_tex.use(0)
-        program['tex'] = 0
-        program['transposition_shader_multiplayer'] = float(abs(LevelExit.transposition_shader_multiplayer))
-        render_object.render(mode=moderngl.TRIANGLE_STRIP)
-        #preventing memory leek
-        frame_tex.release()
-
-        pygame.display.flip()
-        ctx.clear()
-        
-
     
+    def Draw(self):
+        Game.screen.fill(LIGHT_BACKGROUND)
+        self.camera.Draw(self.debug_texts,self.dialogs,self.activations_triggers, self.npcs,self.game_events,self.level_exits,self.player,self.blocks,self.only_draw_low_layer_objs,screen=Game.screen.screen)
 
+        
+    def LoadLocation(self, level_entering, level_left = "None"):
+        self.current_level = level_entering
+        Game.screen.vert_shader, Game.screen.frag_shader, self.player, self.blocks, self.dialogs, self.level_exits, self.activations_triggers, self.npcs, self.only_draw_low_layer_objs  = data_interpreter.LoadLevel(level_entering,level_left)
+        
+        Game.screen.program = Game.screen.ctx.program(vertex_shader=Game.screen.vert_shader, fragment_shader=Game.screen.frag_shader)
+        Game.screen.render_object = Game.screen.ctx.vertex_array(Game.screen.program, [(Game.screen.quad_buffer, '2f 2f', 'vert', 'texcoord')])
+    
+    
+    
+        
 
 if __name__ == "__main__":
-    InitializeProgram()
-    Main()
+    kraszak_banger = Game()
+    kraszak_banger.GameLooping()
