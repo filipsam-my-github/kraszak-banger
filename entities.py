@@ -103,15 +103,17 @@ class Player(PhysicsCollider, CameraDrawable):
         # Horizontal movement
         if not Dialog.dialog_active_status:
             if keys[pygame.K_d]:
-                self.x_cord += self.entity_speed * dt * diagonal_multiplier
-                self.movement_vector[0] = self.entity_speed * diagonal_multiplier *dt
+                if not keys[pygame.K_a]:
+                    self.x_cord += self.entity_speed * dt * diagonal_multiplier
+                    self.movement_vector[0] = self.entity_speed * diagonal_multiplier *dt
             elif keys[pygame.K_a]:
                 self.x_cord += -self.entity_speed * dt * diagonal_multiplier
                 self.movement_vector[0] = -self.entity_speed * dt * diagonal_multiplier
 
             if keys[pygame.K_w]:
-                self.y_cord += -self.entity_speed * dt * diagonal_multiplier
-                self.movement_vector[1] = -self.entity_speed * diagonal_multiplier *dt
+                if not keys[pygame.K_s]:
+                    self.y_cord += -self.entity_speed * dt * diagonal_multiplier
+                    self.movement_vector[1] = -self.entity_speed * diagonal_multiplier *dt
 
             elif keys[pygame.K_s]:
                 self.y_cord += self.entity_speed * dt * diagonal_multiplier
