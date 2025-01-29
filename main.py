@@ -8,6 +8,7 @@ from pyautogui import size as screen_size
 from camera import Camera
 from texts import Font
 from activation_triggers import Dialog, LevelExit, EventActivator
+from keys_vals import ClearPygameKeyboard
 
 import moderngl
 #data structure like list but faster
@@ -17,7 +18,6 @@ from array import array
 import data_interpreter
 
 from texts import FastGuiTextBox
-
 
 
 #variables for resizing screen
@@ -101,13 +101,6 @@ class ShaderScreen:
             self.ctx.clear()
             self.ctx.viewport  = (0, 0, 640, 360)
 
-        
-class ClearPygameKeyboard:
-    def __init__(self):
-        pass
-    
-    def __getitem__(self, key):
-        return False
 
     
 

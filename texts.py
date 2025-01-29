@@ -49,7 +49,7 @@ class Font:
             if str(self.original_font_size) in Font.pixelated_font.keys():
                 self.text_image = Font.pixelated_font[str(self.original_font_size)].render(self.text_content,True,Font.COLOR)
             else:
-                Font.pixelated_font[str(self.original_font_size)] = pygame.font.Font("fonts/mad-mew-mew/mad-mew-mew.otf", self.original_font_size)
+                Font.pixelated_font[str(self.original_font_size)] = pygame.font.Font("fonts/ness/ness.otf", self.original_font_size)
                 self.text_image = Font.pixelated_font[str(self.original_font_size)].render(self.text_content,True,Font.COLOR)
         
         image_width = self.text_image.get_width()*self.text_image_meta_data["fullscreen"][0]
@@ -140,4 +140,11 @@ class FastGuiTextBox:
             new_sentence += new_word
 
         return new_sentence
+
+
+def Center(start, end, text_start, text_end) -> int:
+    text_start -= start
+    text_end -= start
+    end -= start
         
+    return (end//2 - (text_end - text_start)//2) + start

@@ -5,6 +5,9 @@ from items import Item
 from blocks import PhysicsCollider
 from camera import CameraDrawable
 from activation_triggers import Dialog
+from keys_vals import ClearPygameKeyboard, IsDown, IsUp
+import gui
+import json_interpreter
 
 class Player(PhysicsCollider, CameraDrawable):
     """
@@ -53,13 +56,20 @@ class Player(PhysicsCollider, CameraDrawable):
         self.met_events = []
         self.met_dialogs = []
         
-        self.item = None
+        # fix circulation and segregate scripts in reasonable order
+        self.inventory = json_interpreter.ReadItems(Dialog.language,["funny_thing", "prawn", "secret_key", "money", "stick", "copper_coin"])
         
         self.gui_image = False
         
         self._animation_clock = 0
         self.x_cord_for_animation = self.x_cord
         self.y_cord_for_animation = self.y_cord
+        
+        
+        self.show_inventory = False
+        self.inventory_gui = gui.InventoryGui(self.inventory)
+        
+        self.last_keys = ClearPygameKeyboard()
 
         super().__init__(movement_strength=26)
     
@@ -101,7 +111,7 @@ class Player(PhysicsCollider, CameraDrawable):
             diagonal_multiplier = 1#sqrt(self.entity_speed*dt)/(self.entity_speed*dt) when activated, bugs are appearing
 
         # Horizontal movement
-        if not Dialog.dialog_active_status:
+        if not Dialog.dialog_active_status and not self.show_inventory:
             if keys[pygame.K_d]:
                 if not keys[pygame.K_a]:
                     self.x_cord += self.entity_speed * dt * diagonal_multiplier
@@ -121,11 +131,17 @@ class Player(PhysicsCollider, CameraDrawable):
         
             self.rect.x = self.x_cord
             self.rect.y = self.y_cord
+        
+        if IsDown(self.last_keys, keys, pygame.K_e) and not (self.show_inventory == False and Dialog.dialog_active_status):
+            self.show_inventory = not self.show_inventory
 
         # Reset collision detection for next frame
 
         self.movement_vector[0] = self.x_cord - old_x_cord
         self.movement_vector[1] = self.y_cord - old_y_cord
+        
+        self.inventory_gui.Tick(self.last_keys, keys)
+        self.last_keys = keys
         
         
         
@@ -257,6 +273,9 @@ class Player(PhysicsCollider, CameraDrawable):
         ImageLoader.DrawImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
         if Player.HITBOX:
             pygame.draw.rect(screen, (230,50,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
+        
+        if self.show_inventory:
+            self.inventory_gui.Draw(screen)
     
     def GetImageSize(self) -> tuple[int,int]:
         return ImageLoader.images[self.image_name].get_size()
