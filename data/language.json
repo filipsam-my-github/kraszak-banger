@@ -7,7 +7,14 @@
     
         "second_thought_on_hallway":"ta zostaneie pisarzem zamiest lekazem",
 
-        "math_test_and_youre_late": "bedziesz mial mniej czasu na napisanie testu odkat sie spuzniles¬To zapisz sobie pytania które ci podyktuje¬*Zapisales pytania ale czujesz sie wykonczony"
+        "math_test_and_youre_late": "bedziesz mial mniej czasu na napisanie testu odkat sie spuzniles¬To zapisz sobie pytania które ci podyktuje¬*Zapisales pytania ale czujesz sie wykonczony",
+
+        "funny_thing": "zabawna objekt",
+        "prawn": "krewetka",
+        "secret_key": "tejemniczy klucz",
+        "money": "kaska",
+        "stick": "patyk",
+        "copper_coin": "miediane zloto"
     },
 
 
@@ -19,8 +26,18 @@
 
         "second_thought_on_hallway":"Yeah I'll become a writer instead of becoming a doctor.",
 
-        "math_test_and_youre_late": "Since you late you will have less time to write your exam¬Listen closely because I'll read out loud question so you'll be able to write them down"
+        "math_test_and_youre_late": "Since you late you will have less time to write your exam¬Listen closely because I'll read out loud question so you'll be able to write them down",
 
+        "funny_thing": "funny thing",
+        "prawn": "prawn",
+        "secret_key": "secret key",
+        "money": "money",
+        "stick": "stick",
+        "copper_coin": "copper cion"
+
+
+
+        
 
 
     }
