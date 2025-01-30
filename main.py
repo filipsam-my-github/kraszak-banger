@@ -18,7 +18,7 @@ from array import array
 import data_interpreter
 
 from texts import FastGuiTextBox
-
+import time
 
 #variables for resizing screen
 MONITOR_SIZE = screen_size()
@@ -106,21 +106,29 @@ class ShaderScreen:
 
 class Game:
     screen = ShaderScreen()
+    dt = time.time()
     def __init__(self, game_state = "gameplay"):
         Game.InitializeGame()
         
         self.game_state = game_state
         self.game_states = {"gameplay":Gameplay()}
         
+        self.dt = time.time()
+        
         
     
     def GameLooping(self):
         texts = {"camera_cords":Font(text="",original_font_size=25,cursive=False,x_cord=350,y_cord=0)}
         clock = pygame.time.Clock()
+        last_time = time.time()
+        Game.dt = time.time() - last_time
+        
         
         while True:    
             clock.tick(60)
-            
+            Game.dt = time.time() - last_time
+            last_time = time.time()
+
             self.game_states[self.game_state].Tick()
             self.game_states[self.game_state].Draw()
 
@@ -173,7 +181,7 @@ class Gameplay(GameState):
         
         self.key = ClearPygameKeyboard()        
         
-        self.LoadLocation("library", "None")
+        self.LoadLocation("colision_tests", "None")
     
     def PygameEvents(self):
         for event in pygame.event.get():
