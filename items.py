@@ -2,7 +2,8 @@
     It's code from item when this game was meant to be roguelike so this file is yet not integrated with other files (for now not important)
 """
 from abc import ABC , abstractmethod
-import graphic_handler as gh
+import graphic_handler
+
 
 class Item(ABC):
     """
@@ -33,7 +34,7 @@ class Item(ABC):
             x_cord = self.x_cord
         if not y_cord:
             y_cord = self.y_cord
-        gh.ImageLoader.DrawImage(screen, self.image, x_cord, y_cord)
+        graphic_handler.ImageLoader.DrawImage(screen, self.image, x_cord, y_cord)
 
 class Sword(Item):
 
