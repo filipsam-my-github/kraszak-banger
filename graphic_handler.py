@@ -40,9 +40,7 @@ class ImageLoader:
     
     #calculated width and height
     _standard_size_of_image_height = __IMAGE_WIDTH * _SCALE
-    print(_standard_size_of_image_height)
     _standard_size_of_image_width = __IMAGE_HEIGHT * _SCALE
-    print(_standard_size_of_image_width)
     
     _MOBS_ASSET = None
     _MAP_ASSET = None
@@ -98,7 +96,7 @@ class ImageLoader:
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
             
         #school
-        for i in ["school_door", "school_test", "school_floor", "school_wall"]:
+        for i in ["school_door", "school_test", "school_floor", "school_wall", "bookshelf_front", "bookshelf_side", "bookshelf_top"]:
             kraszak_heading_something = pygame.image.load(f"graphics//school//{i}.png")
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
