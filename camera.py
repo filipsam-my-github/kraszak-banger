@@ -1,4 +1,3 @@
-from texts import Font
 import pygame
 from abc import ABC , abstractmethod 
 
