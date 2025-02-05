@@ -1,15 +1,17 @@
-import pygame
-from math import sqrt
-from graphic_handler import ImageLoader
-from items import Item
-from blocks import PhysicsCollider
-from camera import CameraDrawable
-from activation_triggers import Dialog
-from keys_vals import ClearPygameKeyboard, IsDown, IsUp
+from abc import ABC , abstractmethod
+import pygame, os, sys, texts_handler
+import keys_vals
 import gui
+import graphic_handler
+import solid_blocks
+import activation_triggers
+import camera
+import audio_handler
+import math
 import json_interpreter
 
-class Player(PhysicsCollider, CameraDrawable):
+
+class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
     """
     Represents a player entity in the game, inheriting from `PhysicsCollider`.
     The `Player` class provides Tick, Collisions and Animations
@@ -27,11 +29,19 @@ class Player(PhysicsCollider, CameraDrawable):
     
     HEIGHT = 50
     WIDTH = 20
-    HITBOX = True    
+    HITBOX = False    
     NO_CLIP = True
     
     met_dialogs = []
     met_events = []
+    
+    forward = pygame.K_w
+    backward = pygame.K_s
+    left = pygame.K_a
+    right = pygame.K_d
+    inventory = pygame.K_e
+    
+    music_fading = False
     
     def __init__(self, x_cord, y_cord) -> object:
         self.image_name = f"kraszak_heading_down_1"
@@ -44,20 +54,20 @@ class Player(PhysicsCollider, CameraDrawable):
         image_skin_cord_x = 1
         image_skin_cord_y = 11
         
-        self._skin_x = -ImageLoader.GetScalingMultiplier()[0]*image_skin_cord_x
-        self._skin_y = -ImageLoader.GetScalingMultiplier()[1]*image_skin_cord_y
+        self._skin_x = -graphic_handler.ImageLoader.GetScalingMultiplier()[0]*image_skin_cord_x
+        self._skin_y = -graphic_handler.ImageLoader.GetScalingMultiplier()[1]*image_skin_cord_y
 
         self.x_cord = x_cord-self._skin_x
         self.y_cord = y_cord-self._skin_y
         self.movement_vector = [0,0]
-        self.rect = pygame.Rect(self.x_cord, self.y_cord, 14*ImageLoader.GetScalingMultiplier()[0], 11*ImageLoader.GetScalingMultiplier()[1])
+        self.rect = pygame.Rect(self.x_cord, self.y_cord, 14*graphic_handler.ImageLoader.GetScalingMultiplier()[0], 11*graphic_handler.ImageLoader.GetScalingMultiplier()[1])
 
         self.plot_state = 0#how far is player in plot of this game might be helpful when dialog is going to be after certain event but not before
         self.met_events = []
         self.met_dialogs = []
         
         # fix circulation and segregate scripts in reasonable order
-        self.inventory = json_interpreter.ReadItems(Dialog.language,["funny_thing", "prawn", "secret_key", "money", "stick", "copper_coin"])
+        self.inventory = json_interpreter.ReadItems(activation_triggers.Dialog.language,["funny_thing", "prawn", "secret_key", "money", "stick", "copper_coin"])
         
         self.gui_image = False
         
@@ -69,7 +79,7 @@ class Player(PhysicsCollider, CameraDrawable):
         self.show_inventory = False
         self.inventory_gui = gui.InventoryGui(self.inventory)
         
-        self.last_keys = ClearPygameKeyboard()
+        self.last_keys = keys_vals.ClearPygameKeyboard()
 
         super().__init__(movement_strength=26)
     
@@ -80,7 +90,7 @@ class Player(PhysicsCollider, CameraDrawable):
         """
             used formula https://www.toppr.com/guides/maths/introduction-to-three-dimensional-geometry/distance-between-two-points/
         """
-        return sqrt((self.x_cord-point_x_cord)**2+(self.y_cord-point_y_cord)**2)
+        return math.sqrt((self.x_cord-point_x_cord)**2+(self.y_cord-point_y_cord)**2)
 
 
     def Tick(self, keys, dt):
@@ -101,7 +111,7 @@ class Player(PhysicsCollider, CameraDrawable):
         self.movement_vector[1] = 0
         
         # Count active keys for diagonal adjustment
-        for key in [pygame.K_w, pygame.K_d, pygame.K_a, pygame.K_s]:
+        for key in [Player.forward, Player.right, Player.left, Player.backward]:
             if keys[key]:
                 keys_down += 1
 
@@ -111,28 +121,28 @@ class Player(PhysicsCollider, CameraDrawable):
             diagonal_multiplier = 1#sqrt(self.entity_speed*dt)/(self.entity_speed*dt) when activated, bugs are appearing
 
         # Horizontal movement
-        if not Dialog.dialog_active_status and not self.show_inventory:
-            if keys[pygame.K_d]:
-                if not keys[pygame.K_a]:
+        if not activation_triggers.Dialog.dialog_active_status and not self.show_inventory:
+            if keys[Player.right]:
+                if not keys[Player.left]:
                     self.x_cord += self.entity_speed * dt * diagonal_multiplier
                     self.movement_vector[0] = self.entity_speed * diagonal_multiplier *dt
-            elif keys[pygame.K_a]:
+            elif keys[Player.left]:
                 self.x_cord += -self.entity_speed * dt * diagonal_multiplier
                 self.movement_vector[0] = -self.entity_speed * dt * diagonal_multiplier
 
-            if keys[pygame.K_w]:
-                if not keys[pygame.K_s]:
+            if keys[Player.forward]:
+                if not keys[Player.backward]:
                     self.y_cord += -self.entity_speed * dt * diagonal_multiplier
                     self.movement_vector[1] = -self.entity_speed * diagonal_multiplier *dt
 
-            elif keys[pygame.K_s]:
+            elif keys[Player.backward]:
                 self.y_cord += self.entity_speed * dt * diagonal_multiplier
                 self.movement_vector[1] = self.entity_speed * diagonal_multiplier *dt
         
             self.rect.x = self.x_cord
             self.rect.y = self.y_cord
         
-        if IsDown(self.last_keys, keys, pygame.K_e) and not (self.show_inventory == False and Dialog.dialog_active_status):
+        if keys_vals.IsDown(self.last_keys, keys, Player.inventory) and not (self.show_inventory == False and activation_triggers.Dialog.dialog_active_status):
             self.show_inventory = not self.show_inventory
 
         # Reset collision detection for next frame
@@ -143,7 +153,38 @@ class Player(PhysicsCollider, CameraDrawable):
         self.inventory_gui.Tick(self.last_keys, keys)
         self.last_keys = keys
         
+        if Player.music_fading:
+            dis_val = max(0,(min(1,1-self.HowFarFromPlayer(64, 160)/550)))
+            
+            audio_handler.MusicHandler.SetVal(dis_val) 
+
         
+    def UpdateInventory(self):
+        self.inventory_gui = gui.InventoryGui(self.inventory)
+    
+    def MoveForAnimation(self,x_speed = 0, y_speed = 0):      
+        old_x_cord = self.x_cord
+        old_y_cord = self.y_cord
+          
+        self.movement_vector[0] = 0 
+        self.movement_vector[1] = 0
+
+        self.x_cord += x_speed
+        self.movement_vector[0] = x_speed
+        
+        self.y_cord += y_speed
+        self.movement_vector[1] = y_speed
+       
+                
+        
+        self.rect.x = self.x_cord
+        self.rect.y = self.y_cord
+        
+
+        # Reset collision detection for next frame
+
+        self.movement_vector[0] = self.x_cord - old_x_cord
+        self.movement_vector[1] = self.y_cord - old_y_cord
         
             
     def __AnimationSetStanding(self):
@@ -170,28 +211,25 @@ class Player(PhysicsCollider, CameraDrawable):
         cords_differences = (self.x_cord_for_animation - self.x_cord, self.y_cord - self.y_cord_for_animation)
         if cords_differences[1] != 0:
             if cords_differences[1] > 0:
-                new_image_name = self.image_name.split("_")
-                new_image_name[2] = "down"
-                
-                self.image_name = "_".join(new_image_name)
+                self.SetPlayersDirection("down")
             elif cords_differences[1] < 0:
-                new_image_name = self.image_name.split("_")
-                new_image_name[2] = "up"
-                
-                self.image_name = "_".join(new_image_name)
+                self.SetPlayersDirection("up")
         elif cords_differences[0] != 0:
             if self.movement_vector[0] > 0:
-                new_image_name = self.image_name.split("_")
-                new_image_name[2] = "right"
-                
-                self.image_name = "_".join(new_image_name)
-            
+                self.SetPlayersDirection("right")
             elif self.movement_vector[0] < 0:
-                new_image_name = self.image_name.split("_")
-                new_image_name[2] = "left"
+                self.SetPlayersDirection("left")
                 
-                self.image_name = "_".join(new_image_name)
+                
+                
     
+    def SetPlayersDirection(self, direction):
+        new_image_name = self.image_name.split("_")
+        new_image_name[2] = direction
+        
+        self.image_name = "_".join(new_image_name)
+                
+                
     def __AnimationClockTick(self,dt):
         """
             updates number of frame (moving frame)
@@ -228,6 +266,7 @@ class Player(PhysicsCollider, CameraDrawable):
         
         self.x_cord_for_animation = self.x_cord
         self.y_cord_for_animation = self.y_cord
+    
         
         
     
@@ -242,7 +281,7 @@ class Player(PhysicsCollider, CameraDrawable):
             
         
     
-    def PickAnItem(self, item : Item):
+    def PickAnItem(self, item):
         """
             Unimplemented
             
@@ -270,7 +309,7 @@ class Player(PhysicsCollider, CameraDrawable):
         if y_cord == None:
             y_cord = self.y_cord
         
-        ImageLoader.DrawImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
+        graphic_handler.ImageLoader.DrawImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
         if Player.HITBOX:
             pygame.draw.rect(screen, (230,50,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
         
@@ -278,17 +317,17 @@ class Player(PhysicsCollider, CameraDrawable):
             self.inventory_gui.Draw(screen)
     
     def GetImageSize(self) -> tuple[int,int]:
-        return ImageLoader.images[self.image_name].get_size()
+        return graphic_handler.ImageLoader.images[self.image_name].get_size()
 
 
-class Npc(PhysicsCollider, CameraDrawable):
+class Npc(solid_blocks.PhysicsCollider, camera.CameraDrawable):
     ALL_NPC_NAMES = ["zombiee", "skeleton", "dark_knight", "meth_man", "cyclop",
                                 "blue_bat", "green_bat", "cyan_bat", "red_bat"]
     
     for i in range(7):
         ALL_NPC_NAMES.append(f"player{i}")
         
-    HITBOX = True
+    HITBOX = False
     COLOR = (207, 173, 62)
     
     
@@ -296,14 +335,14 @@ class Npc(PhysicsCollider, CameraDrawable):
         image_skin_cord_x = 5
         image_skin_cord_y = 7
         
-        self._skin_x = -ImageLoader.GetScalingMultiplier()[0]*image_skin_cord_x
-        self._skin_y = -ImageLoader.GetScalingMultiplier()[1]*image_skin_cord_y
+        self._skin_x = -graphic_handler.ImageLoader.GetScalingMultiplier()[0]*image_skin_cord_x
+        self._skin_y = -graphic_handler.ImageLoader.GetScalingMultiplier()[1]*image_skin_cord_y
         
         x_cord += -self._skin_x#because skin_x and skin_y are negative numbers
         y_cord += -self._skin_y
        
        
-        super().__init__(pygame.Rect(x_cord+image_skin_cord_x, y_cord+image_skin_cord_y, 7*ImageLoader.GetScalingMultiplier()[0], 8*ImageLoader.GetScalingMultiplier()[1]), x_cord+image_skin_cord_x, y_cord+image_skin_cord_y, movement_vector=[0,0], movement_strength=movement_strength)
+        super().__init__(pygame.Rect(x_cord+image_skin_cord_x, y_cord+image_skin_cord_y, 7*graphic_handler.ImageLoader.GetScalingMultiplier()[0], 8*graphic_handler.ImageLoader.GetScalingMultiplier()[1]), x_cord+image_skin_cord_x, y_cord+image_skin_cord_y, movement_vector=[0,0], movement_strength=movement_strength)
         
 
         self.image_name = image_name
@@ -325,13 +364,13 @@ class Npc(PhysicsCollider, CameraDrawable):
         if y_cord == None:
             y_cord = self.y_cord
         
-        ImageLoader.DrawImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
+        graphic_handler.ImageLoader.DrawImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
         if Player.HITBOX:
             pygame.draw.rect(screen, (230,50,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
     
     
     def GetImageSize(self) -> tuple[int,int]:
-        return ImageLoader.images[self.image_name].get_size()
+        return graphic_handler.ImageLoader.images[self.image_name].get_size()
 
     
     def GetImageCords():
