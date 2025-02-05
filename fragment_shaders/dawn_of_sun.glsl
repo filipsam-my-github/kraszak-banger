@@ -32,3 +32,5 @@ void main(){
     
     f_color = vec4(red*disc, green*disc, blue*disc, 1.0);
 }
+
+
