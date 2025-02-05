@@ -5,7 +5,7 @@
 
 import pytest
 from entities import Player, Npc
-from blocks import HeavyGoldenBox
+from solid_blocks import HeavyGoldenBox
 from activation_triggers import LevelExit, Dialog
 import math
 
