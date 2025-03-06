@@ -36,6 +36,7 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
     USE: `vertex shaders, fragment shaders, player, blocks, dialogs, level_exits, activations_triggers, npcs = LoadLevel("Examples")`
     
     """
+    print("the level", level_name)
     if auto_save:
         json_interpreter.SaveGame(level_name, level_before, engine.Game.current_game_file)
     

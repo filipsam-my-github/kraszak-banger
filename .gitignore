@@ -160,3 +160,25 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+legacy
+testss.py
+levels/test.ksl
+levels/test1.ksl
+levels/library copy.ksl
+interview.txt
+_test3.py
+_test2.py
+_test.test
+_test.py
+.vscode/settings.json
+main_old.py
+new_main.py
+levels/colision_tests.ksl
+audio/farewell.mp3
+audio/fkj_ylang_ylang.mp3
+audio/marconi_union_weightless.mp3
+audio/undertale_yellow_OST_121_tucked_in.mp3
+audio.zip
+data/language copy.json
+import_everything.py
+fragment_shaders/end copy.glsl

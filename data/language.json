@@ -78,7 +78,16 @@
 
         "I_take_care": "Dzieki ci bardzo. Obiecuje, ze porozmawiam z pania od chemii i zdasz z odpowiednia ocena. Ale ty musisz nauczyc sie troche chemii, najlepiej takiej, ktora trudno by bylo wytlumaczyc twoim rodzicom. Wiec beda przekonani, ze rzeczywiscie uczysz sie na medycyne na pelny etat.",
 
-        "story": "Nauczyciel zatroszczyl sie o mlodego Kraszewskiego, ale jego koszmar nie skonczyl sie az do... Tutaj to sie zmieni."
+        "story": "Nauczyciel zatroszczyl sie o mlodego Kraszewskiego, ale jego koszmar nie skonczyl sie az do... Tutaj to sie zmieni.",
+
+        "tutorial": "you make nice and nice lol",
+        "tutorial_movement": "Ruch ",
+        "tutorial_dialogs_skip_reload": "Pomin animacje tekstu ",
+        "tutorial_dialogs_dialog_next_or_enter": "Wejdz w nowy dialog\n(dziala nawet gdy jestes obok\nNPC bez rozpoczetego dialogu) ",
+        "tutorial_close_gui_view": "Zamknij widok powiekszenia ",
+        "tutorial_inventory": "Ekwipunek ",
+        "tutorial_fullscreen": "Pelnoekranowe doswiadczenie "
+
     },
 
 
@@ -168,7 +177,16 @@
         "you_fond_notebook": "*You found the notebook.",
 
         "I_take_care": "Thank you very much¬I promise I'll talk to the chemistry teacher, and you'll pass with a decent grade¬But you need to learn some chemistry¬Preferably the kind that would be hard to explain to your parents¬That way, they'll be convinced you're really studying medicine full-time.",
-        "story": "The teacher looked after young Kraszewski¬But his nightmare didn't stop until¬Here, this will change."
+        "story": "The teacher looked after young Kraszewski¬But his nightmare didn't stop until¬Here, this will change.",
+
+        "tutorial": "you make nice and nice lol",
+        "tutorial_movement": "Movement ",
+        "tutorial_dialogs_skip_reload": "Skip text's animation ",
+        "tutorial_dialogs_dialog_next_or_enter": "enter new dialog\n(it works even when you're next to\nnpc without canversation started) ",
+        "tutorial_close_gui_view": "close zoom view ",
+        "tutorial_inventory": "Inventory ",
+        "tutorial_fullscreen": "Fullsceen expirience "
+
 }
 
 }

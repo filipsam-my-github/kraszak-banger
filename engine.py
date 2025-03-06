@@ -190,7 +190,7 @@ class Game:
         Game.InitializeGame()
         
         self.game_state = Pointer(game_state)
-        self.game_states = {"gameplay":game_states.Gameplay(), "main_menu":game_states.Menu(), "languages":game_states.Languages(), "load_game":game_states.LoadGame(), "settings":game_states.Settings()}
+        self.game_states = {"tutorial":game_states.Tutorial(),"gameplay":game_states.Gameplay(), "main_menu":game_states.Menu(), "languages":game_states.Languages(), "load_game":game_states.LoadGame(), "settings":game_states.Settings()}
         game_states.LoadData()
         Game.mouse = gui.MouseGuiEventHandler.mouse
         
@@ -224,7 +224,7 @@ class Game:
 
             old_game_state = self.game_state.val
             self.game_states[self.game_state].Tick(self.game_state)
-            self.LoadNewGameState(old_game_state)
+            self.LoadNewGameStateIfNeeded(old_game_state)
             self.game_states[self.game_state].Draw()
 
             
@@ -235,7 +235,7 @@ class Game:
                 pass
             Game.screen.DisplayScene(self.game_states[self.game_state].GetShaderArgument())
 
-    def LoadNewGameState(self, old_game_state):
+    def LoadNewGameStateIfNeeded(self, old_game_state):
         if old_game_state != self.game_state:
             self.game_states[old_game_state].Clear()
             self.game_states[self.game_state].LoadState()

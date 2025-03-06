@@ -85,8 +85,8 @@ def SaveGame(current, left_level, save_name):
         return None
     
     save_data = {
-    "from_level": current,
-    "to_level": left_level,
+    "from_level": left_level,
+    "to_level": current,
 
     "met_dialogs": [],
     "met_events": [],

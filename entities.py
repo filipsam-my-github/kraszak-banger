@@ -44,7 +44,7 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
     
     music_fading = False
     
-    tag_inventory = ["funny_thing", "prawn", "secret_key", "money", "stick", "copper_coin"]
+    tag_inventory = []
     
     def __init__(self, x_cord, y_cord) -> object:
         self.player_id = "reg"

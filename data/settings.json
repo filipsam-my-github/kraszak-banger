@@ -4,8 +4,8 @@
         "player_backward": "s",
         "player_left": "a",
         "player_right": "d",
-        "skip_dialog_rendering": "SPACE",
-        "next_dialog": "LSHIFT",
+        "skip_dialog_rendering": "LSHIFT",
+        "next_dialog": "SPACE",
         "close_gui": "x",
         "full_screen": "f",
         "inventory": "e"

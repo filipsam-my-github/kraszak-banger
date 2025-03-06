@@ -82,6 +82,7 @@ class Gameplay(GameState):
         
         self.key = keys_vals.ClearPygameKeyboard()        
         
+        print(engine.Game.load_level)
         self.LoadLocation(engine.Game.load_level["entry"], engine.Game.load_level["last"])
         
         audio_handler.MusicHandler.Play("DEX 1200 Tomorrow Island Royalty Free Music", play_anyway_if_is_already_there=False)
@@ -173,7 +174,8 @@ class Gameplay(GameState):
             # ImageLoader.ChangeSize([1,1])
             # self.camera.ChangedScale([1,1])
             self.keys = keys_vals.ClearPygameKeyboard()
-            
+
+
             self.LoadLocation(activation_triggers.LevelExit.load_level_status[1]["go_to"],self.current_level, auto_save=True)
             
             activation_triggers.LevelExit.transposition_status = True
@@ -309,6 +311,116 @@ class Gameplay(GameState):
 
 
 
+class Tutorial(GameState):    
+    def __init__(self):
+        pass
+    # "tutorial": "you make nice and nice lol",
+    #     "tutorial_movement": "To move, you use the following keys",
+    #     "tutorial_dialogs_skip_reload": "Use this key to skip text's animation",
+    #     "tutorial_dialogs_dialog_next_or_enter": "but if you want to enter new dialog (it works even when you're next to npc without canversation started) click",
+    #     "tutorial_close_gui_view": "To close zoom view you need to click ",
+    #     "tutorial_inventory": "Cnventory is under",
+    #     "tutorial_fullscreen": "Click this key for fullsceen expirience"
+    def LoadState(self):
+        
+        self.tutorial_message = json_interpreter.ReadDialog(activation_triggers.Dialog.language, "tutorial_fullscreen") + f" {pygame.key.name(engine.ShaderScreen.full_screen)}\n"
+        self.tutorial_message += json_interpreter.ReadDialog(activation_triggers.Dialog.language, "tutorial_movement")+ f" {pygame.key.name(entities.Player.forward)},{pygame.key.name(entities.Player.backward)},{pygame.key.name(entities.Player.right)},{pygame.key.name(entities.Player.left)}\n"
+        self.tutorial_message += json_interpreter.ReadDialog(activation_triggers.Dialog.language, "tutorial_dialogs_skip_reload")+ f" {pygame.key.name(activation_triggers.Dialog.SKIP_DIALOG)}\n"
+        self.tutorial_message += json_interpreter.ReadDialog(activation_triggers.Dialog.language, "tutorial_dialogs_dialog_next_or_enter")+ f" {pygame.key.name(activation_triggers.Dialog.NEXT_DIALOG)}\n"
+        self.tutorial_message += json_interpreter.ReadDialog(activation_triggers.Dialog.language, "tutorial_close_gui_view")+ f" {pygame.key.name(point_click_elemtnts.PointClickScene.exit_key)}\n"
+        self.tutorial_message += json_interpreter.ReadDialog(activation_triggers.Dialog.language, "tutorial_inventory")+ f" {pygame.key.name(entities.Player.inventory)}\n"
+        
+        
+        self.tutorial_gui_text = texts_handler.Font(self.tutorial_message)
+        self.tutorial_gui_text.MoveTo(50,50)
+        self.clock = 0
+        
+        self.camera = camera.Camera((640, 360),0,0)
+        
+        self.start_transition = False
+        
+        # engine.Game.screen.UpdateVertShader("vertex_shaders/vert_normal.glsl")
+        # engine.Game.screen.UpdateFragShader("fragment_shaders/frag_normal.glsl")
+        engine.Game.screen.UpdateFragShader("fragment_shaders/fireflies.glsl")
+        
+    
+
+    
+    def PygameEvents(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == engine.ShaderScreen.full_screen:
+                    engine.Game.screen.UpdateFullscreen()
+                elif event.key == pygame.K_ESCAPE:
+                    self.pause.active = True
+                    self.pause.LoadState()
+                else:
+                    self.start_transition = True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print("mouse cords",engine.Game.screen.game_cursor.cords[0], engine.Game.screen.game_cursor.cords[1])
+                
+    
+    def Tick(self, game_state):
+        self.clock += engine.Game.dt
+        self.PygameEvents()        
+        self.keys = self.SafeKeyInput()
+        gui.MouseGuiEventHandler.Tick(
+            pygame.mouse.get_pos(), pygame.mouse.get_pressed()
+        )
+        
+        if self.start_transition and activation_triggers.LevelExit.transposition_shader_multiplayer>0:
+            activation_triggers.LevelExit.transposition_shader_multiplayer = max(0, activation_triggers.LevelExit.transposition_shader_multiplayer-engine.Game.dt*5)
+        
+        if self.start_transition and activation_triggers.LevelExit.transposition_shader_multiplayer == 0:
+            activation_triggers.LevelExit.load_level_status[0] = True
+        
+
+        if activation_triggers.LevelExit.load_level_status[0]:
+            # ImageLoader.ChangeSize([1,1])
+            # self.camera.ChangedScale([1,1])
+            game_state.Change("gameplay")
+            
+            activation_triggers.LevelExit.transposition_status = False
+            activation_triggers.LevelExit.transposition_shader_multiplayer = 1
+            activation_triggers.LevelExit.load_level_status[0] = False
+            engine.Game.load_level = {
+                        "entry": "library",
+                        "last": "None"
+                    }
+            all_saves = []
+            for root, dirs, files in os.walk("data\\saves\\"):
+                for file in files:
+                    all_saves.append((None))
+            
+
+            engine.Game.current_game_file = (f"save {len(all_saves)+1}", f"Save {len(all_saves)+1}")
+            print(engine.Game.current_game_file)
+        
+        
+            
+    
+    def Draw(self):
+        engine.Game.screen.screen.fill((0,0,0))
+        self.camera.Draw(self.tutorial_gui_text, screen=engine.Game.screen.screen)
+        
+
+    def UpdateShaderArgument(self):
+        pass
+    
+    def Clear(self):
+        pass        
+
+    def GetShaderArgument(self):
+        return {
+                "time":float(self.clock),
+                "transposition_shader_multiplayer":activation_triggers.LevelExit.transposition_shader_multiplayer,
+                "hovered_button": (0,0,0,0),
+                "chosen_button": (0,0,0,0)
+                }
+    
 
 class GuiStructure:
     ...
@@ -429,7 +541,7 @@ class Menu(GameState):
                 
 
                 engine.Game.current_game_file = (f"save {len(all_saves)+1}", f"Save {len(all_saves)+1}")
-                game_state.Change("gameplay")
+                game_state.Change("tutorial")
             case "continue":
                 if engine.Game.current_game_file:
                     save_data = json_interpreter.LoadSaveData(engine.Game.current_game_file)
@@ -1003,3 +1115,4 @@ def LoadBinds():
 
 def LoadLanguage():
     activation_triggers.Dialog.language = json_interpreter.LoadLanguage()
+

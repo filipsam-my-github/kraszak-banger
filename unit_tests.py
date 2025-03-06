@@ -4,7 +4,7 @@
 """
 
 import pytest
-from entities import Player, Npc
+from entities import Player, DungeonNpc
 from solid_blocks import HeavyGoldenBox
 from activation_triggers import LevelExit, Dialog
 import math
@@ -119,7 +119,6 @@ def test_Hard2MovementBlockedByBlock():
     player1.AnimationTick(1/60)
     
     
-    print(player1.image_name)
     assert player1.image_name.split('_')[3] == "0"
 
 def test_LevelExit():
