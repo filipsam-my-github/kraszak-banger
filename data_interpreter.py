@@ -5,6 +5,7 @@
         `@method LoadLevel` loads data from level it isn't obvious how to use so it's recommended to read docstring of that function 
         
 """
+from __future__ import annotations
 import sys
 import os
 from abc import ABC , abstractmethod
@@ -14,7 +15,9 @@ import noclip_blocks
 import entities
 import activation_triggers
 import camera
-
+import json_interpreter
+import  engine
+from typing import TYPE_CHECKING
 
 def LoadShader(file_path):
     """
@@ -25,7 +28,7 @@ def LoadShader(file_path):
     with open(file_path, 'r') as file:
         return file.read()
 
-def LoadLevel(level_name, level_before="None") -> tuple[str, str, entities.Player, list[solid_blocks.Block], list[activation_triggers.Dialog], list[activation_triggers.LevelExit], list[activation_triggers.EventActivator], list[entities.Npc], list[camera.CameraDrawable]]:
+def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str, entities.Player, list[solid_blocks.Block], list[activation_triggers.Dialog], list[activation_triggers.LevelExit], list[activation_triggers.EventActivator], list[entities.DungeonNpc], list[camera.CameraDrawable]]:
     """
     ARG:
         `@parameter level_name` it is the name of the level without path nor .ksl
@@ -33,9 +36,13 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, entities.Playe
     USE: `vertex shaders, fragment shaders, player, blocks, dialogs, level_exits, activations_triggers, npcs = LoadLevel("Examples")`
     
     """
+    if auto_save:
+        json_interpreter.SaveGame(level_name, level_before, engine.Game.current_game_file)
+    
     with open(f"levels/{level_name}.ksl", "r") as file:
         #data is separated by \n and args are separated by space in file .ksl
         #some may have weird name because there are not class in game but a parameter (like #!#Scale#@#)
+        background = None
         data = file.read().split('\n')
 
         data[0] = data[0].split(' ')
@@ -56,6 +63,8 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, entities.Playe
         if data[2][:22] != "#!#fragment_shaders#@#":
             raise KeyError(f".ksl third line should contain #!#fragment_shaders#@# in third line instead it contains {data[2]}")
         
+            
+        
         data[2] = data[2][23:]
         
         player = None
@@ -67,11 +76,17 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, entities.Playe
         npcs = []
         ghost_blocks = []
         interactable = []
+        camera_rooms = []
         
         current_player_meta_data = []
         
         for i,e in enumerate(data[3:]):
             local_data = e.split(' ')
+            
+            if "#!#background#@#" == local_data[0][:16]:
+                if local_data[1][:15] == "background_lawn":
+                    background = noclip_blocks.LawnBackground(0,0)
+                    continue
 
             if len(local_data) < 3:
                 if local_data == ['']:
@@ -86,13 +101,20 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, entities.Playe
                         current_player_meta_data.append("")#so I can recall 3 element without errors
                         
                     player = entities.Player(float(local_data[1])*scale_x, float(local_data[2])*scale_y)
-                    player.image_name = local_data[0]
+                    skin_variant = local_data[0].split("_")
+                            
+                    engine.Game.general_memory["kraszak_skin"] = skin_variant[1]
+                    
                 elif len(local_data) == 3:
                     pass
                 elif local_data[3] == level_before and current_player_meta_data[3] != level_before:
                     current_player_meta_data = local_data
                     player = entities.Player(float(local_data[1])*scale_x, float(local_data[2])*scale_y)
                     player.image_name = local_data[0]
+                    skin_variant = local_data[0].split("_")
+                            
+                    engine.Game.general_memory["kraszak_skin"] = skin_variant[1]
+                    
                 
             match local_data[0]:
                 case "heavy_golden_box":
@@ -101,18 +123,22 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, entities.Playe
                     blocks.append(solid_blocks.GoldenBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "heavy_steel_box":
                     blocks.append(solid_blocks.HeavySteelBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
-                case "steel_box":
-                    blocks.append(solid_blocks.SteelBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
-                    break
+                case "locked_safe":
+                    interactable.append(solid_blocks.Safe(float(local_data[1])*scale_x, float(local_data[2])*scale_y, False, local_data[3]))
                 case "heavy_wooden_box":
                     blocks.append(solid_blocks.HeavyWoodenBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "wooden_box":
                     blocks.append(solid_blocks.WoodenBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "tree":
                     blocks.append(solid_blocks.Tree(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "tree_dead":
+                    blocks.append(solid_blocks.DeadTree(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "tree_stump":
+                    blocks.append(solid_blocks.TreeStump(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "fern_flower":
                     blocks.append(solid_blocks.FernFlower(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
-                
+                case "fern_flower":
+                    blocks.append(solid_blocks.FernFlower(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "level_exit":
                     level_exits.append(activation_triggers.LevelExit(float(local_data[1])*scale_x, float(local_data[2])*scale_y, local_data[3]))
                 case "dialog_trigger":
@@ -136,6 +162,22 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, entities.Playe
                     blocks.append(solid_blocks.BookshelfTop(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "bookshelf_side":
                     blocks.append(solid_blocks.BookshelfSide(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                
+                case "chair":
+                    blocks.append(solid_blocks.Chair(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "desk_long":
+                    blocks.append(solid_blocks.LongDesk(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "desk":
+                    blocks.append(solid_blocks.Desk(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "library_desk_1":
+                    blocks.append(solid_blocks.LibraryDesk(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1))
+                case "library_desk_2":
+                    blocks.append(solid_blocks.LibraryDesk(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2))
+                case "library_desk_3":
+                    blocks.append(solid_blocks.LibraryDesk(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3))
+                
+                case "potted_palm":
+                    blocks.append(solid_blocks.PottedPalm(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                     
                 case "school_floor":
                     ghost_blocks.append(noclip_blocks.SchoolPlanksFloor(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
@@ -143,64 +185,93 @@ def LoadLevel(level_name, level_before="None") -> tuple[str, str, entities.Playe
                     ghost_blocks.append(noclip_blocks.SchoolDoor(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "grass":
                     ghost_blocks.append(noclip_blocks.ForestGrass(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "short_grass_1":
+                    ghost_blocks.append(noclip_blocks.ShortGrass(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1))
+                case "short_grass_2":
+                    ghost_blocks.append(noclip_blocks.ShortGrass(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2))
+                case "short_grass_3":
+                    ghost_blocks.append(noclip_blocks.ShortGrass(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3))
                 case "rocks":
                     ghost_blocks.append(noclip_blocks.ForestRocks(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "rocks_1":
+                    ghost_blocks.append(noclip_blocks.ForestRocks(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "1"))
+                case "rocks_2":
+                    ghost_blocks.append(noclip_blocks.ForestRocks(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "2"))
+                case "rocks_3":
+                    ghost_blocks.append(noclip_blocks.ForestRocks(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "3"))
+                case "rocks_4":
+                    ghost_blocks.append(noclip_blocks.ForestRocks(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "4"))
+                case "rocks_5":
+                    ghost_blocks.append(noclip_blocks.ForestRocks(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "5"))
+                case "flower_1":
+                    ghost_blocks.append(noclip_blocks.RegFlower(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1))
+                case "flower_2":
+                    ghost_blocks.append(noclip_blocks.RegFlower(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2))
+                case "flower_3":
+                    ghost_blocks.append(noclip_blocks.RegFlower(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3))
+                case "flower_4":
+                    ghost_blocks.append(noclip_blocks.RegFlower(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 4))
                     
                 case "apple":
                     interactable.append(noclip_blocks.Apple(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "notebook":
+                    interactable.append(noclip_blocks.Notebook(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "paper_pile_1":
+                    interactable.append(noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1))
+                case "paper_pile_2":
+                    interactable.append(noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2))
+                case "paper_pile_3":
+                    interactable.append(noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3))
+                
+                
+                
+                case "box_room":
+                    _size = list(map(int,local_data[3].split("x")))
+                    _size = [_size[0]*scale_x ,_size[1]*scale_y]
+                    camera_rooms.append((float(local_data[1])*scale_x, float(local_data[2])*scale_y, _size[0], _size[1]))
+                
+                
                 
                     
-                    
-            if local_data[0] in entities.Npc.ALL_NPC_NAMES:
+            if local_data[0] in entities.DungeonNpc.ALL_NPC_NAMES:
                 if len(local_data) == 3 or (len(local_data) == 4 and local_data[-1] == ""):
-                    npcs.append(entities.Npc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,30))
+                    npcs.append(entities.DungeonNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,30, local_data[3]))
                 elif local_data[3] == "static":
-                    npcs.append(entities.Npc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf")))
+                    npcs.append(entities.DungeonNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"), local_data[3]))
                 elif type(local_data[3]) == str:
-                    raise KeyError(f".ksl {i+4}th line should contain 3th argument such that is either number or a string 'static' you given:'{local_data}' this argument symbolises") 
+                    raise KeyError(f".ksl {i+4}th line should contain 3th argument such that o=one is the id and others are it's coords you given:'{local_data}' this argument symbolises") 
                 else:
-                    npcs.append(entities.Npc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float(local_data[3])))
+                    npcs.append(entities.DungeonNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"), local_data[3]))
+            
+            if local_data[0] in entities.ClassmateNpc.ALL_NPC_NAMES:
+                if len(local_data) == 3 or (len(local_data) == 4 and local_data[-1] == ""):
+                    npcs.append(entities.ClassmateNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,30, local_data[3]))
+                elif local_data[3] == "static":
+                    npcs.append(entities.ClassmateNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"), local_data[3]))
+                elif type(local_data[3]) == str:
+                    npcs.append(entities.ClassmateNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"), local_data[3]))
+                else:
+                    npcs.append(entities.ClassmateNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"), local_data[3]))
+            
+            if local_data[0] in entities.AdultNpc.ALL_NPC_NAMES:
+                if len(local_data) == 3 or (len(local_data) == 4 and local_data[-1] == ""):
+                    npcs.append(entities.AdultNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,30, local_data[3]))
+                elif local_data[3] == "static":
+                    npcs.append(entities.AdultNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"), local_data[3]))
+                elif type(local_data[3]) != "":
+                    npcs.append(entities.AdultNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"),local_data[3]))
+                else:
+                    npcs.append(entities.AdultNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"), local_data[3]))
+            
+            if local_data[0] in entities.SittingClassmateNpc.ALL_NPC_NAMES:
+                if len(local_data) == 3 or (len(local_data) == 4 and local_data[-1] == ""):
+                    npcs.append(entities.SittingClassmateNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"),local_data[3]))
+                elif local_data[3] == "static":
+                    npcs.append(entities.SittingClassmateNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"), local_data[3]))
+                elif type(local_data[3]) == str:
+                    npcs.append(entities.SittingClassmateNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"),local_data[3]))
+                else:
+                    npcs.append(entities.SittingClassmateNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"), local_data[3]))
     
     #LoadShader, LoadShader because data 1 and 2 are names of shaders files
-    return LoadShader(data[1]), LoadShader(data[2]), player, blocks, dialogs, level_exits, activations_triggers, npcs, ghost_blocks
-
-def ReadSavesNames() -> list:
-    return [i for i in os.listdir("data/saves")]
-
-def LoadSave(save_name) -> tuple[str, str, entities.Player, list[solid_blocks.Block], list[activation_triggers.Dialog], list[activation_triggers.LevelExit], list[activation_triggers.EventActivator], list[entities.Npc]]:
-    if not save_name in ReadSavesNames():
-        raise KeyError(f"Couldn't find file in data/saves/ director the file: {save_name}. All available files are {ReadSavesNames()}")
-    
-    with open(f"data/saves/{save_name}") as file:
-        data = file.read().split('\n')
-        room_name = None
-        last_room = None
-        player_met_dialogs = []
-        
-        for line in data:
-            compressed_line = line.replace(" ", "").replace("\t", "").replace("\b", "")#
-            
-            if compressed_line == "":
-                continue
-            
-            if compressed_line[:10] == "room_name=":
-                room_name = compressed_line[10:][:-4]
-            if compressed_line[:10] == "last_room=":
-                last_room = compressed_line[10:][:-4]
-            
-            if compressed_line[:19] == "player_met_dialogs=":
-                player_met_dialogs = compressed_line[20:][:-1].split(',')
-            
-        
-                
-    entities.Player.met_dialogs = player_met_dialogs
-    return LoadLevel(room_name, last_room)
-
-
-        
-
-def LoadSaveData(save_name_with_extension):
-    with open(f"data\\saves\\{save_name_with_extension}", "r") as file:
-        data = file.read().split("\n")
-    
-    return (data[0], data[1])
+    return data[1], data[2], player, blocks, dialogs, level_exits, activations_triggers, npcs, ghost_blocks, background, interactable, camera_rooms

@@ -1,9 +1,11 @@
-
+from __future__ import annotations
 from abc import ABC , abstractmethod
 import pygame, os, sys, texts_handler
 import graphic_handler
 import camera
-
+import engine
+import keys_vals
+from typing import TYPE_CHECKING
 
 
 class PhysicsCollider(ABC):
@@ -65,10 +67,10 @@ class PhysicsCollider(ABC):
         """
         collisions = []
         for tile in tiles:
+            if not isinstance(tile, PhysicsCollider):
+                continue
             if self.rect.colliderect(tile.rect):
                 if tile == self:
-                    print(tile,self)
-                    print(1)
                     pass
                 else:
                     collisions.append(tile)#TODO repere bug here
@@ -153,6 +155,9 @@ class PhysicsCollider(ABC):
         NOTE:
             Resolves positional adjustments to prevent overlapping objects and updates collision types.
         """
+        
+        
+        
         collision_types = {'top': 0, 'bottom': 0, 'right': 0, 'left': 0}
         suspected_tiles = self._CollisionTest(tiles)
 
@@ -221,7 +226,9 @@ class PhysicsCollider(ABC):
             if self.collision_types[i]:
                 self._SetCordsToRectPosition()
                 break
-        
+    
+    def Hovered(self):
+        return False
 
 class Block(PhysicsCollider, camera.CameraDrawable):
     """
@@ -235,6 +242,8 @@ class Block(PhysicsCollider, camera.CameraDrawable):
     INHERITANCE:
         Base class for block-like objects such as `WoodenBox`.
     """
+    SHOW_HITBOX = False
+    
     def __init__(self, x_cord:int, y_cord:int, image_name, movement_strength, graphic_cords_relative_to_rect: tuple[int, int] = "auto", size: tuple[int, int] = "auto"):
         """
         Initializes a `Block` instance with its position, image, and movement strength.
@@ -285,9 +294,9 @@ class Block(PhysicsCollider, camera.CameraDrawable):
         if y_cord == None:
             y_cord = self.y_cord
             
-        graphic_handler.mageLoader.DrawImage(screen,self.image_name, x_cord-self.graphic_cords_relative_to_rect[0], y_cord-self.graphic_cords_relative_to_rect[1])
-
-        #pygame.draw.rect(screen, (230,230,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
+        graphic_handler.ImageLoader.DrawImage(screen,self.image_name, x_cord-self.graphic_cords_relative_to_rect[0], y_cord-self.graphic_cords_relative_to_rect[1])
+        if Block.SHOW_HITBOX:
+            pygame.draw.rect(screen, (230,230,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
         
     def GetImageSize(self) -> tuple[int,int]:
         """
@@ -297,6 +306,9 @@ class Block(PhysicsCollider, camera.CameraDrawable):
             (tuple[int, int]): Width and height of the block's image.
         """
         return graphic_handler.ImageLoader.images[self.image_name].get_size()
+    
+    def GetImageCords(self):
+        return self.x_cord - self.graphic_cords_relative_to_rect[0], self.y_cord - self.graphic_cords_relative_to_rect[1]
 
 
 class WoodenBox(Block):
@@ -307,9 +319,62 @@ class HeavyWoodenBox(Block):
     def __init__(self, x_cord: int, y_cord):
         super().__init__(x_cord, y_cord, image_name = "heavy_wooden_box", movement_strength = 5)
         
-class SteelBox(Block):
-    def __init__(self, x_cord: int, y_cord):
-        super().__init__(x_cord, y_cord, image_name = "steel_box", movement_strength = 15)
+class Safe(Block):
+    def __init__(self, x_cord: int, y_cord, open: bool, inter_actable_event: str = ""):
+        
+
+        image_name = "opened_safe"
+        
+        self.closed_image_name = "locked_safe"
+        super().__init__(x_cord, y_cord, image_name, movement_strength = float('inf'))
+        
+        self.interactable_event = inter_actable_event
+        
+        self._activable = False
+        self._active = False
+        self.hovered = False
+        
+    def SetInteractableEvent(self, new_event):
+        self.interactable_event = new_event
+    
+    def Draw(self, screen, x_cord=None, y_cord=None, width_scaling=1, height_scaling=1):
+        image_name = self.closed_image_name
+        if "safe" in engine.Game.general_memory.keys() and engine.Game.general_memory["safe"]:
+            image_name = self.image_name
+        
+        graphic_handler.ImageLoader.DrawImage(screen,image_name, x_cord-self.graphic_cords_relative_to_rect[0], y_cord-self.graphic_cords_relative_to_rect[1])
+        if Block.SHOW_HITBOX:
+            pygame.draw.rect(screen, (230,230,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
+        
+    def IsActive(self):
+        return self._active
+    
+    def GetEventName(self):
+        return self.interactable_event
+    
+    def Tick(self, player,keys, mouse: dict, camera_cords):
+        if self._active:
+            self._activable = False
+            self._active = False
+        
+        self.hovered = self.rect.collidepoint(mouse["position_xy"][0] + camera_cords[0], mouse["position_xy"][1] + camera_cords[1])
+        
+        if player.HowFarFromPlayer(self.rect.centerx, self.rect.centery) < 100:
+            if self.hovered and mouse["clicked"]["up"]["left"] and self._activable:
+                self._active = True
+        
+        if self.hovered and mouse["clicked"]["down"]["left"]:
+            self._activable = True
+        elif mouse["clicked"]["down"]["left"]:
+            self._activable = False
+    
+    def CloseEnough(self, player):
+        return player.HowFarFromPlayer(self.rect.centerx, self.rect.centery) < 100
+    
+    def Hovered(self):
+        return self.hovered
+
+    
 
 class HeavySteelBox(Block):
     def __init__(self, x_cord: int, y_cord):
@@ -339,6 +404,15 @@ class SchoolWall(Block):
 class Tree(Block):
     def __init__(self, x_cord, y_cord):        
         super().__init__(x_cord, y_cord, "tree", float('inf'), (17, 36) ,(14, 20))
+
+class DeadTree(Block):
+    def __init__(self, x_cord, y_cord):        
+        super().__init__(x_cord, y_cord, "tree_dead", float('inf'), (17, 36) ,(14, 20))
+
+class TreeStump(Block):
+   def __init__(self, x_cord, y_cord):        
+        super().__init__(x_cord, y_cord, "tree_stump", float('inf'), (3, 6), (10, 6))
+        
 class FernFlower(Block):
     def __init__(self, x_cord, y_cord,):
         super().__init__(x_cord, y_cord, "fern_flower", float('inf'), (2, 15), (10, 12))
@@ -354,3 +428,32 @@ class BookshelfSide(Block):
 class BookshelfFront(Block):
     def __init__(self, x_cord, y_cord):
        super().__init__(x_cord, y_cord, "bookshelf_front", float('inf'), (0, 16), (16,8))
+
+class Chair(Block):
+    def __init__(self, x_cord, y_cord):
+       super().__init__(x_cord, y_cord, "chair", float('inf'), (2, 8), (9,7))
+       
+class LongDesk(Block):
+    def __init__(self, x_cord, y_cord):
+       super().__init__(x_cord, y_cord, "desk_long", float('inf'), (2, 3), (12,28))
+       
+class Desk(Block):
+    def __init__(self, x_cord, y_cord):
+       super().__init__(x_cord, y_cord, "desk_short", float('inf'), (2, 2), (12,14))
+
+class LibraryDesk(Block):
+    def __init__(self, x_cord, y_cord, variant):
+       super().__init__(x_cord, y_cord, f"library_desk_{variant}", float('inf'), (0, 5), (16,11))
+
+class PottedPalm(Block):
+    def __init__(self, x_cord, y_cord):
+       super().__init__(x_cord, y_cord, f"potted_palm", float('inf'), (7, 19), (4,4))
+       
+
+
+       
+       
+
+    
+
+

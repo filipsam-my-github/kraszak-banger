@@ -1,44 +1,174 @@
 {
 
-    "Polish":{
+    "Polish": {
         "test": "Test Was Spelt As It Was.",
 
-        "letter_from_father":"Masz iść zostać najleprzym lekrzem w tym kwaracię szechświata¬Inaczj niedostaniesz od nas ani grosza na twoje studia¬Ja Kraszwski mam zmarnować się na medycynie zmiastu uprawiąć magie słowa?¬I to dla kogo dla matki?\nW życiu.",
-    
-        "second_thought_on_hallway":"ta zostaneie pisarzem zamiest lekazem",
+        "letter_from_father": "Staniesz sie najwiekszym lekarzem w tym kwadracie wszechswiata - w przeciwnym razie nie dostaniesz od nas zadnych pieniedzy na twoj uniwersytet. Ja, Kraszwski, musze zmarnowac moj potencjal na zwykla wiedze medyczna zamiast opanowywac potege slowa. Nie ma zadnej osoby, dla ktorej zrobilbym cos takiego.",
+        "second_thought_on_hallway": "Tak, zostane pisarzem zamiast byc lekarzem.",
+        "math_test_and_youre_late": "Poniewaz jestes spozniony, bedziesz mial mniej czasu na napisanie egzaminu. Sluchaj uwaznie, poniewaz przeczytam na glos pytania, zebys mial mozliwosc je zapisac.",
+        "talking_flower": "Yo. Co tam, smutny? Luzik, mam rozwiazanie: walnij (-b+sqrt(b*b-4ac))/2a. Kumasz baze, co nie? ... ... ... Dobra, teraz wstawaj. Slyszalem, ze ostre akcje dobrze budza. *jestes w szoku*",
 
-        "math_test_and_youre_late": "bedziesz mial mniej czasu na napisanie testu odkat sie spuzniles¬To zapisz sobie pytania które ci podyktuje¬*Zapisales pytania ale czujesz sie wykonczony",
+        "solve_math": "Tu jest egzamin, ktory czeka na rozwiazanie. £ Zaczynaj rozmyslac. £ Rozwiaz go.",
+        "you_have_solved_math": "You did the exam, which was surprisingly easy.",
 
-        "funny_thing": "zabawna objekt",
-        "prawn": "krewetka",
-        "secret_key": "tejemniczy klucz",
-        "money": "kaska",
-        "stick": "patyk",
-        "copper_coin": "miediane zloto"
+        "ending_of_act0": "Ty: Czy moge zajac profesorowi chwile? Nauczyciel: Jasne, a co sie stalo? *Podajesz liste nauczycieli*",
+        "ending_of_act0after_pass": "Ty: Nich profesor sam przeczyta. Ale ty chciales isc na sztuki wyzwolone! Interesujesz sie w ogole medycyna? Ty: Nie i w tym problem. Nauczyciel: Chyba wiem, jak na to pomoc. *Wytlumaczyl ci chyba?* Ty: Jak?! *Myslisz, ze nauczyciel mysli 'kurwa, sprytne'.* Nauczyciel: Musisz udawac, ze przygotowujesz sie na medycyne, aby nie bylo podejrzen. Zaaplikujesz na jakies dodatkowe zajecia, a potem po kryjomu takze na sztuki wyzwolone. Ty: Moze byc z tym lekki problem. Nauczyciel: W tajemnicy powiem ci, ze osobiscie znam profesor Iwanowska od medycyny. Moglbym szepnac jej o tobie sloweczko, jesli mi pomozesz. Ty: Zrobie doslownie wszystko, sorze. TO jeszcze do jedzenia przynies mi cos.*Masz przeczucie, ze ktos wie, gdzie jest jedzenie.", 
+
+        "hi": "Czesc, co tam robisz?",
+
+        "funny_thing": "Smieszna rzecz.",
+        "prawn": "Krewetka",
+        "secret_key": "Tajny klucz",
+        "money": "Pieniadze.",
+        "stick": "Patyk",
+        "copper_coin": "Miedziana moneta",
+        "apple": "Jabluko",
+        "paper_pile": "Stos papieru",
+        "notebook": "Dziennik",
+
+        "english": "Angielski",
+        "polish": "Polski",
+        "back": "Wstecz",
+        "languages": "Jezyki",
+        "new_game": "Nowa gra",
+        "exit": "Wyjdz",
+        "settings": "Ustawienia",
+        "load_game": "Zaladuj gre",
+        "Empty": "Pusty",
+        "play": "Graj",
+        "delete": "Usun",
+        "forward": "Naprzod",
+        "backward": "Do tylu",
+        "left_go": "Lewo",
+        "right_go": "Prawo",
+        "skip_dialog": "Pomin dialog",
+        "next_dialog": "Nastepny dialog",
+        "full_screen": "Pelny ekran",
+        "inventory": "Ekwipune.",
+        "save_and_exit": "Zapisz i wyjdz",
+        "save": "Zapisz",
+        "resume": "Wznow",
+        "continue": "Kontynuuj",
+        "close_zoom": "zmaknij widok",
+        "wait_dont_sit_here": "Na pewno nie siedze tutaj.",
+        "why_youre_always_late": "Byles spozniony 17 razy w tym miesiacu. A mimo to znowu sie spozniasz.",
+        "so_sorry": "Bardzo przepraszam, ale nie moge w pelni tego opisac. W wyniku moich poprzednich bledow.",
+        "ight_lets_do_test": "Mozliwe, ze slyszales, ze dzis jest dzien egzaminu, wiec oto masz egzamin z tablicy. Oczekuje na twoj wielki umysl, ktory nie moze powstrzymac sie od rozwiazywania wiekszych problemow wszedzie, poza sala lekcyjna!",
+
+        "feeling_it_is_out_side": "Co za przepiekny dzien. You: Prawda, najlepszy z najlepszych.",
+        "libbrary_kid_black": "Tylko ciekaw, czy mnie zrozumiesz¬W swietle dnia stoje z wieloma, jednak obserwuje z krawedzi.¬Po mojej lewej stronie nie ma brata, po prawej ziemia stoi mocno w przysiedze kamienia.¬Chociaz sale madrosci sa daleko ode mnie, moje korzenie wciaz strzegą przeszlosci.¬W moim cieniu, gdzie spoczywaja tajemnice, czeka czerwone jablko.¬Tak, opisuje siebie jako dosc poetyckiego.",
+        "libbrary_kid_black0": "Prosze, idz. Mam plan do wykonania.",
+        "have_you_found_the_notebook_no": "To zle, sproboj z wiekszym wysilkiem. Sprobuj jeszcze raz, a ci pomoge.",
+        "youre_late_already": "Jestes juz spozniony na nasze zajecia. Przeprosisz mnie, jak bedziesz w lawce.",
+        "heard_somebodyd_hide_it": "Dobry. Nie wiem, gdzie dziennik, ¬ani nie wiem, dlaczego go szukasz¬ tak czy inaczej słyszałem, że twoja RĘKA może poprowadzić cię do celu",
+
+        "outside_is_nice_isnt_it": "Urokliwe powietrze, dobrze jest byc na zewnatrz.£ O tak, niewatpliwie. £ Cokolwiek.",
+        "siad_yes_to_mate": "Zaiste. Slonce swieci, ptaki spiewaja, kwiaty kwitna.",
+        "said_whatever_to_mate": "Tak. Po prostu popatrze w niebo.",
+        "looking_at_sky_long": "*Wydaje sie, ze... *Patrzy w niebo.* Postanowiles nie przeszkadzac.",
+        "see_this_horizon": "Panoramiczna ekspansja niebianskiej granicy przejawia niewyslowiona estetyczna wspanialosc.",
+        "looking_at_sky_short": "*Patrzy w niebo.* Postanowiles nie przeszkadzac.",
+
+        "left_bottom_corner": "*Wyglada, jakby szukala ksiazki.* Ona: Czesc. Ty: Pozdrowienia. Ona: Masz moze pomysl, gdzie jest Fahrenheit 451? Ty: Nie, przepraszam. *Nie jestes pewien, czemu nie zapytala bibliotekarki.*",
+        "librarian": "Ona: Dzien dobry. Jak moge dzis pomoc? Ty: Jakies rekomendacje? Ona: Fahrenheit 451 jest calkiem interesujace i zabawne.",
+        "standing_dude_class2": "*Rozmawiaja, wiec postanowiles nie przeszkadzac.*",
+        "sorry_occupied": "Przepraszam. Zajete.",
+        "I_know_but_for_price": "Moj ziomek zaraz zrobi cos przezabawnego.",
+        "you_fond_notebook": "*Znalazles dziennik.*",
+
+        "I_take_care": "Dzieki ci bardzo. Obiecuje, ze porozmawiam z pania od chemii i zdasz z odpowiednia ocena. Ale ty musisz nauczyc sie troche chemii, najlepiej takiej, ktora trudno by bylo wytlumaczyc twoim rodzicom. Wiec beda przekonani, ze rzeczywiscie uczysz sie na medycyne na pelny etat.",
+
+        "story": "Nauczyciel zatroszczyl sie o mlodego Kraszewskiego, ale jego koszmar nie skonczyl sie az do... Tutaj to sie zmieni."
     },
 
 
 
-    "English":{
-        "test": "Test Was Spelt As It Was.",
-        
-        "letter_from_father":"You shell become the greatest doctor in this square of the universe¬otherwise you will not get any money from us for you uni¬I, Kraszwski, have to waste my potential on mere medical knowledge instead of mastering the power of words¬There is no person for whom I would do such a thing.",
+    "English": {
+        "test": "Test was spelled as it was.",
 
-        "second_thought_on_hallway":"Yeah I'll become a writer instead of becoming a doctor.",
+        "letter_from_father": "You shall become the greatest doctor in this square of the universe¬otherwise, you will not get any money from us for your uni¬I, Kraszewski, have to waste my potential on mere medical knowledge instead of mastering the power of words¬There is no person for whom I would do such a thing.",
 
-        "math_test_and_youre_late": "Since you late you will have less time to write your exam¬Listen closely because I'll read out loud question so you'll be able to write them down",
+        "second_thought_on_hallway": "Yeah, I'll become a writer instead of becoming a doctor.",
 
-        "funny_thing": "funny thing",
-        "prawn": "prawn",
-        "secret_key": "secret key",
-        "money": "money",
-        "stick": "stick",
-        "copper_coin": "copper cion"
+        "math_test_and_youre_late": "Since you're late, you'll have less time to write your exam¬Listen closely because I'll read out loud the questions so you'll be able to write them down.",
 
+        "wait_dont_sit_here": "For sure, I'm not sitting here.",
+        "why_youre_always_late": "You have been late 17 times this month¬But yet, here you are late again.",
+        "so_sorry": "I'm deeply sorry, but I cannot fully describe it¬As a result of my past mistakes.",
+        "ight_lets_do_test": "You might have heard that today is the day of the exam, so here you have an exam on the board¬It's waiting for your great mind, which ¬can't help but solve bigger problems anywhere but in the classroom!",
 
+        "talking_flower": "Yo¬Bit sad?¬I got a solution, just use (-b+sqrt(b*b-4ac))/2a¬I hope you got your answers¬...¬...¬...Yeah, now you have to wake up¬Heard that intense moments can help with that¬*You're in shock.",
 
-        
+        "solve_math": "^Here is an exam that awaits to be solved £Go to Wonderland £Solve it.",
+        "you_have_solved_math": "You did the exam, which was surprisingly easy.",
 
+        "ending_of_act0": "You: May I speak with you, miss?¬Teacher: Yeah, go on¬*You pass the letter.",
+        "ending_of_act0after_pass": "You: Despicable things, please read that.¬Bro's reading*¬Wouldn't you like to go to Aquatic Arts Uni? Are you even interested in medicine?¬Ty: Medicine is like a form of nightmare to me¬Teacher: I might know how to help you¬*He's explaining it? You: How?!¬*You believe that teacher thinks,¬Teacher: You must be somewhat prepared for the med exam, so you'll have an alibi¬You'll apply for med uni and then for art uni.¬You make your parents believe that you got into med, but you are actually in art.¬So you'll have funds from your parents while being there.¬You: Here we might encounter a problem¬Teacher: As a secret, I'll tell you I know biology tech well, so I got you covered if you'll help me¬You: I will and must do anything for my dream, so I'll do whatever you tell me to¬Teacher: I've lost my notebook and I can't find it anywhere¬Your suggestion is my command.¬If you find old notes, take them with you.So bring be something to eat as well.*You have a filling like someone knows where is food.",
 
-    }
+        "funny_thing": "Funny thing",
+        "prawn": "Prawn",
+        "secret_key": "Secret key",
+        "money": "Money",
+        "stick": "Stick",
+        "copper_coin": "Copper coin",
+        "apple": "Apple",
+
+        "english": "English",
+        "polish": "Polish",
+        "back": "Back",
+        "languages": "Languages",
+        "new_game": "New game",
+        "exit": "Exit",
+        "settings": "Settings",
+        "load_game": "Load game",
+        "Empty": "Empty",
+        "play": "Play",
+        "delete": "Delete",
+        "forward": "Forward",
+        "backward": "Backward",
+        "left_go": "Left",
+        "right_go": "Right",
+        "skip_dialog": "Skip dialog",
+        "next_dialog": "Next dialog",
+        "full_screen": "Full screen",
+        "inventory": "Inventory",
+        "save_and_exit": "Save and exit",
+        "save": "Save",
+        "resume": "Resume",
+        "continue": "Continue",
+        "paper_pile": "Paper pile",
+        "notebook": "Notebook",
+        "close_zoom": "close items view",
+
+        "hi": "In daylight, I stand with many, yet I watch from the edge.¬To my left, no brother stands, to my right, the earth stands firm in stone's pledge.¬Though wisdom's halls are far from me, my roots still guard the past.¬Beneath my shade, where secrets rest, a treasure waits at last.",
+        "buy_some_paper": "Hi, wanna buy some info from me?¬I heard you're looking for a piece of paper.",
+        "buy_notebook": "So you're looking for a notebook, aren't you?¬I got you, but I do wanna get my test from the classroom.",
+
+        "feeling_it_is_out_side": "Morning, what a beautiful day¬You: It's gorgeous indeed.",
+        "libbrary_kid_black": "Just curious if you will understand me¬In daylight, I stand with many, yet I watch from the edge.¬To my left, no brother stands, to my right, the earth stands firm in stone's pledge.¬Though wisdom's halls are far from me, my roots still guard the past.¬Beneath my shade, where secrets rest, a red apple waits at last.¬Yeah, I describe myself as quite poetic.¬So to to emphasize the truth that might be messed¬Beyond the ancient sentinel's sway,¬ where your gaze dares not to stray, hidden deep,¬ yet standing tall, the secret waits beyond your call.",
+
+        "libbrary_kid_black0": "Please go, I have a plan to execute.",
+        "have_you_found_the_notebook_no": "Welp, too bad, I really need it, so try¬H¬A¬R¬D¬E¬R¬H A R D E R¬...¬Just try, alright? (*With success)",
+        "youre_late_already": "You're late, be sorry at your desk.",
+        "heard_somebodyd_hide_it": "Morning. I don't know where the notebook is¬ neither I know why are you searching for it¬ either way I've heard that your HANDS might guide you to your destination",
+
+        "outside_is_nice_isnt_it": "Lovely air, it's good to be outside £Yes, indeed £Whatever.",
+        "siad_yes_to_mate": "For sure.¬The sun is shining, birds are singing, flowers are blooming.",
+        "said_whatever_to_mate": "Yeah¬I'm just gonna look at the sky.",
+        "looking_at_sky_long": "*He seems like¬.¬.¬.¬...¬*He's looking at the sky¬*You decided not to interrupt.",
+        "see_this_horizon": "The panoramic expanse of the celestial boundary manifests an ineffable aesthetic resplendence.",
+        "looking_at_sky_short": "*He's looking at the sky¬*You decided not to interrupt.",
+
+        "left_bottom_corner": "*Looks like she's searching for the book¬She: Hi¬You: Greetings¬She: Any ideas where Fahrenheit 451 is?¬You: No, sorry¬*You're not sure why she didn't ask the librarian.",
+        "librarian": "She: Howdy. How can I help you today?¬You: Any recommendations?¬She: Fahrenheit 451 is quite interesting and amusing.",
+        "standing_dude_class2": "*They're talking, so you decided not to interrupt.",
+        "sorry_occupied": "Sorry.¬Occupied.",
+        "I_know_but_for_price": "My dude's gonna do something hilarious.",
+        "very_well_i_tell_everything_to_her": "Bye.",
+        "you_fond_notebook": "*You found the notebook.",
+
+        "I_take_care": "Thank you very much¬I promise I'll talk to the chemistry teacher, and you'll pass with a decent grade¬But you need to learn some chemistry¬Preferably the kind that would be hard to explain to your parents¬That way, they'll be convinced you're really studying medicine full-time.",
+        "story": "The teacher looked after young Kraszewski¬But his nightmare didn't stop until¬Here, this will change."
+}
+
 }

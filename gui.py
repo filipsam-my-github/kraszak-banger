@@ -1,12 +1,13 @@
+from __future__ import annotations
 import keys_vals
 from math import ceil
-
 from abc import ABC , abstractmethod
 import pygame, os, sys, texts_handler
 import keys_vals
-
 import graphic_handler
-
+import entities
+import activation_triggers
+from typing import TYPE_CHECKING
 
 
 class MouseGuiEventHandler:
@@ -106,7 +107,6 @@ class InventoryGui(GuiItem):
         self.rect = pygame.Rect(320-150,45, 300, 270)
         self.check_box = pygame.Rect(320-135, 60, 15, 15)
         
-        print(items)
         
         self.inventory : list[texts_handler.Font] = items
         self.chosen = 0
@@ -126,28 +126,68 @@ class InventoryGui(GuiItem):
     def Draw(self, screen):
         pygame.draw.rect(screen, (0,0,0), self.rect, border_radius=15)
         pygame.draw.rect(screen, (255,255,255), self.rect, width=2 , border_radius=15)
-        pygame.draw.rect(screen, (255,255,255), self.rect, width=2 , border_radius=15)
         pygame.draw.rect(screen, (255, 255, 255), self.check_box)
         for i, item in enumerate(self.inventory):
             item.Draw(screen)
     
     def Tick(self, last_keys ,keys):
-        if keys_vals.IsDown(last_keys, keys, pygame.K_s):
+        if keys_vals.IsDown(last_keys, keys, entities.Player.backward):
             ...
-        if keys_vals.IsDown(last_keys, keys, pygame.K_s) and self.chosen < len(self.inventory)-1:
+        if keys_vals.IsDown(last_keys, keys, entities.Player.backward) and self.chosen < len(self.inventory)-1:
             self.chosen += 1
             self.UpdateCheckPos()
-
-            print('bye')
-        if keys_vals.IsDown(last_keys, keys, pygame.K_w) and self.chosen != 0:
+        if keys_vals.IsDown(last_keys, keys, entities.Player.forward) and self.chosen != 0:
             self.chosen -= 1
             self.UpdateCheckPos()
 
     
     def UpdateCheckPos(self):
-        self.check_box.y = self.inventory[self.chosen].y_cord + 2
-        self.check_box.x = self.inventory[self.chosen].x_cord - 20
+        if len(self.inventory) > 0:
+            self.check_box.y = self.inventory[self.chosen].y_cord + 2
+            self.check_box.x = self.inventory[self.chosen].x_cord - 20
 
+
+class ChoseBox(InventoryGui):
+    def __init__(self, options: list):
+        self.rect = pygame.Rect(120,280, 520, 50)
+        self.check_box = pygame.Rect(120, 320, 15, 15)
+        
+        self.options_names = options
+        self.options_gui: list[texts_handler.Font] = []
+        self.current_option = 0
+        self.chosen_option = None
+        
+        last_size = 0
+        for i, item in enumerate(self.options_names):
+            self.options_gui.append(texts_handler.Font(item, original_font_size=18, cursive=False, x_cord = 110 + max(last_size + 45,last_size*1.3), y_cord = 320))
+            if last_size == 0:
+                last_size = self.options_gui[0].GetImageSize()[0]
+                last_size = max(last_size + 45,last_size*1.3)
+            
+        self.next_cord = last_size
+    
+    def Tick(self, keys):
+        if keys[activation_triggers.Dialog.NEXT_DIALOG]:
+            self.chosen_option = self.options_names[self.current_option]
+        elif keys[entities.Player.forward] or keys[entities.Player.left]:
+           self.current_option -= 1
+           self.current_option = max(0, self.current_option)
+           self.check_box.x = 110 + self.next_cord*self.current_option
+        elif keys[entities.Player.backward] or keys[entities.Player.right]:
+           self.current_option += 1
+           self.current_option = min(len(self.options_names)-1, self.current_option)
+           self.check_box.x = 110 + self.next_cord*self.current_option
+    
+    def Draw(self, screen):
+        pygame.draw.rect(screen, (255, 255, 255), self.check_box)
+        for i, item in enumerate(self.options_gui):
+            item.Draw(screen)
+    
+    def UpdateCheckPos(self):
+        return super().UpdateCheckPos()
+    
+    def GetChosenOption(self):
+        return self.current_option
 
 class Button(GuiItem):
     TRANSLATOR = 17/25
@@ -183,9 +223,12 @@ class Button(GuiItem):
                 self.__prepare = True
             elif MouseGuiEventHandler.mouse["clicked"]["up"]["left"] and self.__prepare:
                 self.activated = True
-                print(self.tag)
         elif MouseGuiEventHandler.mouse["clicked"]["down"]["left"]:
             self.__prepare = False
+    
+    def Hovered(self):
+        return self.hovered
+    
     def Draw(self, screen):
         screen.blit(self.image, (self.x_cord, self.y_cord))
         self.text.Draw(screen)

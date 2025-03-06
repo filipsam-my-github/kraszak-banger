@@ -2,6 +2,7 @@
 
 uniform sampler2D tex;
 uniform float transposition_shader_multiplayer;
+// uniform float time;
 
 const vec2 u_resolution = vec2(640.,360.);
 
@@ -14,7 +15,7 @@ void main() {
 
     const float RADIUS = 2.;
 
-    vec2 circle_centre = vec2(0.5, 0.7);
+    vec2 circle_centre = vec2(0.5145833333333333, 0.5296296296296296);
     vec2 ellipse_radii = vec2(RADIUS, RADIUS*aspect);  // Control the radii for X and Y directions
 
     float red = texture(tex, uvs).r;
@@ -31,11 +32,31 @@ void main() {
         disc = 1.0;
     }
 
+    float time = 1.;
+
+    //debug
+    // float old_disc = abs(disc - 1.0);
+
     disc = abs(disc - 1.0) * adjusted_multiplayer;
+
+    float calibrated_time = abs(mod(time*10.,20.)-10.)+10.;
+
+    float disc_yellow = max(0.04,(pow(disc, 3)+0.025)*(1*(calibrated_time/14)+1.45));
     
-    disc = max(0.025,pow(disc, 3));
+    float disc_blue = max(0.04,pow(disc/1.5, 3)+0.025);
+    disc_yellow += 0.015;
+    disc_blue += 0.005;
 
 
 
-    f_color = vec4(red * disc, green * disc, blue * disc, 1.0);
+    //debug
+    // if (old_disc > 0.95){
+    //     disc_yellow = 1.;
+    //     disc_blue = 1.;
+    // }
+
+
+
+
+    f_color = vec4(red * disc_yellow, green * disc_yellow, blue * disc_blue, 1.0);
 }

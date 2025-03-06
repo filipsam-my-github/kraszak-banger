@@ -1,0 +1,71 @@
+#!#Scale#@# 64 32
+#!#vertex_shaders#@# vertex_shaders\vert_normal.glsl
+#!#fragment_shaders#@# fragment_shaders\frag_normal.glsl
+level_exit 6 -4 school_exit
+level_exit 7 -4 school_exit
+level_exit 6 12 hallway_library_math_class
+level_exit 7 12 hallway_library_math_class
+kraszak_heading_down_0 6 -1 school_exit
+kraszak_heading_up_0 7 9 hallway_library_math_class
+school_wall_floor_left 8 9 
+school_wall_floor_left 8 11 
+school_wall_floor_left 8 13 
+school_wall_floor_right 5 13 
+school_wall_floor_right 5 11 
+school_wall_floor_right 5 9 
+school_wall_floor_right 5 7 
+school_wall_floor_right 5 5 
+school_wall_floor_right 5 3 
+school_wall_floor_right 5 1 
+school_wall_floor_right 5 -1 
+school_wall_floor_right 5 -3 
+school_wall_floor_left 8 -3 
+school_wall_floor_left 8 -1 
+school_wall_floor_left 8 1 
+school_wall_floor_left 8 3 
+school_wall_floor_up 9 9 
+school_wall_floor_up 10 9 
+school_wall_floor_up 11 9 
+school_wall_floor_up 12 9 
+school_wall_floor_down 12 3 
+school_wall_floor_down 11 3 
+school_wall_floor_down 10 3 
+school_wall_floor_down 9 3 
+school_wall_floor_up 13 9 
+school_wall_floor_down 13 3 
+kraszak_heading_left_0 12 5 classroom_3
+level_exit 13 5 classroom_3
+level_exit 13 7 classroom_3
+school_floor 6 12 
+school_floor 6 8 
+school_floor 6 6 
+school_floor 6 4 
+school_floor 6 2 
+school_floor 7 12 
+school_floor 7 8 
+school_floor 7 6 
+school_floor 7 4 
+school_floor 7 2 
+school_floor 7 0 
+school_floor 6 -2 
+school_floor 8 7 
+school_floor 8 5 
+school_floor 9 5 
+school_floor 9 7 
+school_floor 10 5 
+school_floor 10 7 
+school_floor 11 5 
+school_floor 11 7 
+school_floor 12 5 
+school_floor 6 10 
+school_floor 7 10 
+school_floor 7 -2 
+school_floor 6 0 
+school_floor 7 -4 
+school_floor 6 -4 
+school_floor 6 14 
+school_floor 7 14 
+school_floor 13 5 
+school_floor 13 7 
+school_floor 12 7 
+box_room 4 -3 10x18

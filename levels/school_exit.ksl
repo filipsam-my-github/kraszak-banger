@@ -1,0 +1,53 @@
+#!#Scale#@# 64 32
+#!#vertex_shaders#@# vertex_shaders\vert_normal.glsl
+#!#fragment_shaders#@# fragment_shaders\frag_normal.glsl
+#!#background#@# background_lawn
+school_wall 8 6 
+school_wall 7 6 
+school_wall 4 6 
+school_wall 3 6 
+school_wall 3 4 
+school_wall 4 4 
+school_wall 7 4 
+school_wall 8 4 
+school_wall 8 2 
+school_wall 7 2 
+school_wall 6 2 
+school_wall 5 2 
+school_wall 4 2 
+school_wall 3 2 
+level_exit 5 5 hallway_to_exit
+level_exit 6 5 hallway_to_exit
+school_door 5 4 
+tree 8 3 
+tree 3 3 
+tree 1 6 
+tree 7 10 
+flower_3 3 12 
+flower_3 4 11 
+flower_1 1 13 
+flower_1 2 15 
+flower_2 3 14 
+boy_brown_black_front 8 19 outside_is_nice_isnt_it
+kraszak_heading_down_0 6 9 hallway_to_exit
+apple 2 10 
+short_grass_2 7 9 
+short_grass_2 9 11 
+short_grass_2 7 12 
+rocks_3 6 8 
+rocks_3 5 9 
+rocks_3 6 11 
+rocks_3 5 13 
+rocks_3 6 14 
+rocks_3 6 16 
+rocks_3 4 17 
+rocks_5 8 18 
+rocks_4 9 17 
+rocks_1 9 20 
+rocks_2 10 18 
+rocks_3 10 19 
+rocks_3 9 19 
+rocks_3 6 19 
+rocks_3 5 18 
+rocks_3 5 20 
+rocks_3 6 22 

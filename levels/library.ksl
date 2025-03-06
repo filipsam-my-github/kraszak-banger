@@ -5,8 +5,6 @@ kraszak_heading_down_0 7 6 None
 level_exit 7 15 hallway_library_math_class
 level_exit 8 15 hallway_library_math_class
 level_exit 6 15 hallway_library_math_class
-player5 5 -12 static
-player4 11 6 static
 kraszak_heading_up_4 7 12 hallway_library_math_class
 school_wall_floor_right 3 13 
 school_wall_floor_right 3 11 
@@ -50,9 +48,7 @@ school_wall_floor_up 9 15
 school_wall_floor_up 4 15 
 school_wall_floor_up 5 15 
 school_wall 3 15 
-school_wall 12 15 
 school_wall 12 -15 
-school_wall 3 -15 
 bookshelf_front 5 -4 
 bookshelf_front 6 -4 
 bookshelf_front 7 -4 
@@ -70,8 +66,6 @@ bookshelf_front 9 8
 bookshelf_front 10 8 
 bookshelf_front 5 10 
 bookshelf_front 6 10 
-bookshelf_top 6 -9 
-bookshelf_top 5 -9 
 bookshelf_front 8 -12 
 bookshelf_front 9 -12 
 bookshelf_top 11 -3 
@@ -83,10 +77,22 @@ bookshelf_top 11 -13
 bookshelf_top 4 6 
 bookshelf_side 4 9 
 bookshelf_top 4 8 
-dialog_trigger 7 9 letter_from_father
-dialog_trigger 8 6 letter_from_father
-dialog_trigger 6 6 letter_from_father
-dialog_trigger 7 3 letter_from_father
+locked_safe 4 -13 library_safe
+library_desk_2 6 -9 
+library_desk_3 5 -9 
+boy_brown_black_front 11 6 libbrary_kid_black
+girl_brown_black_left 5 9 left_bottom_corner
+girl_brown_black_left 6 6 
+library_lady_front 5 -12 librarian
+school_wall 12 15 
+school_wall 12 17 
+school_wall 11 17 
+school_wall 10 17 
+school_wall 9 17 
+school_wall 5 17 
+school_wall 4 17 
+school_wall 3 17 
+school_wall 3 -15 
 school_floor 8 13 
 school_floor 7 13 
 school_floor 6 13 
@@ -151,9 +157,7 @@ school_floor 10 -7
 school_floor 10 -9 
 school_floor 9 -9 
 school_floor 7 -9 
-school_floor 4 -9 
 school_floor 4 -11 
-school_floor 5 -11 
 school_floor 6 -11 
 school_floor 7 -11 
 school_floor 9 -11 
@@ -175,7 +179,6 @@ school_floor 5 -5
 school_floor 8 -9 
 school_floor 5 3 
 school_floor 5 5 
-school_floor 5 7 
 school_floor 5 9 
 school_floor 10 7 
 school_floor 10 3 
@@ -187,3 +190,19 @@ school_floor 10 -11
 school_floor 8 -11 
 school_floor 9 13 
 school_floor 10 13 
+school_floor 5 -9 
+school_floor 6 -9 
+school_floor 4 -9 
+school_floor 5 7 
+school_floor 5 -11 
+game_event 7 9 letter_from_father
+game_event 8 6 letter_from_father
+game_event 6 6 letter_from_father
+game_event 7 3 letter_from_father
+box_room 3 -15 10x32
+dialog_trigger 4 -11 you_fond_notebook
+game_event 4 -11 you_fond_notebook
+game_event 5 -13 you_fond_notebook
+dialog_trigger 5 -13 you_fond_notebook
+game_event 5 -11 you_fond_notebook
+dialog_trigger 5 -11 you_fond_notebook

@@ -46,7 +46,7 @@ scroll_horizontal = 0
 scroll_vertical = 0
 scroll_speed = 1
 current_file = "None"
-
+out_put_background = None
 
 vertex_shaders = "vertex_shaders\\vert_normal.glsl" 
 fragment_shaders = "fragment_shaders\\frag_normal.glsl"
@@ -54,17 +54,21 @@ fragment_shaders = "fragment_shaders\\frag_normal.glsl"
 
 #store tiles in a list
 img_list = []
-print(ImageLoader.images["kraszak_heading_down_0"].get_size())
+# print(ImageLoader.images["kraszak_heading_down_0"].get_size())
+END_OF_THE_BOX_ROOM_INDEX = None
 for image in ImageLoader.images.keys():
-
-    img_list.append({"img":ImageLoader.images[image],"name":image, "meta_data":""})
+	if "end_of_the_box_room" == image:
+		END_OF_THE_BOX_ROOM_INDEX = len(img_list)
+	img_list.append({"img":ImageLoader.images[image],"name":image, "meta_data":""})
 
 save_img = pygame.image.load('mob_animation/save_btn.png').convert_alpha()
 load_img = pygame.image.load('mob_animation/load_btn.png').convert_alpha()
 vertex_shaders_img = pygame.image.load('graphics/icon_for_vert_shaders.png').convert_alpha()
+background_img = pygame.image.load('graphics/icon_for_background.png').convert_alpha()
 fragment_shaders_img = pygame.image.load('graphics/icon_for_frag_shaders.png').convert_alpha()
 
-GHOST_ELEMENTS = ("school_floor", "grass", "rocks")
+GHOST_ELEMENTS = ("school_floor", "grass", "rocks", "rocks_1", "rocks_2", "rocks_3", "rocks_4", "rocks_5", "short_grass_1", "short_grass_2", "short_grass_3")
+EVENTS_ELEMENTS = ("game_event", "dialog_trigger", "box_room", "firefly_big", "firefly_bug", "firefly_small")
 #define colours
 GREEN = (144, 201, 120)
 WHITE = (255, 255, 255)
@@ -76,6 +80,7 @@ font = pygame.font.SysFont('Futura', 30)
 #create empty tile list
 world_data = {}
 ghost_world_data = []
+events_world_data = []
 
 # #create ground
 # for tile in range(0, MAX_COLS):
@@ -108,7 +113,7 @@ def DrawGrid():
 		pygame.draw.line(screen, WHITE, (0, c * TILE_SIZE_Y - scroll_vertical + bonus*(TILE_SIZE_Y*3)), (SCREEN_WIDTH, c * TILE_SIZE_Y - scroll_vertical + bonus*(TILE_SIZE_Y*3)))
 
 
-#function for drawing the world tiles
+#function for drawing the world tiles    
 def DrawWorld():
 	for i, obj_data in enumerate(ghost_world_data):
 		cords = obj_data["cords"]
@@ -117,8 +122,16 @@ def DrawWorld():
 	for obj_data in world_data.keys():
 		cords = obj_data.split('x')
 		screen.blit(img_list[world_data[obj_data]["id"]]["img"], (int(cords[0]) * TILE_SIZE_X - scroll_horizontal, int(cords[1]) * TILE_SIZE_Y - scroll_vertical))
-
 	
+	for i, obj_data in enumerate(events_world_data):
+		cords = obj_data["cords"]
+		
+		if img_list[obj_data["id"]]["name"] == "box_room" and obj_data["meta_data"] != "":
+			size = tuple(map(int,obj_data["meta_data"].split("x")))
+			screen.blit(img_list[END_OF_THE_BOX_ROOM_INDEX]["img"], (int(cords[0]+size[0]) * TILE_SIZE_X - scroll_horizontal, int(cords[1]+size[1]) * TILE_SIZE_Y - scroll_vertical))
+		screen.blit(img_list[obj_data["id"]]["img"], (int(cords[0]) * TILE_SIZE_X - scroll_horizontal, int(cords[1]) * TILE_SIZE_Y - scroll_vertical)) 
+
+
 
 
 def MouseUpdate(mouse = None):
@@ -193,6 +206,8 @@ def SaveFile(file_path):
 		file.write(f"#!#Scale#@# {TILE_SIZE_X} {TILE_SIZE_Y}\n")
 		file.write(f"#!#vertex_shaders#@# {ConvertPathToRelativeIfPossible(vertex_shaders)}\n")
 		file.write(f"#!#fragment_shaders#@# {ConvertPathToRelativeIfPossible(fragment_shaders)}\n")
+		if out_put_background != None:
+			file.write(f"#!#background#@# {out_put_background}\n")
 		#saves actual level's content
 		for i in world_data:
 			obj_cords = i.split('x')
@@ -207,6 +222,13 @@ def SaveFile(file_path):
 				file.write(f"{ghost_world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {ghost_world_data[i]['meta_data'].split(' ')[0]}\n")#{ConvertPathToRelativeIfPossible(current_file)}
 			else:
 				file.write(f"{ghost_world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {ghost_world_data[i]['meta_data']}\n")
+	
+		for i, element in enumerate(events_world_data):
+			obj_cords = events_world_data[i]["cords"]
+			if events_world_data[i]['name'] == "level_exit":
+				file.write(f"{events_world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {events_world_data[i]['meta_data'].split(' ')[0]}\n")#{ConvertPathToRelativeIfPossible(current_file)}
+			else:
+				file.write(f"{events_world_data[i]['name']} {obj_cords[0]} {obj_cords[1]} {events_world_data[i]['meta_data']}\n")
 
 
 #create buttons
@@ -214,6 +236,7 @@ save_button = button.Button(SCREEN_WIDTH // 2, SCREEN_HEIGHT + LOWER_MARGIN - 50
 load_button = button.Button(SCREEN_WIDTH // 2 + 200, SCREEN_HEIGHT + LOWER_MARGIN - 50, load_img, 1)
 vertex_shaders_button = button.Button(SCREEN_WIDTH // 2 -200, SCREEN_HEIGHT + LOWER_MARGIN - 50, vertex_shaders_img, 1)
 fragment_shaders_button = button.Button(SCREEN_WIDTH // 2 - 400, SCREEN_HEIGHT + LOWER_MARGIN - 50, fragment_shaders_img, 1)
+background_button = button.Button(100, SCREEN_HEIGHT + 40, background_img, 1)
 meta_data_button = button.Button(-100, -100, None, 1)
 meta_data_button.ChangeRectTO(pygame.rect.Rect(-100,-100,TILE_SIZE_X,TILE_SIZE_Y)) 
 
@@ -257,6 +280,9 @@ while run:
 
 	DrawText(f'Level: {level}', font, WHITE, 10, SCREEN_HEIGHT + LOWER_MARGIN - 90)
 	DrawText('Press UP or DOWN to change level', font, WHITE, 10, SCREEN_HEIGHT + LOWER_MARGIN - 60)
+ 
+ 
+	background_button.Draw(screen)
 
 	#save and load data
 	if save_button.Draw(screen):
@@ -302,17 +328,21 @@ while run:
 					#clears level editor level data
 					world_data = {}
 					ghost_world_data = []
+					events_world_data = []
 					#reads file
 					data = file_path.read().split('\n')
 					x_multiplayer = int(data[0].split(' ')[1]) / TILE_SIZE_X
 					y_multiplayer = int(data[0].split(' ')[2]) / TILE_SIZE_Y
+					out_put_background = None
 					for i,e in enumerate(data):
 						obj_cords = e.split(' ')[1:]
-						
       
 						#obj_id is the index where obj_id has img in img_list (list of dictionaries)
 						obj_id = None
 						obj_name = e.split(' ')[0]
+      
+						if obj_name == "#!#background#@#":
+							out_put_background = e.split(' ')[1]
       
 						for i,e in enumerate(img_list):
 							if e["name"] == obj_name:
@@ -326,8 +356,13 @@ while run:
 							meta_data = obj_cords[2:]
 							meta_data = " ".join(meta_data)
 
-						if not img_list[obj_id]["name"] in GHOST_ELEMENTS:
+						if not img_list[obj_id]["name"] in GHOST_ELEMENTS and not img_list[obj_id]["name"] in EVENTS_ELEMENTS:
 							world_data[f"{int(int(obj_cords[0])*x_multiplayer)}x{int(int(obj_cords[1])*y_multiplayer)}"] = {"id":obj_id, "name":obj_name, "meta_data":meta_data}
+						elif img_list[obj_id]["name"] in EVENTS_ELEMENTS:
+							events_world_data.append({
+								"cords": (int(int(obj_cords[0])*x_multiplayer), int(int(obj_cords[1])*y_multiplayer)),
+								"id":obj_id, "name":obj_name, "meta_data":meta_data
+							})
 						else:
 							ghost_world_data.append({
 								"cords": (int(int(obj_cords[0])*x_multiplayer), int(int(obj_cords[1])*y_multiplayer)),
@@ -344,6 +379,17 @@ while run:
 			else:
 				file_path = file_dialog.GetPath()
 				fragment_shaders = file_path
+    
+	if background_button.Draw(screen):
+		with wx.FileDialog(
+			None, "Select a File", wildcard="Text files (*.png)|*.png",
+			style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
+		) as file_dialog:
+
+			if file_dialog.ShowModal() == wx.ID_CANCEL:
+				print("No file selected.")
+			else:
+				out_put_background = file_dialog.GetPath().split("\\")[-1][:-4]
 	
 	if vertex_shaders_button.Draw(screen):
 		with wx.FileDialog(
@@ -356,34 +402,49 @@ while run:
 			else:
 				file_path = file_dialog.GetPath()
 				vertex_shaders = file_path
+    
 
 	
 	if meta_data_button.Draw(screen):
 		is_colliding, cords_if_so =  colliding_with(world_data, (x,y))
+		event_is_colliding = -1,
+		event_cords_if_so = False
+  
 		#calculating position of the mouse
 		x = (pos[0] + scroll_horizontal) // TILE_SIZE_X
 		y = (pos[1] + scroll_vertical) // TILE_SIZE_Y
+	
+		for i, element in enumerate(events_world_data):
+				if element["cords"] == (x, y):
+					event_cords_if_so = True
+					event_is_colliding = i 
+		
 		#opens 1line textbox
 		with wx.TextEntryDialog(
         None, 
         "Edit the text below:", 
         "Input Dialog", 
-        value=world_data[f"{cords_if_so[0]}x{cords_if_so[1]}"]["meta_data"]  # Initial data for the text box
+        value=world_data[f"{cords_if_so[0]}x{cords_if_so[1]}"]["meta_data"] if is_colliding else events_world_data[event_is_colliding]["meta_data"]# Initial data for the text box
     ) as dialog:
 			if dialog.ShowModal() == wx.ID_OK:
 				user_input = dialog.GetValue()
+
        
-				
-				world_data[f"{x}x{y}"]["meta_data"] = user_input
+				if is_colliding:
+					world_data[f"{cords_if_so[0]}x{cords_if_so[1]}"]["meta_data"] = user_input
+				else:
+					events_world_data[event_is_colliding]["meta_data"] = user_input
 			else:
 				print("No input provided.")  # Handle the case when dialog is canceled
 				
 	screen.blit(pygame.font.Font.render(pygame.font.SysFont("arial",40),f"x:{(scroll_horizontal)},y:{(scroll_vertical)}",True,(255, 255, 255)),(350,0))
 	#draw tile panel and tiles
 	pygame.draw.rect(screen, GREEN, (SCREEN_WIDTH, 0, SIDE_MARGIN, SCREEN_HEIGHT))
+ 
 
 	#choose a tile
 	button_count = 0
+
 	for button_count, i in enumerate(entities_to_place):
 		if i.Draw(screen):	
 			current_tile = button_count
@@ -414,12 +475,19 @@ while run:
 		if mouse["clicked"]["down"]["middle"]:
 			pass
 		if mouse["clicked"]["down"]["middle"] or pygame.mouse.get_pressed()[0] == 1 or pygame.mouse.get_pressed()[2] == 1: 
+			event_is_colliding = -1,
+			event_cords_if_so = False
+			for i, element in enumerate(events_world_data):
+					if element["cords"] == (x,y):
+						event_cords_if_so = True
+						event_is_colliding = i 
+			
 			is_colliding, cords_if_so =  colliding_with(world_data, (x,y))
 	
-		if mouse["clicked"]["down"]["middle"] and is_colliding:
+		if mouse["clicked"]["down"]["middle"] and (is_colliding or event_cords_if_so):
 			meta_data_button.ChangeCordsTO(x*TILE_SIZE_X - scroll_horizontal,y*TILE_SIZE_Y - scroll_vertical)
 		if pygame.mouse.get_pressed()[0] == 1:
-			if not is_colliding and not img_list[current_tile]["name"] in GHOST_ELEMENTS:
+			if not f"{x}x{y}" in world_data.keys() and not img_list[current_tile]["name"] in GHOST_ELEMENTS and not img_list[current_tile]["name"] in EVENTS_ELEMENTS:
 				world_data[f"{x}x{y}"] = {"id":current_tile ,"name": img_list[current_tile]["name"], "meta_data":""}
 			elif img_list[current_tile]["name"] in GHOST_ELEMENTS:
 				exactly_the_same = False
@@ -428,6 +496,15 @@ while run:
 						exactly_the_same = True
 				if not exactly_the_same:
 					ghost_world_data.append({
+								"cords": (x, y),"id":current_tile, "name":img_list[current_tile]["name"], "meta_data":""
+							})
+			elif img_list[current_tile]["name"] in EVENTS_ELEMENTS:
+				exactly_the_same = False
+				for i, element in enumerate(events_world_data):
+					if element["cords"] == (x, y) and element["name"] == img_list[current_tile]["name"]:
+						exactly_the_same = True
+				if not exactly_the_same:
+					events_world_data.append({
 								"cords": (x, y),"id":current_tile, "name":img_list[current_tile]["name"], "meta_data":""
 							})
 		if pygame.mouse.get_pressed()[2] == 1:
@@ -439,6 +516,9 @@ while run:
 				for i, element in enumerate(ghost_world_data):
 					if element["cords"] == cords_if_so:
 						ghost_world_data.pop(i) 
+				for i, element in enumerate(events_world_data):
+					if element["cords"] == cords_if_so:
+						events_world_data.pop(i) 
 
 				
 
@@ -479,7 +559,7 @@ while run:
 							run = True
 		if event.type == pygame.MOUSEWHEEL:
 			for i in entities_to_place:
-				i.rect.y += event.y*10
+				i.rect.y += event.y*30
 		#keyboard presses
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.MOUSEBUTTONUP:

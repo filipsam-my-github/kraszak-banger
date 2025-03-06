@@ -1,0 +1,50 @@
+#!#Scale#@# 64 32
+#!#vertex_shaders#@# vertex_shaders\vert_normal.glsl
+#!#fragment_shaders#@# fragment_shaders\frag_normal.glsl
+#!#background#@# background_lawn
+kraszak_heading_down_0 5 5 
+bookshelf_front 10 4 
+bookshelf_front 9 4 
+bookshelf_front 8 4 
+bookshelf_front 7 4 
+notebook 5 10 
+paper_pile_3 6 10 
+paper_pile_2 7 10 
+paper_pile_1 8 10 
+fern_flower 4 7 
+flower_1 4 11 
+flower_2 5 13 
+flower_4 11 8 
+flower_3 11 5 
+tree_stump 2 8 
+potted_palm 10 10 
+boy_brown_black_front 7 5 hi
+girl_brown_black_front 9 5 buy_some_paper
+boy_brown_black_left 10 8 
+school_floor 5 6 
+school_floor 6 6 
+school_floor 7 6 
+school_floor 7 8 
+school_floor 6 8 
+school_floor 5 8 
+school_floor 5 10 
+school_floor 7 10 
+school_floor 8 10 
+school_floor 9 10 
+school_floor 10 10 
+school_floor 10 8 
+school_floor 9 8 
+school_floor 8 8 
+school_floor 8 6 
+school_floor 9 6 
+school_floor 10 6 
+school_floor 6 10 
+rocks_4 6 12 
+rocks_2 7 13 
+rocks_1 8 13 
+rocks 10 12 
+rocks_3 9 12 
+rocks_5 11 10 
+short_grass_2 6 4 
+short_grass_3 4 5 
+short_grass_1 4 3 

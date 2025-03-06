@@ -22,7 +22,7 @@ import camera
 import audio_handler
 import math
 import texts_handler
-
+import cursor
 
 
 
@@ -35,7 +35,7 @@ MONITOR_PROPORTIONS = [MONITOR_SIZE[0]/640, MONITOR_SIZE[1]/360]
 # print(MONITOR_PROPORTIONS)
 
 DARK_BACKGROUND = (16.5,15.7,25.1)
-LIGHT_BACKGROUND = (144, 201, 120)
+LIGHT_BACKGROUND = (0,0,0)#(144, 201, 120)
 
 class ShaderScreen:
     DEFAULT_VERT_SHADER_PATH = "vertex_shaders/vert_normal.glsl"
@@ -61,11 +61,21 @@ class ShaderScreen:
             1.0, -1.0, 1.0, 1.0,
         ]))
 
-        self.vert_shader = vert_shader or data_interpreter.LoadShader(ShaderScreen.DEFAULT_VERT_SHADER_PATH)
-        self.frag_shader = frag_shader or data_interpreter.LoadShader(ShaderScreen.DEFAULT_FRAG_SHADER_PATH)
+        self.vert_shader = data_interpreter.LoadShader(ShaderScreen.DEFAULT_VERT_SHADER_PATH)
+        self.frag_shader = data_interpreter.LoadShader(ShaderScreen.DEFAULT_FRAG_SHADER_PATH)
+        if vert_shader:
+            self.vert_shader = data_interpreter.LoadShader(vert_shader)
+        if frag_shader:
+            self.frag_shader = data_interpreter.LoadShader(frag_shader)
+                    
+        
+        self.name_vert_shader = vert_shader or ShaderScreen.DEFAULT_VERT_SHADER_PATH
+        self.name_frag_shader = frag_shader or ShaderScreen.DEFAULT_FRAG_SHADER_PATH
 
         self.program = self.ctx.program(vertex_shader=self.vert_shader, fragment_shader=self.frag_shader)
         self.render_object = self.ctx.vertex_array(self.program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
+        self.game_cursor = cursor.Cursor()
+
 
     def SurfToTexture(self, surf) -> moderngl.Texture:
         """Converts a Pygame surface to a ModernGL texture."""
@@ -85,6 +95,8 @@ class ShaderScreen:
 
     def DisplayScene(self, arg):
         """Renders the Pygame surface onto the OpenGL screen using shaders."""
+        self.game_cursor.Draw(self.screen)
+        
         frame_tex = self.SurfToTexture(self.screen)
         frame_tex.use(0) 
         self.program['tex'] = 0  
@@ -111,15 +123,24 @@ class ShaderScreen:
     
     def UpdateFragShader(self, path):
         self.frag_shader = data_interpreter.LoadShader(path)
+        self.name_frag_shader = path
 
         self.program = self.ctx.program(vertex_shader=self.vert_shader, fragment_shader=self.frag_shader)
         self.render_object = self.ctx.vertex_array(self.program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
         
-    def UpdateVerShader(self, path):
-        self.frag_shader = data_interpreter.LoadShader(path)
+    def UpdateVertShader(self, path):
+        self.vert_shader = data_interpreter.LoadShader(path)
+        self.name_vert_shader = path
+        
 
         self.program = self.ctx.program(vertex_shader=self.vert_shader, fragment_shader=self.frag_shader)
         self.render_object = self.ctx.vertex_array(self.program, [(self.quad_buffer, '2f 2f', 'vert', 'texcoord')])
+    
+    def GetShadersPaths(self) -> tuple:
+        """
+            returns two paths (vert_shader, frag_shader)
+        """
+        return (self.name_vert_shader, self.name_frag_shader)
         
 
 
@@ -150,17 +171,30 @@ class Pointer:
 
 class Game:
     screen: ShaderScreen = ShaderScreen()
-    load_level = {"entry":"library", 
+    load_level = {"entry": "library", 
                   "last":"None"}
     
+    general_memory: dict = {
+            
+    }
+    
     dt = time.time()
+    keys = pygame.key.get_pressed()
+    clock = 0#
+    MAX_CLOCK_TIME = 1000
+    current_game_file =  None
+    mouse: dict = {}
+    
     def __init__(self, game_state = "main_menu"):
         Game.InitializeGame()
         
         self.game_state = Pointer(game_state)
         self.game_states = {"gameplay":game_states.Gameplay(), "main_menu":game_states.Menu(), "languages":game_states.Languages(), "load_game":game_states.LoadGame(), "settings":game_states.Settings()}
+        game_states.LoadData()
+        Game.mouse = gui.MouseGuiEventHandler.mouse
         
-        self.dt = time.time()
+        
+       
         
         
     
@@ -178,26 +212,33 @@ class Game:
             last_time = time.time()
             if Game.dt > 0.2:
                 Game.dt = 0.2
+            Game.clock += Game.dt
+            Game.clock %= Game.MAX_CLOCK_TIME 
+            Game.keys = pygame.key.get_pressed()
+            
+            gui.MouseGuiEventHandler.Tick(pygame.mouse.get_pos(), pygame.mouse.get_pressed())
+            Game.mouse = gui.MouseGuiEventHandler.mouse
+            
+            
 
             old_game_state = self.game_state.val
             self.game_states[self.game_state].Tick(self.game_state)
             self.LoadNewGameState(old_game_state)
             self.game_states[self.game_state].Draw()
+
             
 
             #rendering shaders
             self.game_states[self.game_state].UpdateShaderArgument()
+            if self.game_state == "gameplay":
+                pass
             Game.screen.DisplayScene(self.game_states[self.game_state].GetShaderArgument())
 
     def LoadNewGameState(self, old_game_state):
         if old_game_state != self.game_state:
             self.game_states[old_game_state].Clear()
             self.game_states[self.game_state].LoadState()
-            entities.Player.met_dialogs = []
-            entities.Player.met_events = []
             entities.Player.music_fading = False
-            entities.EventMathExam.used = False
-            entities.EventTheEnding.used = False
     @classmethod
     def InitializeGame(cls):
         """
@@ -211,4 +252,21 @@ class Game:
         graphic_handler.ImageLoader.init()
         activation_triggers.Dialog.init(MONITOR_PROPORTIONS)
         audio_handler.MusicHandler.init()
+
+
+
+
+def GetKeyPygameRealName(key_int):
+    key_name = pygame.key.name(key_int)
+
+    # Remove spaces if the key is NOT a letter
+    if not key_name.isalpha() or len(key_name) > 1:  
+        key_name = key_name.split(" ")
+        if len(key_name) == 1:
+            return key_name[0].upper()
+        else:
+            return key_name[0][0].upper() + key_name[1].upper()
         
+    
+    return key_name
+

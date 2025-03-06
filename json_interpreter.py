@@ -1,6 +1,15 @@
 import json
-
-
+import data_interpreter
+import entities
+import noclip_blocks
+import solid_blocks
+import activation_triggers
+import gui
+import os
+import pygame
+import game_events
+import point_click_elemtnts
+import engine
 
 def ReadDialog(language="English", dialog=None):
     
@@ -57,5 +66,119 @@ def ReadItems(language, *args):
                 else:
                     raise KeyError(f"In data/language.json file there is no such language as {language}")
         return items
+
+
+
+def ReadSavesNames() -> list:
+    return [i for i in os.listdir("data/saves")]
+
+
+
+
+def SaveGame(current, left_level, save_name):            
+    try:
+        immutable_save = LoadEverything(f"data/saves/{save_name}")["debug_save"]
+    except:
+        immutable_save = False
+    
+    if immutable_save:
+        return None
+    
+    save_data = {
+    "from_level": current,
+    "to_level": left_level,
+
+    "met_dialogs": [],
+    "met_events": [],
+
+    "inventory": [],
+    "game_temp_memory":{}
+    }
+    
+    
+    save_data["met_dialogs"] = activation_triggers.DialogLogic.met_dialogs
+    save_data["met_events"] = game_events.EventsLogic.met_events
+    
+    save_data["game_temp_memory"] = engine.Game.general_memory
+    
+    save_data["inventory"] = entities.Player.tag_inventory
+    
+
+    if type(save_name) != str:
+        save_name = save_name[0].replace(' ', '_')
         
-print(ReadItems("English", "funny_thing", ("funny_thing", "funny_thing")))
+    
+    Closing(save_data, f"data/saves/{save_name.replace(' ', '_')}", "w")
+
+
+def LoadSaveData(save_name):# -> tuple[str, str, entities.Player, list[solid_blocks.Block], list[activation_triggers.Dialog], list[activation_triggers.LevelExit], list[activation_triggers.EventActivator], list[entities.DungeonNpc]]:
+    game_data = LoadEverything(f"data/saves/{save_name}")
+        
+    game_events.EventsLogic.met_events = game_data["met_events"]
+    
+    activation_triggers.DialogLogic.met_dialogs = game_data["met_dialogs"]
+    
+    engine.Game.general_memory = game_data["game_temp_memory"]
+    
+    entities.Player.tag_inventory = game_data["inventory"]
+    
+            
+    return game_data["to_level"], game_data["from_level"]
+
+
+
+def LoadEverything(file_name) -> dict:
+    """
+        keys binds, audio, languages
+    """
+    with open(f"{file_name}.json", 'r',encoding='utf-8') as settings_file:
+        settings_data = json.load(settings_file)
+        return settings_data
+
+def LoadAudio() -> dict:
+    """
+        keys volume, sounds, music
+    """
+    return LoadEverything("data/settings")["audio"]
+
+def LoadLanguage() -> dict:
+    """
+        string (language)
+    """
+    return LoadEverything("data/settings")["language"]
+
+def LoadNewLanguage(language):
+    new_settings = LoadEverything("data/settings")
+    new_settings["language"] = language
+    Closing(new_settings)
+    
+
+
+def LoadBinds() -> dict:
+    """
+        keys player_forward, player_backward, player_left,
+        player_right, skip_dialog_rendering, next_dialog
+    """
+    return LoadEverything("data/settings")["binds"]
+
+
+
+def LoadNewBinds(bind_id, key_string_val):
+    if type(key_string_val) != str:
+        key_string_val = engine.GetKeyPygameRealName(key_string_val)
+    print(bind_id)
+    binds = LoadEverything("data/settings")
+    binds["binds"][bind_id] = key_string_val
+    Closing(binds)
+    
+    
+    
+    
+
+    
+def Closing(data ,file = "data/settings", mode = "r+"):
+    
+    with open(f"{file}.json", mode) as settings_file:
+        settings_file.seek(0)
+        json.dump(data, settings_file, indent=4, ensure_ascii=False)
+        settings_file.truncate()

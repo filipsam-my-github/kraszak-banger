@@ -80,26 +80,86 @@ class ImageLoader:
         
         for i in range(5):
             for j in ["down","left","up","right"]:
-                kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszaks_heading_{j}/kraszaks_heading_{j}_{i}.png").convert_alpha()
-                
-                cls.images[f"kraszak_heading_{j}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+                for ii in ["kraszak_heading_", "kraszak_lantern_"]:
+                    kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszak/walking/{ii}{j}/{ii}{j}_{i}.png").convert_alpha()
+                    cls.images[f"{ii}{j}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
         
-        for i in ["level_exit", "dialog_trigger", "game_event"]:
+        for i in range(12):
+            kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszak/kraszak_hands_letter//frame_{i+1}.png").convert_alpha()
+            
+            cls.images[f"letter_passing_animation_left_kraszak_{i+1}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+            
+            kraszak_heading_something = pygame.image.load(f"graphics/animations/teacher/teacher_receive_letter//frame_{i+1}.png").convert_alpha()
+            
+            cls.images[f"letter_passing_animation_teacher_{i+1}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+            
+        for i in range(21):
+            kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszak/kraszak_sleeping//frame_{i+1}.png").convert_alpha()
+            
+            cls.images[f"falling_asleep_animation_{i+1}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+            
+            
+        for i in [str(i+1) for i in range(9)]:
+            kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszak/read_letter/frame_{i}.png").convert_alpha()
+
+            
+            cls.images[f"read_letter_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+
+        for i in ["kraszak_sitting", "kraszak_in_chair"]:
+            kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszak/{i}.png").convert_alpha()
+
+            
+            cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+        
+        
+        
+        for i in ["level_exit", "dialog_trigger", "game_event", "box_room", "end_of_the_box_room"]:
             kraszak_heading_something = pygame.image.load(f"graphics//{i}.png").convert_alpha()
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
             
         #forest folder
-        for i in ["fern_flower", "grass", "rocks", "tree"]:
+        for i in ["fern_flower", "grass", "rocks", "rocks_1", "rocks_2", "rocks_3", "rocks_4","firefly_big", "firefly_bug", "firefly_small", "flower_1", "flower_2","rocks_5", "tree", "background_lawn", "flower_3", "flower_4", "short_grass_1", "short_grass_2", "short_grass_3", "tree_dead", "tree_stump"]:
             kraszak_heading_something = pygame.image.load(f"graphics//forest//{i}.png")
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
             
+            
+            
         #school
-        for i in ["school_door", "school_test", "school_floor", "school_wall", "bookshelf_front", "bookshelf_side", "bookshelf_top"]:
+        for i in ["school_door", "school_test", "school_floor", "school_wall", "bookshelf_front", "bookshelf_side", "bookshelf_top", "locked_safe",
+                  "locked_safe", "opened_safe", "safe_background", "scaled_locked_safe", "scaled_locker", "chair", "desk_long", "desk_short", "library_desk_1", "library_desk_2", "library_desk_3", "library_lady_front", "library_lady_front", "potted_palm", "notebook"
+                ]:
             kraszak_heading_something = pygame.image.load(f"graphics//school//{i}.png")
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+        
+        for i in range(20):
+            kraszak_heading_something = pygame.image.load(f"graphics//animations//safe_opening//frame_{i+1}.png")
+                    
+            cls.images[f"opening_of_the_safe_{i+1}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+        
+        for i in ["1","2","3"]:
+            kraszak_heading_something = pygame.image.load(f"graphics//school//paper_pile//paper_pile_{i}.png")
+                    
+            cls.images[f"paper_pile_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+        
+        
+        #paintings
+        for i in ["beauty", "god", "hand", "idk", "mona", "scream"]:
+            kraszak_heading_something = pygame.image.load(f"graphics//paintings//{i}.jpg")
+                    
+            cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+        
+        #other people
+        for i in ["boy_blond_black_sit", "boy_brown_black_front", "boy_brown_black_left", "boy_brown_black_sit",
+                  "boy_brown_white_sit", "boy_ginger_green_sit", "girl_blonde_blue_sit", "girl_blonde_green_sit", "girl_brown_black_front",
+                  "girl_brown_black_left", "girl_brown_black_sit", "library_lady_front", "teacher_front", "teacher_left", "teacher_right"]:
+            kraszak_heading_something = pygame.image.load(f"graphics//other_people//{i}.png")
+                    
+            cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+
+            
         
         for i, name in enumerate(["down","left", "up", "right"]):
             kraszak_heading_something = pygame.image.load(f"graphics//school//school_wall_floor_down.png")
@@ -139,10 +199,14 @@ class ImageLoader:
 
         _boxes_names_in_order = ["wooden_box", "heavy_wooden_box",
                                 "steel_box", "heavy_steel_box",
-                                "golden_box", "heavy_golden_box", ]
+                                "golden_box", "heavy_golden_box"]
 
         for i, name in enumerate(_boxes_names_in_order):
             cls.images[name] = cls._MAP_ASSET.subsurface(pygame.Rect(i * cls._standard_size_of_image_width, cls._standard_size_of_image_height * 5, cls._standard_size_of_image_width, cls._standard_size_of_image_height)).copy()
+        
+        for i, name in enumerate(["off","bad", "on"]):
+            cls.images[f"cursor_{name}"] = pygame.image.load(f"graphics//cursor//cursor_{name}.png")
+        
 
         cls._MOBS_ASSET = None #free memory that is not needed anymore
         cls._MAP_ASSET = None

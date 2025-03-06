@@ -5,34 +5,6 @@ kraszak_heading_right_1 1 6 hallway_library_math_class
 level_exit 0 6 hallway_library_math_class
 level_exit 0 3 hallway_library_math_class
 level_exit 0 9 hallway_library_math_class
-heavy_golden_box 3 -3 
-heavy_golden_box 3 0 
-heavy_golden_box 3 9 
-heavy_golden_box 3 12 
-heavy_golden_box 5 9 
-heavy_golden_box 5 12 
-heavy_golden_box 7 9 
-heavy_golden_box 7 12 
-heavy_golden_box 9 9 
-heavy_golden_box 9 12 
-heavy_golden_box 9 -3 
-heavy_golden_box 9 0 
-heavy_golden_box 7 -3 
-heavy_golden_box 7 0 
-heavy_golden_box 5 -3 
-heavy_golden_box 5 0 
-player2 1 0 static
-player6 6 0 static
-zombiee 6 -3 static
-dark_knight 4 -3 static
-player4 8 -3 
-player1 10 0 static
-player5 10 -3 
-skeleton 4 9 static
-blue_bat 6 9 static
-player4 6 12 static
-player1 10 12 static
-level_exit 2 -3 dream_forest
 school_wall_floor_right 0 0 
 school_wall_floor_right 0 -2 
 school_wall_floor_right 0 -4 
@@ -68,17 +40,39 @@ school_wall_floor_up 4 16
 school_wall_floor_up 3 16 
 school_wall_floor_up 2 16 
 school_wall_floor_left 11 14 
-school_wall 0 -6 
 school_wall 0 16 
 school_wall 11 16 
 school_wall 11 -6 
-meth_man 8 0 
-dialog_trigger 2 9 math_test_and_youre_late
-dialog_trigger 2 6 math_test_and_youre_late
-dialog_trigger 1 3 math_test_and_youre_late
-dialog_trigger 1 12 math_test_and_youre_late
-game_event 8 9 cut_scene_and_the_dream
-game_event 10 9 cut_scene_and_the_dream
+kraszak_heading_left_0 4 13 dream_forest1
+kraszak_heading_left_0 8 13 dream_forest2
+kraszak_heading_left_0 8 7 dream_forest3
+kraszak_heading_left_0 10 7 dream_forest4
+desk_long 3 -2 
+chair 4 0 
+desk_long 9 10 
+desk_long 7 10 
+desk_long 5 10 
+desk_long 3 10 
+boy_ginger_green_sit 4 -3 sorry_occupied
+desk_long 5 -2 
+desk_long 7 -2 
+desk_long 9 -2 
+girl_blonde_blue_sit 6 -1 sorry_occupied
+girl_brown_black_sit 8 -1 sorry_occupied
+girl_blonde_blue_sit 8 -3 sorry_occupied
+girl_blonde_green_sit 6 -3 sorry_occupied
+boy_brown_white_sit 10 -1 sorry_occupied
+boy_brown_black_sit 10 -3 sorry_occupied
+boy_blond_black_sit 4 9 I_know_but_for_price
+girl_blonde_green_sit 6 11 sorry_occupied
+girl_blonde_blue_sit 6 9 sorry_occupied
+teacher_right 1 0 teacher_dialog_math
+girl_brown_black_sit 10 11 sorry_occupied
+school_wall 0 -6 
+chair 4 12 
+chair 8 12 
+chair 8 10 
+chair 10 10 
 school_floor 0 2 
 school_floor 0 4 
 school_floor 0 6 
@@ -95,22 +89,13 @@ school_floor 8 14
 school_floor 9 14 
 school_floor 10 14 
 school_floor 10 12 
-school_floor 9 12 
 school_floor 7 12 
-school_floor 6 12 
-school_floor 5 12 
-school_floor 3 12 
 school_floor 2 12 
 school_floor 1 12 
 school_floor 1 10 
 school_floor 2 10 
-school_floor 3 10 
 school_floor 4 10 
-school_floor 5 10 
-school_floor 6 10 
-school_floor 7 10 
 school_floor 8 10 
-school_floor 9 10 
 school_floor 10 10 
 school_floor 10 8 
 school_floor 9 8 
@@ -140,7 +125,6 @@ school_floor 6 4
 school_floor 5 4 
 school_floor 4 4 
 school_floor 3 4 
-school_floor 2 4 
 school_floor 1 4 
 school_floor 1 3 
 school_floor 1 2 
@@ -153,20 +137,9 @@ school_floor 7 2
 school_floor 8 2 
 school_floor 9 2 
 school_floor 10 2 
-school_floor 10 0 
-school_floor 6 0 
 school_floor 2 0 
-school_floor 1 0 
 school_floor 1 -2 
-school_floor 2 -2 
-school_floor 3 -2 
-school_floor 4 -2 
 school_floor 5 -2 
-school_floor 6 -2 
-school_floor 7 -2 
-school_floor 8 -2 
-school_floor 9 -2 
-school_floor 10 -2 
 school_floor 9 -4 
 school_floor 10 -4 
 school_floor 8 -4 
@@ -177,10 +150,55 @@ school_floor 4 -4
 school_floor 3 -4 
 school_floor 2 -4 
 school_floor 1 -4 
-school_floor 8 0 
 school_floor 4 12 
+school_floor 8 12 
+school_floor 4 0 
+school_floor 3 -2 
+school_floor 3 0 
+school_floor 7 10 
+school_floor 5 10 
+school_floor 5 12 
+school_floor 3 10 
+school_floor 3 12 
+school_floor 10 -2 
+school_floor 10 0 
+school_floor 9 -2 
+school_floor 9 0 
+school_floor 8 -2 
+school_floor 8 0 
+school_floor 7 -2 
+school_floor 7 0 
+school_floor 6 0 
+school_floor 5 0 
+school_floor 4 -2 
+school_floor 6 -2 
+school_floor 6 12 
+school_floor 6 10 
+school_floor 1 0 
+school_floor 2 -2 
+school_floor 9 10 
+school_floor 9 12 
+school_floor 2 4 
+dialog_trigger 2 9 math_test_and_youre_late
+dialog_trigger 2 6 math_test_and_youre_late
+dialog_trigger 1 3 math_test_and_youre_late
+dialog_trigger 1 12 math_test_and_youre_late
+game_event 8 9 cut_scene_and_the_dream
+game_event 10 9 cut_scene_and_the_dream
 game_event 4 12 cut_scene_and_the_dream
 game_event 8 12 cut_scene_and_the_dream
-school_floor 8 12 
 dialog_trigger 4 0 wait_dont_sit_here
-school_floor 4 0 
+dialog_trigger 10 9 solve_math
+dialog_trigger 8 9 solve_math
+dialog_trigger 8 12 solve_math
+dialog_trigger 4 12 solve_math
+game_event 2 14 ending_of_act0
+game_event 3 7 ending_of_act0
+game_event 3 5 ending_of_act0
+game_event 3 2 ending_of_act0
+box_room 0 -6 12x24
+game_event 2 0 ending_subtitles
+game_event 2 2 ending_subtitles
+game_event 1 4 ending_subtitles
+game_event 2 4 ending_subtitles
+game_event 1 -1 ending_subtitles

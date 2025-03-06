@@ -10,9 +10,18 @@ class ClearPygameKeyboard:
     def __getitem__(self, key):
         return False
 
+def ReadValBoolOrKeys(last_keys, key_val):
+    if type(last_keys) == bool:
+        return last_keys
+    return last_keys[key_val]
+
 
 def IsDown(last_keys, current_keys, key_val):
-    return last_keys[key_val] != current_keys[key_val] and current_keys[key_val] == True
+
+    return ReadValBoolOrKeys(last_keys, key_val) != ReadValBoolOrKeys(current_keys, key_val) and ReadValBoolOrKeys(current_keys, key_val) == True
 
 def IsUp(last_keys, current_keys, key_val):
-    return last_keys[key_val] != current_keys[key_val] and last_keys[key_val] == True
+    
+    return ReadValBoolOrKeys(last_keys, key_val) != ReadValBoolOrKeys(current_keys, key_val) and ReadValBoolOrKeys(last_keys, key_val) == True
+
+

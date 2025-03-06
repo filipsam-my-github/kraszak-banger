@@ -1,3 +1,4 @@
+from __future__ import annotations
 from abc import ABC , abstractmethod
 import pygame, os, sys, texts_handler
 import keys_vals
@@ -9,8 +10,11 @@ import camera
 import audio_handler
 import math
 import json_interpreter
-
-
+import activation_triggers
+import game_events
+import game_states
+import engine
+from typing import TYPE_CHECKING
 class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
     """
     Represents a player entity in the game, inheriting from `PhysicsCollider`.
@@ -32,9 +36,6 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
     HITBOX = False    
     NO_CLIP = True
     
-    met_dialogs = []
-    met_events = []
-    
     forward = pygame.K_w
     backward = pygame.K_s
     left = pygame.K_a
@@ -43,7 +44,11 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
     
     music_fading = False
     
+    tag_inventory = ["funny_thing", "prawn", "secret_key", "money", "stick", "copper_coin"]
+    
     def __init__(self, x_cord, y_cord) -> object:
+        self.player_id = "reg"
+        
         self.image_name = f"kraszak_heading_down_1"
 
         self._ROOT_SPEED = 120
@@ -63,11 +68,10 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         self.rect = pygame.Rect(self.x_cord, self.y_cord, 14*graphic_handler.ImageLoader.GetScalingMultiplier()[0], 11*graphic_handler.ImageLoader.GetScalingMultiplier()[1])
 
         self.plot_state = 0#how far is player in plot of this game might be helpful when dialog is going to be after certain event but not before
-        self.met_events = []
-        self.met_dialogs = []
         
         # fix circulation and segregate scripts in reasonable order
-        self.inventory = json_interpreter.ReadItems(activation_triggers.Dialog.language,["funny_thing", "prawn", "secret_key", "money", "stick", "copper_coin"])
+        
+        self.translated_inventory = json_interpreter.ReadItems(activation_triggers.Dialog.language, Player.tag_inventory)
         
         self.gui_image = False
         
@@ -75,13 +79,18 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         self.x_cord_for_animation = self.x_cord
         self.y_cord_for_animation = self.y_cord
         
+        self.walking_style = "heading"
+        
         
         self.show_inventory = False
-        self.inventory_gui = gui.InventoryGui(self.inventory)
+        self.inventory_gui = gui.InventoryGui(self.translated_inventory)
         
         self.last_keys = keys_vals.ClearPygameKeyboard()
 
         super().__init__(movement_strength=26)
+    
+    def GetImageCords(self):
+        return self.x_cord + self._skin_x, self.y_cord + self._skin_y
     
     def __SpeedUpdate(self):
         return (self._ROOT_SPEED + self.speed_bonuses) * self.speed_multiplier
@@ -90,8 +99,18 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         """
             used formula https://www.toppr.com/guides/maths/introduction-to-three-dimensional-geometry/distance-between-two-points/
         """
-        return math.sqrt((self.x_cord-point_x_cord)**2+(self.y_cord-point_y_cord)**2)
+        return math.sqrt((self.rect.centerx-point_x_cord)**2+(self.rect.centery-point_y_cord)**2)
 
+    def AddToInventory(self, obj_tag_name):
+        Player.tag_inventory.append(obj_tag_name)
+        self.translated_inventory = json_interpreter.ReadItems(activation_triggers.Dialog.language, self.tag_inventory)
+        self.inventory_gui = gui.InventoryGui(self.translated_inventory)
+        
+    def DeleteToInventory(self, obj_tag_name):
+        self.tag_inventory.remove(obj_tag_name)
+        self.translated_inventory = json_interpreter.ReadItems(activation_triggers.Dialog.language, self.tag_inventory)
+        self.inventory_gui = gui.InventoryGui(self.translated_inventory)
+            
 
     def Tick(self, keys, dt):
         """
@@ -160,7 +179,7 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
 
         
     def UpdateInventory(self):
-        self.inventory_gui = gui.InventoryGui(self.inventory)
+        self.inventory_gui = gui.InventoryGui(self.translated_inventory)
     
     def MoveForAnimation(self,x_speed = 0, y_speed = 0):      
         old_x_cord = self.x_cord
@@ -215,11 +234,25 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
             elif cords_differences[1] < 0:
                 self.SetPlayersDirection("up")
         elif cords_differences[0] != 0:
-            if self.movement_vector[0] > 0:
-                self.SetPlayersDirection("right")
-            elif self.movement_vector[0] < 0:
+            if cords_differences[0] > 0:
                 self.SetPlayersDirection("left")
+            elif cords_differences[0] < 0:
+                self.SetPlayersDirection("right")
                 
+        
+        if cords_differences == (0,0):#if cords_differences are 0,0 and movement_vector is not (0,0) that means that player entirely was stopped by something and player vector has been flipped by something 
+            if self.movement_vector[1] != 0:
+                if self.movement_vector[1] > 0:
+                    self.SetPlayersDirection("down")
+                elif self.movement_vector[1] < 0:
+                    self.SetPlayersDirection("up")
+            elif self.movement_vector[0] != 0:
+                if self.movement_vector[0] < 0:
+                    self.SetPlayersDirection("left")
+                elif self.movement_vector[0] > 0:
+                    self.SetPlayersDirection("right")
+        
+
                 
                 
     
@@ -257,6 +290,13 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
                 `player.AnimationTick(dt)`
         """
         
+        new_image_name = self.image_name.split("_")
+        new_image_name[1] = engine.Game.general_memory["kraszak_skin"]
+        self.image_name = "_".join(new_image_name)
+        
+                
+        
+        
         are_cords_different = not (self.x_cord_for_animation == self.x_cord and self.y_cord_for_animation == self.y_cord)
         self.__AnimationSetDirectionUpdate()
         if (self.movement_vector[0] != 0 or self.movement_vector[1] != 0) and are_cords_different:
@@ -271,10 +311,10 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         
     
     def AddMetEvent(self, name_of_the_event:str):
-        self.met_events.append(name_of_the_event)
+        game_events.EventsLogic.met_events.append(name_of_the_event)
     
     def AddMetDialog(self, name_of_the_dialog:str):
-        self.met_dialogs.append(name_of_the_dialog)
+        activation_triggers.DialogLogic.met_dialogs.append(name_of_the_dialog)
         
         
             
@@ -316,24 +356,34 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         if self.show_inventory:
             self.inventory_gui.Draw(screen)
     
+        
+    
     def GetImageSize(self) -> tuple[int,int]:
         return graphic_handler.ImageLoader.images[self.image_name].get_size()
 
+    def __eq__(self, other):
+        if not isinstance(other, Player):
+            return NotImplemented
+        return self.player_id == other.player_id
 
-class Npc(solid_blocks.PhysicsCollider, camera.CameraDrawable):
-    ALL_NPC_NAMES = ["zombiee", "skeleton", "dark_knight", "meth_man", "cyclop",
-                                "blue_bat", "green_bat", "cyan_bat", "red_bat"]
+    def __hash__(self):
+        return hash(self.player_id)
+
+    def __lt__(self, other):
+        if not isinstance(other, Player):
+            return NotImplemented
+        return self.y_cord < other.y_cord
     
-    for i in range(7):
-        ALL_NPC_NAMES.append(f"player{i}")
-        
+
+
+
+class Npc(solid_blocks.PhysicsCollider, camera.CameraDrawable, ABC):
     HITBOX = False
     COLOR = (207, 173, 62)
     
-    
-    def __init__(self, image_name ,x_cord, y_cord, movement_strength):
-        image_skin_cord_x = 5
-        image_skin_cord_y = 7
+    def __init__(self, image_name ,x_cord, y_cord, movement_strength, rectx, recty, rect_width, rect_height, dialog_activator=""):
+        image_skin_cord_x = rectx
+        image_skin_cord_y = recty
         
         self._skin_x = -graphic_handler.ImageLoader.GetScalingMultiplier()[0]*image_skin_cord_x
         self._skin_y = -graphic_handler.ImageLoader.GetScalingMultiplier()[1]*image_skin_cord_y
@@ -342,10 +392,22 @@ class Npc(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         y_cord += -self._skin_y
        
        
-        super().__init__(pygame.Rect(x_cord+image_skin_cord_x, y_cord+image_skin_cord_y, 7*graphic_handler.ImageLoader.GetScalingMultiplier()[0], 8*graphic_handler.ImageLoader.GetScalingMultiplier()[1]), x_cord+image_skin_cord_x, y_cord+image_skin_cord_y, movement_vector=[0,0], movement_strength=movement_strength)
+        super().__init__(pygame.Rect(x_cord+image_skin_cord_x, y_cord+image_skin_cord_y, rect_width*graphic_handler.ImageLoader.GetScalingMultiplier()[0], rect_height*graphic_handler.ImageLoader.GetScalingMultiplier()[1]), x_cord+image_skin_cord_x, y_cord+image_skin_cord_y, movement_vector=[0,0], movement_strength=movement_strength)
         
 
         self.image_name = image_name
+        
+        self.dialog_rect = pygame.Rect(
+                self.x_cord + self._skin_x,
+                self.y_cord + self._skin_y,
+                self.GetImageSize()[0],
+                self.GetImageSize()[1]+5)
+
+        self.dialog_activator = dialog_activator
+        self.dialog_event: activation_triggers.Dialog = None
+        self.old_key = False
+        
+        
     
     def Draw(self, screen, x_cord = None, y_cord = None, width_scaling = 1, height_scaling = 1):
         """
@@ -366,12 +428,73 @@ class Npc(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         
         graphic_handler.ImageLoader.DrawImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
         if Player.HITBOX:
+            pygame.draw.rect(screen, (230,50,50),
+                            (
+                                x_cord + self._skin_x*width_scaling,
+                                y_cord + self._skin_y*height_scaling,
+                                self.dialog_rect.width*width_scaling,
+                                self.dialog_rect.height*height_scaling
+                            ),
+                             width=2)
             pygame.draw.rect(screen, (230,50,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
+        
+        if self.dialog_event:
+            self.dialog_event.Draw(screen)
     
+    def Tick(self, game:game_states.Gameplay, keys):
+        if self.dialog_activator != "" and keys_vals.IsDown(self.old_key ,keys, activation_triggers.Dialog.NEXT_DIALOG) and not activation_triggers.DialogLogic.CheckIfIsCooldown():
+            if game.player.rect.colliderect(self.dialog_rect):
+                activation_triggers.DialogLogic.CastCooldown()
+                self.dialog_event = activation_triggers.DialogLogic.CreateDialog(self.dialog_activator, (game.player.x_cord, game.player.y_cord))
+        self.old_key = keys[activation_triggers.Dialog.NEXT_DIALOG]
+        
+
+        if self.dialog_event:
+            self.dialog_event.Tick(game.player)
     
     def GetImageSize(self) -> tuple[int,int]:
         return graphic_handler.ImageLoader.images[self.image_name].get_size()
 
     
-    def GetImageCords():
-        return 
+    
+    def GetImageCords(self):
+        return self.x_cord + self._skin_x, self.y_cord + self._skin_y
+    
+class DungeonNpc(Npc):
+    ALL_NPC_NAMES = ["zombiee", "skeleton", "dark_knight", "meth_man", "cyclop",
+                                "blue_bat", "green_bat", "cyan_bat", "red_bat"]
+    
+    
+    def __init__(self, image_name ,x_cord, y_cord, movement_strength):
+        super().__init__(image_name ,x_cord, y_cord, movement_strength, 5, 7, 7, 8)
+    
+
+
+class AdultNpc(Npc):
+    ALL_NPC_NAMES = ["library_lady_front", "teacher_front", "teacher_left", "teacher_right"]
+    
+    
+    def __init__(self, image_name ,x_cord, y_cord, movement_strength, dialog = ""):
+        super().__init__(image_name ,x_cord, y_cord, movement_strength, 1, 19, 14, 13, dialog)
+        
+
+class ClassmateNpc(Npc):
+    ALL_NPC_NAMES = ["boy_brown_black_front", "boy_brown_black_left", "girl_brown_black_front",
+                  "girl_brown_black_left"]
+    
+    for i in range(7):
+        ALL_NPC_NAMES.append(f"player{i}")
+
+    
+    
+    def __init__(self, image_name ,x_cord, y_cord, movement_strength, dialog = ""):
+        super().__init__(image_name ,x_cord, y_cord, movement_strength, 3, 13, 10, 11, dialog)
+        
+
+class SittingClassmateNpc(Npc):
+    ALL_NPC_NAMES = ["boy_blond_black_sit", "boy_brown_black_sit","boy_brown_white_sit", "boy_ginger_green_sit", 
+                     "girl_blonde_blue_sit", "girl_blonde_green_sit", "girl_brown_black_sit"]
+    
+    
+    def __init__(self, image_name ,x_cord, y_cord, movement_strength, dialog = ""):
+        super().__init__(image_name ,x_cord, y_cord, movement_strength, 2, 15, 9, 9, dialog)
