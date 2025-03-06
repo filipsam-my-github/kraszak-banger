@@ -26,7 +26,7 @@ import cursor
 
 
 
-
+GAME_NAME = "kraszak the game (beta 0.1a)"
 
 
 MONITOR_SIZE = screen_size()
@@ -46,6 +46,7 @@ class ShaderScreen:
     def __init__(self, vert_shader=None, frag_shader=None):
         self.gl_screen = pygame.display.set_mode((640, 360), pygame.OPENGL | pygame.DOUBLEBUF | pygame.RESIZABLE)
         self.screen = pygame.Surface((640, 360))
+        pygame.display.set_caption(GAME_NAME)
 
         self.screen.fill((255, 0, 0))
 
