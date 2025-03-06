@@ -34,7 +34,7 @@ vec2 get_firefly_position_horizontal(float id, float time) {
     return vec2(baseX + spiralX, baseY + spiralY) / SCREEN_SIZE;
 }
 
-vec2 getFireflyPositionVertical(float id, float time) {
+vec2 get_firefly_position_vertical(float id, float time) {
     bool from_left = id < NUM_FIREFLIES_VERTICAL / 2;
     float baseX = from_left ? 0.0 : SCREEN_SIZE.x;
     float baseY = mod(id, 9.0) / 9.0 * SCREEN_SIZE.y + rand(vec2(id, 0.0)) * SCREEN_SIZE.y * 0.1;
@@ -97,7 +97,7 @@ void main() {
 
     for (int i = 0; i < NUM_FIREFLIES_VERTICAL; i++) {
         float id = float(i);
-        vec2 fireflyPos = getFireflyPositionVertical(id, time);
+        vec2 fireflyPos = get_firefly_position_vertical(id, time);
         float distance = length(uvs - fireflyPos);
         float intensity = exp(-pow(distance * 15.0, 2.0)) * 1.2;
         float witherEffect = sin(time * 3.0 + id) * 0.5 + 0.5;

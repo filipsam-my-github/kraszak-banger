@@ -158,10 +158,19 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     blocks.append(solid_blocks.SchoolWall(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "None"))
                 case "bookshelf_front":
                     blocks.append(solid_blocks.BookshelfFront(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "bookshelf_front_1_dark":
+                    blocks.append(solid_blocks.BookshelfFront(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "1_dark"))
+                case "bookshelf_front_2_dark":
+                    blocks.append(solid_blocks.BookshelfFront(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "2_dark"))
                 case "bookshelf_top":
                     blocks.append(solid_blocks.BookshelfTop(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "bookshelf_top_dark":
+                    blocks.append(solid_blocks.BookshelfTop(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "dark"))
                 case "bookshelf_side":
                     blocks.append(solid_blocks.BookshelfSide(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "bookshelf_side_dark":
+                    blocks.append(solid_blocks.BookshelfSide(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "dark"))
+                
                 
                 case "chair":
                     blocks.append(solid_blocks.Chair(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
@@ -175,9 +184,35 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     blocks.append(solid_blocks.LibraryDesk(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2))
                 case "library_desk_3":
                     blocks.append(solid_blocks.LibraryDesk(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3))
+                case "bench":
+                    blocks.append(solid_blocks.Bench(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "planter_box_1":
+                    blocks.append(solid_blocks.PlanterBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1))
+                case "planter_box_2":
+                    blocks.append(solid_blocks.PlanterBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2))
+                case "planter_box_3":
+                    blocks.append(solid_blocks.PlanterBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3))
+                case "planter_box_4":
+                    blocks.append(solid_blocks.PlanterBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 4))
+                case "wall":
+                    blocks.append(solid_blocks.Wall(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "wall_left":
+                    blocks.append(solid_blocks.Wall(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "left"))
+                case "wall_right":
+                    blocks.append(solid_blocks.Wall(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "right"))
+                    
+                    
                 
                 case "potted_palm":
                     blocks.append(solid_blocks.PottedPalm(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "pot":
+                    blocks.append(solid_blocks.BiggerPot(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "potted_flower_1":
+                    blocks.append(solid_blocks.BiggerPot(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "flower_1"))
+                case "potted_flower_2":
+                    blocks.append(solid_blocks.BiggerPot(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "flower_2"))
+                case "potted_flower_3":
+                    blocks.append(solid_blocks.BiggerPot(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "flower_3"))
                     
                 case "school_floor":
                     ghost_blocks.append(noclip_blocks.SchoolPlanksFloor(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
@@ -211,6 +246,24 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     ghost_blocks.append(noclip_blocks.RegFlower(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3))
                 case "flower_4":
                     ghost_blocks.append(noclip_blocks.RegFlower(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 4))
+                case "path_center":
+                    ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "center"))
+                case "path_down_left":
+                    ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "down_left"))
+                case "path_down_right":
+                    ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "down_right"))
+                case "path_down":
+                    ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "down"))
+                case "path_left":
+                    ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "left"))
+                case "path_right":
+                    ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "right"))
+                case "path_up_right":
+                    ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "up_right"))
+                case "path_up_left":
+                    ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "up_left"))
+                case "path_up":
+                    ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "up"))
                     
                 case "apple":
                     interactable.append(noclip_blocks.Apple(float(local_data[1])*scale_x, float(local_data[2])*scale_y))

@@ -1,14 +1,11 @@
 #!#Scale#@# 64 32
 #!#vertex_shaders#@# vertex_shaders\vert_normal.glsl
 #!#fragment_shaders#@# fragment_shaders\frag_normal.glsl
-school_wall_floor_down 8 0 
 school_wall_floor_down 5 0 
 school_wall_floor_down 4 0 
 school_wall_floor_down 3 0 
 school_wall_floor_down 2 0 
 school_wall_floor_right 1 2 
-school_wall_floor_down 9 0 
-school_wall_floor_down 10 0 
 school_wall_floor_left 11 2 
 school_wall_floor_left 11 4 
 school_wall_floor_left 11 6 
@@ -57,8 +54,6 @@ chair 10 11
 chair 10 13 
 chair 8 11 
 chair 8 13 
-potted_palm 2 15 
-library_lady_front 2 12 feeling_it_is_out_side
 level_exit 7 -1 hallway_library_math_class
 level_exit 6 -1 hallway_library_math_class
 paper_pile_3 5 7 
@@ -66,6 +61,12 @@ desk_long 9 11
 paper_pile_1 9 12 
 kraszak_heading_down_0 6 1 hallway_library_math_class
 school_wall 1 0 
+potted_flower_3 2 14 
+potted_flower_2 3 14 
+school_wall_floor_down 10 0 
+school_wall_floor_down 9 0 
+school_wall_floor_down 8 0 
+teacher_ginger_red_front 2 12 feeling_it_is_out_side
 school_floor 7 0 
 school_floor 5 2 
 school_floor 5 4 
@@ -75,7 +76,6 @@ school_floor 7 16
 school_floor 6 16 
 school_floor 5 16 
 school_floor 4 16 
-school_floor 3 16 
 school_floor 3 14 
 school_floor 4 14 
 school_floor 5 14 
@@ -91,7 +91,6 @@ school_floor 6 12
 school_floor 5 12 
 school_floor 4 12 
 school_floor 3 12 
-school_floor 2 12 
 school_floor 2 10 
 school_floor 4 10 
 school_floor 5 10 
@@ -131,7 +130,6 @@ school_floor 3 10
 school_floor 2 16 
 school_floor 2 14 
 school_floor 6 0 
-school_floor 10 16 
 school_floor 10 2 
 school_floor 9 14 
 school_floor 10 3 
@@ -141,4 +139,10 @@ school_floor 7 4
 school_floor 8 4 
 school_floor 8 2 
 school_floor 7 2 
+school_floor 3 16 
+school_floor 2 12 
+school_floor 10 17 
+school_floor 10 16 
 box_room 1 0 11x20
+shelf_3 5 0 
+shelf_1 9 0 

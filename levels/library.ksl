@@ -23,7 +23,6 @@ school_wall_floor_right 3 -13
 school_wall_floor_down 4 -15 
 school_wall_floor_down 5 -15 
 school_wall_floor_down 6 -15 
-school_wall_floor_down 7 -15 
 school_wall_floor_down 8 -15 
 school_wall_floor_down 9 -15 
 school_wall_floor_down 10 -15 
@@ -49,39 +48,10 @@ school_wall_floor_up 4 15
 school_wall_floor_up 5 15 
 school_wall 3 15 
 school_wall 12 -15 
-bookshelf_front 5 -4 
-bookshelf_front 6 -4 
-bookshelf_front 7 -4 
-bookshelf_front 8 -4 
-bookshelf_front 9 -4 
-bookshelf_front 8 -8 
-bookshelf_front 9 -8 
-bookshelf_front 10 -8 
-bookshelf_front 5 3 
-bookshelf_front 6 3 
-bookshelf_front 8 3 
-bookshelf_front 9 3 
-bookshelf_front 10 3 
-bookshelf_front 9 8 
-bookshelf_front 10 8 
-bookshelf_front 5 10 
-bookshelf_front 6 10 
-bookshelf_front 8 -12 
-bookshelf_front 9 -12 
-bookshelf_top 11 -3 
-bookshelf_side 11 -1 
-bookshelf_top 11 -10 
-bookshelf_side 11 -8 
-bookshelf_top 11 -12 
-bookshelf_top 11 -13 
-bookshelf_top 4 6 
-bookshelf_side 4 9 
-bookshelf_top 4 8 
 locked_safe 4 -13 library_safe
 library_desk_2 6 -9 
 library_desk_3 5 -9 
 boy_brown_black_front 11 6 libbrary_kid_black
-girl_brown_black_left 5 9 left_bottom_corner
 girl_brown_black_left 6 6 
 library_lady_front 5 -12 librarian
 school_wall 12 15 
@@ -93,15 +63,41 @@ school_wall 5 17
 school_wall 4 17 
 school_wall 3 17 
 school_wall 3 -15 
+school_wall_floor_down 7 -15 
+bookshelf_front_1_dark 11 -14 
+bookshelf_front_2_dark 10 -14 
+bookshelf_front 11 -8 
+bookshelf_front 10 -8 
+bookshelf_front 9 -8 
+bookshelf_front 4 -3 
+bookshelf_front 5 -3 
+bookshelf_front 6 -3 
+bookshelf_front 4 -7 
+girl_brown_black_front 6 0 left_bottom_corner
+bookshelf_front 6 3 
+bookshelf_front 5 3 
+bookshelf_front 4 3 
+bookshelf_front 8 -4 
+bookshelf_front 9 -3 
+bookshelf_front 10 -2 
+bookshelf_front 11 -1 
+bookshelf_front 11 4 
+bookshelf_front 10 4 
+bookshelf_front 9 4 
+bookshelf_side_dark 4 10 
+bookshelf_side_dark 4 11 
+bookshelf_side_dark 4 12 
+bookshelf_front_1_dark 11 10 
+bookshelf_front_2_dark 10 10 
+bookshelf_front_1_dark 9 10 
+bookshelf_front_2_dark 8 10 
 school_floor 8 13 
 school_floor 7 13 
 school_floor 6 13 
 school_floor 5 13 
 school_floor 4 13 
-school_floor 4 11 
 school_floor 7 11 
 school_floor 8 11 
-school_floor 11 11 
 school_floor 11 9 
 school_floor 11 7 
 school_floor 11 5 
@@ -112,18 +108,13 @@ school_floor 6 7
 school_floor 7 7 
 school_floor 8 7 
 school_floor 9 7 
-school_floor 10 5 
 school_floor 9 5 
 school_floor 8 5 
 school_floor 7 5 
 school_floor 6 5 
 school_floor 4 5 
-school_floor 6 3 
 school_floor 7 3 
-school_floor 8 3 
-school_floor 9 3 
 school_floor 11 3 
-school_floor 11 1 
 school_floor 10 1 
 school_floor 9 1 
 school_floor 8 1 
@@ -137,8 +128,6 @@ school_floor 6 -1
 school_floor 7 -1 
 school_floor 8 -1 
 school_floor 9 -1 
-school_floor 10 -1 
-school_floor 11 -1 
 school_floor 10 -3 
 school_floor 11 -5 
 school_floor 10 -5 
@@ -146,26 +135,19 @@ school_floor 9 -5
 school_floor 8 -5 
 school_floor 7 -5 
 school_floor 6 -5 
-school_floor 4 -5 
 school_floor 4 -3 
 school_floor 4 -7 
 school_floor 5 -7 
 school_floor 6 -7 
 school_floor 7 -7 
-school_floor 9 -7 
-school_floor 10 -7 
 school_floor 10 -9 
-school_floor 9 -9 
 school_floor 7 -9 
 school_floor 4 -11 
 school_floor 6 -11 
 school_floor 7 -11 
-school_floor 9 -11 
-school_floor 11 -11 
 school_floor 10 -13 
 school_floor 9 -13 
 school_floor 8 -13 
-school_floor 7 -13 
 school_floor 6 -13 
 school_floor 5 -13 
 school_floor 4 -13 
@@ -177,17 +159,10 @@ school_floor 7 17
 school_floor 8 17 
 school_floor 5 -5 
 school_floor 8 -9 
-school_floor 5 3 
 school_floor 5 5 
-school_floor 5 9 
 school_floor 10 7 
-school_floor 10 3 
 school_floor 4 3 
-school_floor 9 11 
-school_floor 10 11 
-school_floor 11 13 
 school_floor 10 -11 
-school_floor 8 -11 
 school_floor 9 13 
 school_floor 10 13 
 school_floor 5 -9 
@@ -195,6 +170,36 @@ school_floor 6 -9
 school_floor 4 -9 
 school_floor 5 7 
 school_floor 5 -11 
+school_floor 7 -13 
+school_floor 10 3 
+school_floor 9 3 
+school_floor 8 3 
+school_floor 6 3 
+school_floor 5 3 
+school_floor 5 11 
+school_floor 6 11 
+school_floor 9 9 
+school_floor 10 9 
+school_floor 11 -1 
+school_floor 11 -3 
+school_floor 8 -3 
+school_floor 7 -3 
+school_floor 6 -3 
+school_floor 5 -3 
+school_floor 11 -9 
+school_floor 11 -11 
+school_floor 11 -13 
+school_floor 9 -11 
+school_floor 8 -11 
+school_floor 8 -7 
+school_floor 4 -4 
+school_floor 4 7 
+school_floor 4 9 
+school_floor 4 11 
+school_floor 5 9 
+school_floor 11 2 
+school_floor 9 -9 
+school_floor 11 13 
 game_event 7 9 letter_from_father
 game_event 8 6 letter_from_father
 game_event 6 6 letter_from_father
@@ -206,3 +211,8 @@ game_event 5 -13 you_fond_notebook
 dialog_trigger 5 -13 you_fond_notebook
 game_event 5 -11 you_fond_notebook
 dialog_trigger 5 -11 you_fond_notebook
+shelf_1 9 -15 
+shelf_2 8 -15 
+shelf_3 5 -15 
+shelf_3 6 -15 
+game_event 7 7 tutorial

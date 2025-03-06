@@ -418,37 +418,95 @@ class FernFlower(Block):
         super().__init__(x_cord, y_cord, "fern_flower", float('inf'), (2, 15), (10, 12))
 
 class BookshelfTop(Block):
-    def __init__(self, x_cord, y_cord):
-        super().__init__(x_cord, y_cord, "bookshelf_top", float('inf'))
+    def __init__(self, x_cord, y_cord, look_type=""):
+        if look_type != "":
+            look_type = "_" + look_type
+        super().__init__(x_cord, y_cord, f"bookshelf_top{look_type}", float('inf'))
 
 class BookshelfSide(Block):
-     def __init__(self, x_cord, y_cord):
-        super().__init__(x_cord, y_cord, "bookshelf_side", float('inf'), (0,8),(16,16))
+     def __init__(self, x_cord, y_cord, look_type=""):
+        if look_type != "":
+            look_type = "_" + look_type
+         
+        super().__init__(x_cord, y_cord, f"bookshelf_side{look_type}", float('inf'), (0,8),(16,16))
 
 class BookshelfFront(Block):
-    def __init__(self, x_cord, y_cord):
-       super().__init__(x_cord, y_cord, "bookshelf_front", float('inf'), (0, 16), (16,8))
+    def __init__(self, x_cord, y_cord, look_type=""):
+        if look_type != "":
+            look_type = "_" + look_type
+        
+        super().__init__(x_cord, y_cord, f"bookshelf_front{look_type}", float('inf'), (0, 16), (16,8))
 
 class Chair(Block):
     def __init__(self, x_cord, y_cord):
-       super().__init__(x_cord, y_cord, "chair", float('inf'), (2, 8), (9,7))
+        super().__init__(x_cord, y_cord, "chair", float('inf'), (2, 8), (9,7))
        
 class LongDesk(Block):
     def __init__(self, x_cord, y_cord):
-       super().__init__(x_cord, y_cord, "desk_long", float('inf'), (2, 3), (12,28))
+        super().__init__(x_cord, y_cord, "desk_long", float('inf'), (2, 3), (12,28))
        
 class Desk(Block):
     def __init__(self, x_cord, y_cord):
-       super().__init__(x_cord, y_cord, "desk_short", float('inf'), (2, 2), (12,14))
+        super().__init__(x_cord, y_cord, "desk_short", float('inf'), (2, 2), (12,14))
 
 class LibraryDesk(Block):
     def __init__(self, x_cord, y_cord, variant):
-       super().__init__(x_cord, y_cord, f"library_desk_{variant}", float('inf'), (0, 5), (16,11))
+        super().__init__(x_cord, y_cord, f"library_desk_{variant}", float('inf'), (0, 5), (16,11))
 
 class PottedPalm(Block):
     def __init__(self, x_cord, y_cord):
-       super().__init__(x_cord, y_cord, f"potted_palm", float('inf'), (7, 19), (4,4))
-       
+        super().__init__(x_cord, y_cord, "potted_palm", float('inf'), (7, 19), (4,4))
+
+
+class BiggerPot(Block):
+    def __init__(self, x_cord, y_cord, flower=""):
+        hitbox = (
+                (4, 6), 
+                (10,5)
+            )
+        if flower != "":
+            flower = "ted_" + flower
+            hitbox = (
+                    (hitbox[0][0], 20), 
+                    hitbox[1]
+                )
+            
+        super().__init__(x_cord, y_cord, f"pot{flower}", float('inf'), hitbox[0], hitbox[1])
+
+class PlanterBox(Block):
+    def __init__(self, x_cord, y_cord, planter_type:int):
+        hitbox = (
+                (13, 7), 
+                (22,34)
+            )
+
+            
+        super().__init__(x_cord, y_cord, f"planter_box_{planter_type}", float('inf'), hitbox[0], hitbox[1])
+
+
+class Bench(Block):
+    def __init__(self, x_cord, y_cord):
+        hitbox = (
+                (2, 8), 
+                (12,24)
+            )
+
+            
+        super().__init__(x_cord, y_cord, "bench", float('inf'), hitbox[0], hitbox[1])
+
+class Wall(Block):
+    def __init__(self, x_cord, y_cord, rotation=""):
+        hitbox = (
+                (0, 0), 
+                (16,16)
+            )
+
+        if rotation != "":
+            rotation = "_" + rotation
+
+            
+        super().__init__(x_cord, y_cord, f"wall{rotation}", float('inf'), hitbox[0], hitbox[1])
+
 
 
        

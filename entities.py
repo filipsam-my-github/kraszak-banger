@@ -471,7 +471,7 @@ class DungeonNpc(Npc):
 
 
 class AdultNpc(Npc):
-    ALL_NPC_NAMES = ["library_lady_front", "teacher_front", "teacher_left", "teacher_right"]
+    ALL_NPC_NAMES = ["library_lady_front", "teacher_front", "teacher_left", "teacher_right", "radecki_front", "teacher_ginger_red_front"]
     
     
     def __init__(self, image_name ,x_cord, y_cord, movement_strength, dialog = ""):
@@ -493,7 +493,12 @@ class ClassmateNpc(Npc):
 
 class SittingClassmateNpc(Npc):
     ALL_NPC_NAMES = ["boy_blond_black_sit", "boy_brown_black_sit","boy_brown_white_sit", "boy_ginger_green_sit", 
-                     "girl_blonde_blue_sit", "girl_blonde_green_sit", "girl_brown_black_sit"]
+    "girl_blonde_blue_sit", "girl_blonde_green_sit", "girl_brown_black_sit", 
+    "boy_black_jean_sit",
+    "boy_brown_red_sit",
+    "boy_blonde_black_sit",
+    "boy_hat_black_sit",
+    "girl_brown_red_sit"]
     
     
     def __init__(self, image_name ,x_cord, y_cord, movement_strength, dialog = ""):

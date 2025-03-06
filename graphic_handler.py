@@ -83,6 +83,7 @@ class ImageLoader:
                 for ii in ["kraszak_heading_", "kraszak_lantern_"]:
                     kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszak/walking/{ii}{j}/{ii}{j}_{i}.png").convert_alpha()
                     cls.images[f"{ii}{j}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+
         
         for i in range(12):
             kraszak_heading_something = pygame.image.load(f"graphics/animations/kraszak/kraszak_hands_letter//frame_{i+1}.png").convert_alpha()
@@ -128,7 +129,26 @@ class ImageLoader:
             
         #school
         for i in ["school_door", "school_test", "school_floor", "school_wall", "bookshelf_front", "bookshelf_side", "bookshelf_top", "locked_safe",
-                  "locked_safe", "opened_safe", "safe_background", "scaled_locked_safe", "scaled_locker", "chair", "desk_long", "desk_short", "library_desk_1", "library_desk_2", "library_desk_3", "library_lady_front", "library_lady_front", "potted_palm", "notebook"
+                  "locked_safe", "opened_safe", "safe_background", "scaled_locked_safe", "scaled_locker", "chair", "desk_long", "desk_short", "library_desk_1", "library_desk_2", "library_desk_3", "library_lady_front", "library_lady_front", "potted_palm", "notebook","bookshelf_front_1_dark","bookshelf_front_2_dark",
+                    "bookshelf_front_3_dark",
+                    "bookshelf_side_dark",
+                    "chair_stack","crate_blue","crate_green",
+                    "crate_purple",
+                    "crate_red",
+                    "crate_stack_1",
+                    "crate_stack_2",
+                    "crate_yellow",
+                    "pot",
+                    "potted_flower_1",
+                    "potted_flower_2",
+                    "potted_flower_3",
+                    "punching_bag",
+                    "shelf_1",
+                    "shelf_2",
+                    "shelf_3",
+                    "toolrack",
+                    "toolrack_sword"
+                  
                 ]:
             kraszak_heading_something = pygame.image.load(f"graphics//school//{i}.png")
                     
@@ -144,6 +164,26 @@ class ImageLoader:
                     
             cls.images[f"paper_pile_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
         
+        #school outside
+        for i in [
+                "bench",
+                "planter_box_1", "planter_box_2", "planter_box_3", "planter_box_4",
+                "wall", "wall_left", "wall_right"
+                ]:
+            kraszak_heading_something = pygame.image.load(f"graphics//school_outside//{i}.png")
+                    
+            cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+        
+        #school path
+        for i in [
+                "path_center",
+                "path_down", "path_down_left", "path_down_right", "path_left",
+                "path_right", "path_up", "path_up_left", "path_up_right"
+                ]:
+            kraszak_heading_something = pygame.image.load(f"graphics//school_outside//path//{i}.png")
+                    
+            cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+        
         
         #paintings
         for i in ["beauty", "god", "hand", "idk", "mona", "scream"]:
@@ -154,7 +194,13 @@ class ImageLoader:
         #other people
         for i in ["boy_blond_black_sit", "boy_brown_black_front", "boy_brown_black_left", "boy_brown_black_sit",
                   "boy_brown_white_sit", "boy_ginger_green_sit", "girl_blonde_blue_sit", "girl_blonde_green_sit", "girl_brown_black_front",
-                  "girl_brown_black_left", "girl_brown_black_sit", "library_lady_front", "teacher_front", "teacher_left", "teacher_right"]:
+                  "girl_brown_black_left", "girl_brown_black_sit", "library_lady_front", "teacher_front", "teacher_left", "teacher_right",
+                  "boy_black_jean_sit", "boy_blonde_jeans_sit",
+                  "boy_blonde_black_sit",
+                  "boy_brown_red_sit",
+                  "boy_hat_black_sit",
+                  "radecki_front",
+                  "teacher_ginger_red_front"]:
             kraszak_heading_something = pygame.image.load(f"graphics//other_people//{i}.png")
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))

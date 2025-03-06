@@ -21,7 +21,6 @@ school_wall_floor_up 5 12
 school_wall_floor_down 12 4 
 school_wall_floor_down 11 4 
 school_wall_floor_down 10 4 
-school_wall_floor_down 9 4 
 school_wall_floor_down 8 4 
 school_wall_floor_down 5 4 
 school_wall_floor_down 4 4 
@@ -39,6 +38,7 @@ level_exit 6 14 classroom_2
 level_exit 7 14 classroom_2
 kraszak_heading_down_0 7 6 hallway_to_exit
 kraszak_heading_up_2 7 11 classroom_2
+school_wall_floor_down 9 4 
 school_floor 7 12 
 school_floor 6 12 
 school_floor 6 10 
@@ -66,7 +66,6 @@ school_floor 12 10
 school_floor 11 10 
 school_floor 10 10 
 school_floor 9 10 
-school_floor 8 10 
 school_floor 7 10 
 school_floor 7 6 
 school_floor 6 6 
@@ -87,6 +86,9 @@ school_floor 7 2
 school_floor 6 2 
 school_floor 7 4 
 school_floor 6 4 
+school_floor 8 10 
 dialog_trigger 5 6 second_thought_on_hallway
 dialog_trigger 5 9 second_thought_on_hallway
 box_room 0 3 13x12
+shelf_2 3 4 
+shelf_2 10 4 

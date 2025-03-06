@@ -67,8 +67,10 @@ vertex_shaders_img = pygame.image.load('graphics/icon_for_vert_shaders.png').con
 background_img = pygame.image.load('graphics/icon_for_background.png').convert_alpha()
 fragment_shaders_img = pygame.image.load('graphics/icon_for_frag_shaders.png').convert_alpha()
 
-GHOST_ELEMENTS = ("school_floor", "grass", "rocks", "rocks_1", "rocks_2", "rocks_3", "rocks_4", "rocks_5", "short_grass_1", "short_grass_2", "short_grass_3")
-EVENTS_ELEMENTS = ("game_event", "dialog_trigger", "box_room", "firefly_big", "firefly_bug", "firefly_small")
+GHOST_ELEMENTS = ("school_floor", "grass", "rocks", "rocks_1", "rocks_2", "rocks_3", "rocks_4", "rocks_5", "short_grass_1", "short_grass_2", "short_grass_3","path_center",
+                "path_down", "path_down_left", "path_down_right", "path_left",
+                "path_right", "path_up", "path_up_left", "path_up_right")
+EVENTS_ELEMENTS = ("game_event", "dialog_trigger", "box_room", "firefly_big", "firefly_bug", "firefly_small", "shelf_1","shelf_2", "shelf_3", "toolrack", "toolrack_sword")
 #define colours
 GREEN = (144, 201, 120)
 WHITE = (255, 255, 255)

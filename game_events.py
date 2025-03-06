@@ -190,6 +190,8 @@ class TheTrueEnding(Event):
     def __Used(self):
         TheTrueEnding.used = True
         self.active = False
+
+
         
 
 class EventPassExamAndTalkToTeach(Event):

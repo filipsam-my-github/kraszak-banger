@@ -85,6 +85,10 @@ class SchoolDoor(GhostBlock):
     def __init__(self, x_cord, y_cord):
         super().__init__(x_cord, y_cord, "school_door")
 
+class Path(GhostBlock):
+    def __init__(self, x_cord, y_cord, type_of_path:str):
+        super().__init__(x_cord, y_cord, f"path_{type_of_path}")
+
 
 class Interactable(GhostBlock):
     def __init__(self, x_cord, y_cord, image_name):
@@ -137,6 +141,7 @@ class Apple(Interactable):
 class Notebook(Interactable):
     def __init__(self, x_cord, y_cord):
         super().__init__(x_cord, y_cord, "notebook")
+        
 
 class NotePile(Interactable):
     def __init__(self, x_cord, y_cord, pail_number = 1):
@@ -156,6 +161,6 @@ class NotePile(Interactable):
                     self.image_name = f"paper_pile_{self.pail_number}"
         
         self.old_key_were_pressed = keys[activation_triggers.Dialog.NEXT_DIALOG]
-        
+
         
     
