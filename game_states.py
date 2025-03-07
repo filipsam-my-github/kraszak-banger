@@ -52,7 +52,9 @@ class GameState(ABC):
 
     
 
-class Gameplay(GameState):    
+class Gameplay(GameState):   
+    SHOW_CAMERA_CORDS = False
+     
     def __init__(self):
         pass
     
@@ -72,7 +74,7 @@ class Gameplay(GameState):
         self.background: noclip_blocks.Background = self.DEFAULT_BACKGROUND_COLOR
         
         
-        self.debug_texts = {"camera_cords":texts_handler.Font(text="",original_font_size=25,cursive=False,x_cord=350,y_cord=0)}
+        self.debug_texts = {"camera_cords":texts_handler.Font(text="",original_font_size=25,cursive=False,x_cord=350,y_cord=0, show=Gameplay.SHOW_CAMERA_CORDS)}
         
         gui.MouseGuiEventHandler()
         
@@ -345,7 +347,7 @@ class Tutorial(GameState):
         
         # engine.Game.screen.UpdateVertShader("vertex_shaders/vert_normal.glsl")
         # engine.Game.screen.UpdateFragShader("fragment_shaders/frag_normal.glsl")
-        engine.Game.screen.UpdateFragShader("fragment_shaders/fireflies.glsl")
+        engine.Game.screen.UpdateFragShader("fragment_shaders/frag_normal.glsl")
         
     
 
@@ -406,8 +408,8 @@ class Tutorial(GameState):
             
     
     def Draw(self):
-        engine.Game.screen.screen.fill((0,0,0))
-        self.camera.Draw(self.tutorial_gui_text, screen=engine.Game.screen.screen)
+        engine.Game.screen.screen.fill((7.905,40.035,23.97))
+        graphic_handler.ImageLoader.DrawImage(engine.Game.screen.screen, "keyboard_tutorial_with_keys", 0,0)
         
 
     def UpdateShaderArgument(self):
@@ -418,10 +420,8 @@ class Tutorial(GameState):
 
     def GetShaderArgument(self):
         return {
-                "time":float(self.clock),
                 "transposition_shader_multiplayer":activation_triggers.LevelExit.transposition_shader_multiplayer,
-                "hovered_button": (0,0,0,0),
-                "chosen_button": (0,0,0,0)
+
                 }
     
 

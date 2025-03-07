@@ -6,7 +6,7 @@
         "letter_from_father": "Staniesz sie najwiekszym lekarzem w tym kwadracie wszechswiata - w przeciwnym razie nie dostaniesz od nas zadnych pieniedzy na twoj uniwersytet. Ja, Kraszwski, musze zmarnowac moj potencjal na zwykla wiedze medyczna zamiast opanowywac potege slowa. Nie ma zadnej osoby, dla ktorej zrobilbym cos takiego.",
         "second_thought_on_hallway": "Tak, zostane pisarzem zamiast byc lekarzem.",
         "math_test_and_youre_late": "Poniewaz jestes spozniony, bedziesz mial mniej czasu na napisanie egzaminu. Sluchaj uwaznie, poniewaz przeczytam na glos pytania, zebys mial mozliwosc je zapisac.",
-        "talking_flower": "Yo. Co tam, smutny? Luzik, mam rozwiazanie: walnij (-b+sqrt(b*b-4ac))/2a. Kumasz baze, co nie? ... ... ... Dobra, teraz wstawaj. Slyszalem, ze ostre akcje dobrze budza. *jestes w szoku*",
+        "talking_flower": "Yo. Co tam, smutny? Luzik, mam rozwiazanie: walnij (-b+sqrt(b*b-4ac))/2a. Kumasz baze, co nie? ... ... ... Dobra, teraz wstawaj. *jestes w szoku*",
 
         "solve_math": "Tu jest egzamin, ktory czeka na rozwiazanie. £ Zaczynaj rozmyslac. £ Rozwiaz go.",
         "you_have_solved_math": "You did the exam, which was surprisingly easy.",
@@ -106,7 +106,7 @@
         "so_sorry": "I'm deeply sorry, but I cannot fully describe it¬As a result of my past mistakes.",
         "ight_lets_do_test": "You might have heard that today is the day of the exam, so here you have an exam on the board¬It's waiting for your great mind, which ¬can't help but solve bigger problems anywhere but in the classroom!",
 
-        "talking_flower": "Yo¬Bit sad?¬I got a solution, just use (-b+sqrt(b*b-4ac))/2a¬I hope you got your answers¬...¬...¬...Yeah, now you have to wake up¬Heard that intense moments can help with that¬*You're in shock.",
+        "talking_flower": "Yo¬Bit sad?¬I got a solution, just use (-b+sqrt(b*b-4ac))/2a¬I hope you got your answers¬...¬...¬...Yeah, now you have to wake up¬*You're in shock.",
 
         "solve_math": "^Here is an exam that awaits to be solved £Go to Wonderland £Solve it.",
         "you_have_solved_math": "You did the exam, which was surprisingly easy.",

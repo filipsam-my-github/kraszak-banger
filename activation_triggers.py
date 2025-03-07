@@ -29,7 +29,7 @@ class Dialog(camera.CameraDrawable):
             `COLOR` color of the hitbox.
     """
     
-    box_rect_normal = pygame.rect.Rect(100,200,450,155)
+    box_rect_normal = pygame.rect.Rect(100,190,450,165)
     box_rect_full_screen = None
     
     full_screen_multiplier = None    
@@ -44,7 +44,7 @@ class Dialog(camera.CameraDrawable):
     dialog_active_status = False
     __text_content_iterator_index = 0
     __showed_text = texts_handler.FastGuiTextBox("hi Im here")
-    __showed_text.MoveTo(110,210)
+    __showed_text.MoveTo(110,200)
     __text_to_show:list = None  
     __current_part_of_dialog = 0
     __max_part_of_dialog:int = None
@@ -82,12 +82,14 @@ class Dialog(camera.CameraDrawable):
         
         if self.active_local_status and Dialog.dialog_active_status:
             if width_scaling == 1 and height_scaling == 1:  
-                pygame.draw.rect(screen,self.background_color,Dialog.box_rect_normal)
+                pygame.draw.rect(screen,self.background_color,Dialog.box_rect_normal,border_radius=15)
+                pygame.draw.rect(screen,(255,255,255),Dialog.box_rect_normal,width=2,border_radius=15)
                 Dialog.__showed_text.Draw(screen, 0,0, width_scaling, height_scaling)
             else:
                 if [width_scaling, height_scaling] != Dialog.full_screen_multiplier:
                     Dialog.init((width_scaling, height_scaling))
-                pygame.draw.rect(screen,self.background_color,Dialog.box_rect_full_screen)
+                pygame.draw.rect(screen,self.background_color,Dialog.box_rect_full_screen,border_radius=15)
+                pygame.draw.rect(screen,(255,255,255),Dialog.box_rect_normal,width=2,border_radius=15)
                 Dialog.__showed_text.Draw(screen, 0,0, width_scaling, height_scaling)
         
         if self.active_local_status and Dialog.chosen_checkbox:
@@ -137,7 +139,7 @@ class Dialog(camera.CameraDrawable):
         cls.dialog_active_status = False
         cls.__text_content_iterator_index = 0
         cls.__showed_text = texts_handler.FastGuiTextBox("")
-        cls.__showed_text.MoveTo(110,220)
+        cls.__showed_text.MoveTo(110,200)
         cls.__text_to_show:list = None  
         cls.__current_part_of_dialog = 0
         cls.__max_part_of_dialog:int = None
@@ -201,12 +203,14 @@ class Dialog(camera.CameraDrawable):
 
         if Dialog.dialog_active_status:
             if width_scaling == 1 and height_scaling == 1:  
-                pygame.draw.rect(screen,Dialog.DEFAULT_BACKGROUND,Dialog.box_rect_normal)
+                pygame.draw.rect(screen,Dialog.DEFAULT_BACKGROUND,Dialog.box_rect_normal,border_radius=15)
+                pygame.draw.rect(screen,(255,255,255),Dialog.box_rect_normal,width=2,border_radius=15)
                 Dialog.__showed_text.Draw(screen, 0,0, width_scaling, height_scaling)
             else:
                 if [width_scaling, height_scaling] != Dialog.full_screen_multiplier:
                     Dialog.init((width_scaling, height_scaling))
-                pygame.draw.rect(screen,Dialog.DEFAULT_BACKGROUND,Dialog.box_rect_full_screen)
+                pygame.draw.rect(screen,Dialog.DEFAULT_BACKGROUND,Dialog.box_rect_full_screen,border_radius=15)
+                pygame.draw.rect(screen,(255,255,255),Dialog.box_rect_normal,width=2,border_radius=15)
                 Dialog.__showed_text.Draw(screen, 0,0, width_scaling, height_scaling)
         
         if Dialog.chosen_checkbox:
@@ -243,7 +247,7 @@ class Dialog(camera.CameraDrawable):
         Dialog.dialog_active_status = False
         Dialog.__text_content_iterator_index = 0
         Dialog.__showed_text = texts_handler.FastGuiTextBox("hi Im here")
-        Dialog.__showed_text.MoveTo(110,220)
+        Dialog.__showed_text.MoveTo(110,200)
         Dialog.__text_to_show:list = None  
         Dialog.__current_part_of_dialog = 0
         Dialog.__max_part_of_dialog:int = None

@@ -205,6 +205,11 @@ class ImageLoader:
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
 
+        #gui
+        for i in ["keyboard_tutorial_with_keys"]:
+            kraszak_heading_something = pygame.image.load(f"graphics//ui//{i}.png")
+                    
+            cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width)) 
             
         
         for i, name in enumerate(["down","left", "up", "right"]):

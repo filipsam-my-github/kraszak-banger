@@ -16,7 +16,8 @@ class Font:
     
     COLOR = (255,255,255)
     
-    def __init__(self,text="", original_font_size=25, cursive=False, x_cord = 0, y_cord = 0):
+    def __init__(self,text="", original_font_size=25, cursive=False, x_cord = 0, y_cord = 0, show = True):
+        self._SHOW = show
         self.original_font_size = original_font_size
         
         self.original_font_size = self.original_font_size
@@ -70,13 +71,14 @@ class Font:
         self.max_width = max_width
     
     def Draw(self, screen, x_cord=None, y_cord=None, width_scaling=1, height_scaling=1):
-        if self.text_image_meta_data["fullscreen"] != [width_scaling, height_scaling]:
-            self.text_image_meta_data["fullscreen"] = [width_scaling, height_scaling]
-            self.UpdateFontMemoryAndImage()
+        if self._SHOW:
+            if self.text_image_meta_data["fullscreen"] != [width_scaling, height_scaling]:
+                self.text_image_meta_data["fullscreen"] = [width_scaling, height_scaling]
+                self.UpdateFontMemoryAndImage()
+            
+            
+            screen.blit(self.text_image,(self.x_cord*width_scaling, self.y_cord*height_scaling))
         
-        
-        screen.blit(self.text_image,(self.x_cord*width_scaling, self.y_cord*height_scaling))
-    
     def GetImageSize(self):
         return (self.text_image.get_width(),self.text_image.get_height())
     
