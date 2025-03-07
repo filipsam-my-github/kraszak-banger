@@ -361,10 +361,14 @@ class EventMathExam(Event):
             self.game.player.image_name = "kraszak_in_chair"
             self.tasks["rotation1"] = True
         elif (int(self.game.camera.x_cord) != 0 or int(self.game.camera.y_cord) != -98.0) and not self.tasks["dialog1"]:
-            if int(self.game.camera.x_cord) != 0:
-                self.game.camera.x_cord += 60*engine.Game.dt*self.IsPositiveMultiplayer(0, self.game.camera.x_cord)
-            if int(self.game.camera.y_cord) != -98:
-                self.game.camera.y_cord += 60*engine.Game.dt*self.IsPositiveMultiplayer(-98, self.game.camera.y_cord)
+            if int(self.game.camera.x_cord) > 0:
+                self.game.camera.x_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(0, self.game.camera.x_cord)
+            else:
+                self.game.camera.x_cord = 0
+            if int(self.game.camera.y_cord) > -98:
+                self.game.camera.y_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(-98, self.game.camera.y_cord)
+            else:
+                self.game.camera.y_cord = -98
         elif not self.tasks["dialog1"]:
             if self.last_started_dialog < 1:
                 self.dialogs[0].CastAnimationForCutscenes(self.game.player)
@@ -375,10 +379,14 @@ class EventMathExam(Event):
             if activation_triggers.Dialog.dialog_active_status == False:
                 self.tasks["dialog1"] = True
         elif (int(self.game.camera.x_cord) != 128 or int(self.game.camera.y_cord) != int(216.0)) and not self.tasks["dialog2"]:
-            if int(self.game.camera.x_cord) != 128:
-                self.game.camera.x_cord += 60*engine.Game.dt*self.IsPositiveMultiplayer(128, self.game.camera.x_cord)
-            if int(self.game.camera.y_cord) != 216:
-                self.game.camera.y_cord += 60*engine.Game.dt*self.IsPositiveMultiplayer(216.0, self.game.camera.y_cord)
+            if int(self.game.camera.x_cord) < 128:
+                self.game.camera.x_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(128, self.game.camera.x_cord)
+            else:
+                self.game.camera.x_cord = 128
+            if int(self.game.camera.y_cord) < 216:
+                self.game.camera.y_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(216.0, self.game.camera.y_cord)
+            else:
+                self.game.camera.y_cord = 216
         
 
         elif not self.tasks["dialog2"]:
@@ -392,10 +400,14 @@ class EventMathExam(Event):
                 self.tasks["dialog2"] = True
         
         elif (int(self.game.camera.x_cord) != 0 or int(self.game.camera.y_cord) != -98) and not self.tasks["dialog3"]:
-            if int(self.game.camera.x_cord) != 0:
-                self.game.camera.x_cord += 60*engine.Game.dt*self.IsPositiveMultiplayer(0, self.game.camera.x_cord)
-            if int(self.game.camera.y_cord) != -98:
-                self.game.camera.y_cord += 60*engine.Game.dt*self.IsPositiveMultiplayer(-98, self.game.camera.y_cord)
+            if int(self.game.camera.x_cord) > 0:
+                self.game.camera.x_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(0, self.game.camera.x_cord)
+            else:
+                self.game.camera.x_cord = 0
+            if int(self.game.camera.y_cord) > -98:
+                self.game.camera.y_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(-98, self.game.camera.y_cord)
+            else:
+                self.game.camera.y_cord = -98
             
         elif not self.tasks["dialog3"]:
             if self.last_started_dialog < 3:
@@ -408,10 +420,14 @@ class EventMathExam(Event):
                 self.tasks["dialog3"] = True
             
         elif int(self.game.camera.x_cord) != 128 or int(self.game.camera.y_cord) != 216:
-            if int(self.game.camera.x_cord) != 128:
-                self.game.camera.x_cord += 60*engine.Game.dt*self.IsPositiveMultiplayer(128, self.game.camera.x_cord)
-            if int(self.game.camera.y_cord) != 216:
-                self.game.camera.y_cord += 60*engine.Game.dt*self.IsPositiveMultiplayer(216.0, self.game.camera.y_cord)
+            if int(self.game.camera.x_cord) < 128:
+                self.game.camera.x_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(128, self.game.camera.x_cord)
+            else:
+                self.game.camera.x_cord = 128
+            if int(self.game.camera.y_cord) < 216:
+                self.game.camera.y_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(216.0, self.game.camera.y_cord)
+            else:
+                self.game.camera.y_cord = 216
         elif self.clock < 3 or activation_triggers.LevelExit.transposition_shader_multiplayer-0.19 < 0:
             if self.clock == 0:
                 self.game.player.x_cord += self.temp_off_set 
@@ -428,10 +444,9 @@ class EventMathExam(Event):
             self.game.player.x_cord -= self.temp_off_set
             scale = (64, 32)
             seat = [1, float("inf")]
-            for i, place in enumerate(((4, 12),
-                                        (8, 12),
-                                        (8, 9),
-                                        (10, 9))):
+            for i, place in enumerate((
+                                        (8, 7),
+                                        (10, 7))):
                 if self.game.player.HowFarFromPlayer(place[0]*scale[0], place[1]*scale[1]) < seat[1]:
                     seat = [i+1,self.game.player.HowFarFromPlayer(place[0]*scale[0], place[1]*scale[1])]
                 
@@ -490,7 +505,7 @@ class LetterFromFather(Event):
         self.game.PygameEvents()
         
         if self.animation_frame < 5:
-            self.animation_frame += engine.Game.dt*2
+            self.animation_frame += engine.Game.dt*5
             
             self.game.player.image_name = f"read_letter_{int(self.animation_frame)}"
                 

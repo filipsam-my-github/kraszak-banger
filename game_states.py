@@ -82,7 +82,6 @@ class Gameplay(GameState):
         
         self.key = keys_vals.ClearPygameKeyboard()        
         
-        print(engine.Game.load_level)
         self.LoadLocation(engine.Game.load_level["entry"], engine.Game.load_level["last"])
         
         audio_handler.MusicHandler.Play("DEX 1200 Tomorrow Island Royalty Free Music", play_anyway_if_is_already_there=False)
@@ -204,16 +203,21 @@ class Gameplay(GameState):
             engine.Game.screen.fill(self.background)
             self.camera.Draw(self.debug_texts,self.dialogs,self.activations_triggers, self.top_down_view,self.game_events,self.level_exits,self.only_draw_low_layer_objs, screen=engine.Game.screen.screen)
             activation_triggers.Dialog.ClassDraw(screen=engine.Game.screen.screen)
+            self.player.DrawInventory(engine.Game.screen.screen)
         else:
             self.background.Tick(self.camera)
             self.camera.Draw(self.debug_texts,self.dialogs,self.activations_triggers, self.top_down_view,self.game_events,self.level_exits,self.only_draw_low_layer_objs, self.background, screen=engine.Game.screen.screen)
             activation_triggers.Dialog.ClassDraw(screen=engine.Game.screen.screen)
+            self.player.DrawInventory(engine.Game.screen.screen)
+
+            
         self.top_down_view.discard(self.player)
         
         if self.pause.active:
             self.top_down_view.add(self.player)
             self.pause.Draw()
             self.top_down_view.discard(self.player)
+            
         
 
         
@@ -397,7 +401,6 @@ class Tutorial(GameState):
             
 
             engine.Game.current_game_file = (f"save {len(all_saves)+1}", f"Save {len(all_saves)+1}")
-            print(engine.Game.current_game_file)
         
         
             
@@ -857,7 +860,6 @@ class Settings(Menu):
     def DealWithButtonsEvents(self, game_state):
         for i in self.buttons.keys():
             if self.buttons[i].activated:
-                print("Settings.instatnt.DealWithButtonEvents().self.buttons", self.buttons)
                 self.Event(i, game_state)
                 
                 
@@ -898,6 +900,7 @@ class Settings(Menu):
                         
                     elif not pygame.key.name(event.key) in self.buttons.keys():
                         key = self.GetKeyByPurpose(self.assign_new_key)
+                        print('not pygame.key.name(event.key) in self.buttons.keys()')
                         
                         self.buttons[pygame.key.name(event.key)] = gui.Button(self.buttons[key].x_cord,
                                                     self.buttons[key].y_cord,
@@ -915,7 +918,6 @@ class Settings(Menu):
         self = LoadGame()
     
     def AssignNewKey(self, initial_data, new_key):
-        print("try")
         if initial_data == "forward" or initial_data == pygame.key.name(entities.Player.forward):
             entities.Player.forward = new_key
             json_interpreter.LoadNewBinds("player_forward", new_key)
@@ -941,7 +943,7 @@ class Settings(Menu):
         elif initial_data == "full_screen" or initial_data == pygame.key.name(engine.ShaderScreen.full_screen):
             engine.ShaderScreen.full_screen = new_key
             json_interpreter.LoadNewBinds("full_screen", new_key)
-        elif initial_data == "close_gui" or initial_data == pygame.key.name(engine.ShaderScreen.full_screen):
+        elif initial_data == "close_gui" or initial_data == pygame.key.name(point_click_elemtnts.PointClickScene.exit_key):
             engine.ShaderScreen.full_screen = new_key
             json_interpreter.LoadNewBinds("close_gui", new_key)
     
@@ -1108,8 +1110,8 @@ def LoadBinds():
     entities.Player.left = getattr(pygame, f'K_{bins["player_left"]}', None)
     entities.Player.right = getattr(pygame, f'K_{bins["player_right"]}', None)
     entities.Player.inventory = getattr(pygame, f'K_{bins["inventory"]}', None)
-    activation_triggers.Dialog.NEXT_DIALOG = getattr(pygame, f'K_{bins["skip_dialog_rendering"]}', None)
-    activation_triggers.Dialog.SKIP_DIALOG = getattr(pygame, f'K_{bins["next_dialog"]}', None)
+    activation_triggers.Dialog.NEXT_DIALOG = getattr(pygame, f'K_{bins["next_dialog"]}', None)
+    activation_triggers.Dialog.SKIP_DIALOG = getattr(pygame, f'K_{bins["skip_dialog_rendering"]}', None)
     engine.ShaderScreen.full_screen = getattr(pygame, f'K_{bins["full_screen"]}', None)
     point_click_elemtnts.PointClickScene.exit_key = getattr(pygame, f'K_{bins["close_gui"]}', None)
 

@@ -167,6 +167,9 @@ class ChoseBox(InventoryGui):
         self.next_cord = last_size
     
     def Tick(self, keys):
+        self.current_option = max(0, self.current_option)
+        self.check_box.x = 110 + self.next_cord*self.current_option
+        
         if keys[activation_triggers.Dialog.NEXT_DIALOG]:
             self.chosen_option = self.options_names[self.current_option]
         elif keys[entities.Player.forward] or keys[entities.Player.left]:

@@ -352,11 +352,10 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         graphic_handler.ImageLoader.DrawImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
         if Player.HITBOX:
             pygame.draw.rect(screen, (230,50,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
-        
+    
+    def DrawInventory(self, screen):
         if self.show_inventory:
             self.inventory_gui.Draw(screen)
-    
-        
     
     def GetImageSize(self) -> tuple[int,int]:
         return graphic_handler.ImageLoader.images[self.image_name].get_size()

@@ -166,7 +166,7 @@ def LoadBinds() -> dict:
 def LoadNewBinds(bind_id, key_string_val):
     if type(key_string_val) != str:
         key_string_val = engine.GetKeyPygameRealName(key_string_val)
-    print(bind_id)
+    print(bind_id, key_string_val, "what?")
     binds = LoadEverything("data/settings")
     binds["binds"][bind_id] = key_string_val
     Closing(binds)

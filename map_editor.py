@@ -511,7 +511,6 @@ while run:
 							})
 		if pygame.mouse.get_pressed()[2] == 1:
 			if is_colliding:
-				print('hi')
 				del world_data[f"{cords_if_so[0]}x{cords_if_so[1]}"]
 				meta_data_button.ChangeCordsTO(-100,-100)
 			else:
