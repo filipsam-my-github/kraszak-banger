@@ -26,7 +26,7 @@ import cursor
 
 
 
-GAME_NAME = "kraszak the game (pre-release 1.0a)"
+GAME_NAME = "kraszak the game (pre-release 1.0b)"
 
 
 MONITOR_SIZE = screen_size()

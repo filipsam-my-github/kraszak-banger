@@ -944,7 +944,7 @@ class Settings(Menu):
             engine.ShaderScreen.full_screen = new_key
             json_interpreter.LoadNewBinds("full_screen", new_key)
         elif initial_data == "close_gui" or initial_data == pygame.key.name(point_click_elemtnts.PointClickScene.exit_key):
-            engine.ShaderScreen.full_screen = new_key
+            point_click_elemtnts.PointClickScene.exit_key = new_key
             json_interpreter.LoadNewBinds("close_gui", new_key)
     
     def GetKeyByPurpose(self, key_purpose):
