@@ -1093,6 +1093,10 @@ class Pause:
 def ClearGameplayData():
     game_events.EventMathExam.used = False
     game_events.EventTheEnding.used = False
+    game_events.EventTalkWithFLower.used = False
+    game_events.LetterFromFather.used = False
+    game_events.EventPassExamAndTalkToTeach.used = False
+    game_events.TheTrueEnding.used = False
     activation_triggers.DialogLogic.met_dialogs = []
     game_events.EventsLogic.met_events = []
 
