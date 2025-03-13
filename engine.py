@@ -194,6 +194,10 @@ class Game:
         game_states.LoadData()
         Game.mouse = gui.MouseGuiEventHandler.mouse
         
+        game_ico = pygame.image.load("data/games_ico.png")
+
+        pygame.display.set_icon(game_ico)
+        
         
        
         
