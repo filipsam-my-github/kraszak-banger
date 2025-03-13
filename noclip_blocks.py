@@ -6,6 +6,7 @@ import entities
 import pygame
 import activation_triggers
 import keys_vals
+import utilities
 from typing import TYPE_CHECKING
 
 class GhostBlock(camera.CameraDrawable):
@@ -91,11 +92,12 @@ class Path(GhostBlock):
 
 
 class Interactable(GhostBlock):
-    def __init__(self, x_cord, y_cord, image_name):
+    def __init__(self, x_cord, y_cord, image_name, id = None):
         super().__init__(x_cord, y_cord, image_name)
         self.rect = pygame.Rect(x_cord, y_cord, 16*4, 16*4)
         self.grabbed = False
         self.old_key_were_pressed = False
+        self.ID = id
     
     
     # @grapable
@@ -109,6 +111,7 @@ class Interactable(GhostBlock):
             if keys_vals.IsDown(self.old_key_were_pressed, keys, activation_triggers.Dialog.NEXT_DIALOG) and self.rect.colliderect(obj.rect):
                 self.grabbed =  True
                 obj.AddToInventory(self.image_name)
+                utilities.ObjHasBeenGrabbed(self.ID)
         
         self.old_key_were_pressed = keys[activation_triggers.Dialog.NEXT_DIALOG]
         
@@ -131,21 +134,21 @@ class Interactable(GhostBlock):
                 
             
 class Apple(Interactable):
-    def __init__(self, x_cord, y_cord):
-        super().__init__(x_cord, y_cord, "apple")
+    def __init__(self, x_cord, y_cord, id):
+        super().__init__(x_cord, y_cord, "apple",utilities.CreateId(type(self), id[0], id[1]))
 
 class Apple(Interactable):
-    def __init__(self, x_cord, y_cord):
-        super().__init__(x_cord, y_cord, "apple")
+    def __init__(self, x_cord, y_cord,id):
+        super().__init__(x_cord, y_cord, "apple",utilities.CreateId(type(self), id[0], id[1]))
 
 class Notebook(Interactable):
-    def __init__(self, x_cord, y_cord):
-        super().__init__(x_cord, y_cord, "notebook")
+    def __init__(self, x_cord, y_cord, id):
+        super().__init__(x_cord, y_cord, "notebook",utilities.CreateId(type(self), id[0], id[1]))
         
 
 class NotePile(Interactable):
-    def __init__(self, x_cord, y_cord, pail_number = 1):
-        super().__init__(x_cord, y_cord, f"paper_pile_{pail_number}")
+    def __init__(self, x_cord, y_cord, pail_number = 1, id=None):
+        super().__init__(x_cord, y_cord, f"paper_pile_{pail_number}",utilities.CreateId(type(self), id[0], id[1]))
         self.pail_number = pail_number
     
     def Tick(self, obj: entities.Player, keys, mouse: dict, camera_cords):

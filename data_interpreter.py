@@ -17,6 +17,7 @@ import activation_triggers
 import camera
 import json_interpreter
 import  engine
+import utilities
 from typing import TYPE_CHECKING
 
 def LoadShader(file_path):
@@ -115,8 +116,9 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     skin_variant = local_data[0].split("_")
                             
                     engine.Game.general_memory["kraszak_skin"] = skin_variant[1]
-                    
-                
+            
+            data_to_create_id = (level_name, i+3)    
+            
             match local_data[0]:
                 case "heavy_golden_box":
                     blocks.append(solid_blocks.HeavyGoldenBox(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
@@ -267,15 +269,25 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "up"))
                     
                 case "apple":
-                    interactable.append(noclip_blocks.Apple(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                    _obj = noclip_blocks.Apple(float(local_data[1])*scale_x, float(local_data[2])*scale_y,id=data_to_create_id)
+                    if not utilities.DoesExist(_obj.ID):
+                        interactable.append(_obj)
                 case "notebook":
-                    interactable.append(noclip_blocks.Notebook(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                    _obj = noclip_blocks.Notebook(float(local_data[1])*scale_x, float(local_data[2])*scale_y,id=data_to_create_id)
+                    if not utilities.DoesExist(_obj.ID):
+                        interactable.append(_obj)
                 case "paper_pile_1":
-                    interactable.append(noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1))
+                    _obj = noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1,id=data_to_create_id)
+                    if not utilities.DoesExist(_obj.ID):
+                        interactable.append(_obj)
                 case "paper_pile_2":
-                    interactable.append(noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2))
+                    _obj = noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2,id=data_to_create_id)
+                    if not utilities.DoesExist(_obj.ID):
+                        interactable.append(_obj)
                 case "paper_pile_3":
-                    interactable.append(noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3))
+                    _obj = noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3,id=data_to_create_id)
+                    if not utilities.DoesExist(_obj.ID):
+                        interactable.append(_obj)
                 
                 
                 

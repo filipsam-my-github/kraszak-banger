@@ -21,7 +21,7 @@ class Interable(camera.CameraDrawable):
     INHERITANCE:
         Base class for block-like objects such as `WoodenBox`.
     """
-    def __init__(self, x_cord:int, y_cord:int, image_name, graphic_cords_relative_to_rect: tuple[int, int] = "auto", size: tuple[int, int] = "auto"):
+    def __init__(self, x_cord:int, y_cord:int, image_name, id:str, graphic_cords_relative_to_rect: tuple[int, int] = "auto", size: tuple[int, int] = "auto"):
         """
         Initializes a `Block` instance with its position, image, and movement strength.
         
@@ -42,6 +42,8 @@ class Interable(camera.CameraDrawable):
         
         self.graphic_cords_relative_to_rect = (graphic_cords_relative_to_rect[0]*4,graphic_cords_relative_to_rect[1]*4)
         self.to_terminate = False
+        self.ID = id
+    
 
     
     def Draw(self, screen, x_cord = None, y_cord = None, width_scaling = 1, height_scaling = 1):
