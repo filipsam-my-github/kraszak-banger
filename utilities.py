@@ -2,7 +2,7 @@
 grabbed_objects_by_id = {}
 
 def CreateId(obj,entering_level,line):
-    return str(type(obj))+str(entering_level)+str(line)
+    return str(type(obj).__name__)+str(entering_level)+str(line)
 
 
 def ObjHasBeenGrabbed(id):
@@ -12,5 +12,6 @@ def ObjHasBeenGrabbed(id):
 
 def DoesExist(id):
     global grabbed_objects_by_id
+    print(grabbed_objects_by_id)
     return id in grabbed_objects_by_id.keys()
     

@@ -284,10 +284,25 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     _obj = noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2,id=data_to_create_id)
                     if not utilities.DoesExist(_obj.ID):
                         interactable.append(_obj)
+                        continue
+                    _obj = noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1,id=data_to_create_id)
+                    if not utilities.DoesExist(_obj.ID):
+                        interactable.append(_obj)
+                        continue
+                        
                 case "paper_pile_3":
                     _obj = noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3,id=data_to_create_id)
                     if not utilities.DoesExist(_obj.ID):
                         interactable.append(_obj)
+                        continue
+                    _obj = noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2,id=data_to_create_id)
+                    if not utilities.DoesExist(_obj.ID):
+                        interactable.append(_obj)
+                        continue
+                    _obj = noclip_blocks.NotePile(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1,id=data_to_create_id)
+                    if not utilities.DoesExist(_obj.ID):
+                        interactable.append(_obj)
+                        continue
                 
                 
                 

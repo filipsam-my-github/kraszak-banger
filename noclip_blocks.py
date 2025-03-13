@@ -124,6 +124,7 @@ class Interactable(GhostBlock):
     
     def GetImageCords(self):
         return self.x_cord, self.y_cord
+
                 
     
     # def grapable(self, func: function):
@@ -150,12 +151,14 @@ class NotePile(Interactable):
     def __init__(self, x_cord, y_cord, pail_number = 1, id=None):
         super().__init__(x_cord, y_cord, f"paper_pile_{pail_number}",utilities.CreateId(type(self), id[0], id[1]))
         self.pail_number = pail_number
+        self.ID += f"num:{self.pail_number}"
     
     def Tick(self, obj: entities.Player, keys, mouse: dict, camera_cords):
         if not self.grabbed:
             if keys_vals.IsDown(self.old_key_were_pressed, keys, activation_triggers.Dialog.NEXT_DIALOG) and self.rect.colliderect(obj.rect):
                 self.pail_number -= 1
                 obj.AddToInventory("paper_pile")
+                utilities.ObjHasBeenGrabbed(self.ID)
                 
                 
                 if self.pail_number < 1:            
