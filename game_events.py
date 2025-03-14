@@ -324,6 +324,55 @@ class EventMathExam(Event):
         self.old_image = self.game.player.image_name
         self.temp_off_set = -16*4
         
+        self.desks_cords = (128, 216)
+        self.teacher_cords = (0,-98)
+        self.camera_clock = 0
+        
+        self.CameraMovementFormula = lambda distance, time : distance*(
+            min(
+                (1/(
+                    ((5*time)%5 + 2)/(-10)   
+                ) + 5
+                )/4 + 0.11,
+                1)
+        ) 
+    
+    def CameraCLockTick(self):
+        animation_time_in_sec = 1.3
+        self.camera_clock = min(self.camera_clock + engine.Game.dt/animation_time_in_sec, 0.99)
+        
+    def GeneralCalculatePosition(self,_from, _to) -> tuple[int,int]:
+        self.camera_clock = min(self.camera_clock, 0.99)
+        distance = (_to[0] - _from[0], _to[1] - _from[1])
+        
+        return (
+            _from[0] + self.CameraMovementFormula(distance[0], self.camera_clock),
+            _from[1] + self.CameraMovementFormula(distance[1], self.camera_clock)
+        )
+        
+    
+    def CalculatePositionToTeacher(self, axi:str=""):
+        newpos = self.GeneralCalculatePosition(self.desks_cords, self.teacher_cords)
+        
+        match axi:
+            case "x_cord":
+                return newpos[0]
+            case "y_cord":
+                return newpos[1]
+        
+        return newpos
+        
+    
+    def CalculatePositionToDesks(self, axi:str=""):
+        newpos = self.GeneralCalculatePosition(self.teacher_cords, self.desks_cords)
+        
+        match axi:
+            case "x_cord":
+                return newpos[0]
+            case "y_cord":
+                return newpos[1]
+        
+        return newpos
     
     def Draw(self):
         engine.Game.screen.fill(engine.LIGHT_BACKGROUND)
@@ -361,15 +410,13 @@ class EventMathExam(Event):
             self.game.player.image_name = "kraszak_in_chair"
             self.tasks["rotation1"] = True
         elif (int(self.game.camera.x_cord) != 0 or int(self.game.camera.y_cord) != -98.0) and not self.tasks["dialog1"]:
-            if int(self.game.camera.x_cord) > 0:
-                self.game.camera.x_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(0, self.game.camera.x_cord)
-            else:
-                self.game.camera.x_cord = 0
-            if int(self.game.camera.y_cord) > -98:
-                self.game.camera.y_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(-98, self.game.camera.y_cord)
-            else:
-                self.game.camera.y_cord = -98
+            self.CameraCLockTick()
+            
+            self.game.camera.x_cord = self.CalculatePositionToTeacher("x_cord")
+            self.game.camera.y_cord = self.CalculatePositionToTeacher("y_cord")
+            
         elif not self.tasks["dialog1"]:
+            self.camera_clock = 0
             if self.last_started_dialog < 1:
                 self.dialogs[0].CastAnimationForCutscenes(self.game.player)
                 self.last_started_dialog = 1
@@ -379,17 +426,14 @@ class EventMathExam(Event):
             if activation_triggers.Dialog.dialog_active_status == False:
                 self.tasks["dialog1"] = True
         elif (int(self.game.camera.x_cord) != 128 or int(self.game.camera.y_cord) != int(216.0)) and not self.tasks["dialog2"]:
-            if int(self.game.camera.x_cord) < 128:
-                self.game.camera.x_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(128, self.game.camera.x_cord)
-            else:
-                self.game.camera.x_cord = 128
-            if int(self.game.camera.y_cord) < 216:
-                self.game.camera.y_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(216.0, self.game.camera.y_cord)
-            else:
-                self.game.camera.y_cord = 216
+            self.CameraCLockTick()
+            
+            self.game.camera.x_cord = self.CalculatePositionToDesks("x_cord")
+            self.game.camera.y_cord = self.CalculatePositionToDesks("y_cord")
         
 
         elif not self.tasks["dialog2"]:
+            self.camera_clock = 0
             if self.last_started_dialog < 2:
                 self.dialogs[1].CastAnimationForCutscenes(self.game.player)
                 self.last_started_dialog = 2
@@ -400,16 +444,13 @@ class EventMathExam(Event):
                 self.tasks["dialog2"] = True
         
         elif (int(self.game.camera.x_cord) != 0 or int(self.game.camera.y_cord) != -98) and not self.tasks["dialog3"]:
-            if int(self.game.camera.x_cord) > 0:
-                self.game.camera.x_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(0, self.game.camera.x_cord)
-            else:
-                self.game.camera.x_cord = 0
-            if int(self.game.camera.y_cord) > -98:
-                self.game.camera.y_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(-98, self.game.camera.y_cord)
-            else:
-                self.game.camera.y_cord = -98
+            self.CameraCLockTick()
+            
+            self.game.camera.x_cord = self.CalculatePositionToTeacher("x_cord")
+            self.game.camera.y_cord = self.CalculatePositionToTeacher("y_cord")
             
         elif not self.tasks["dialog3"]:
+            self.camera_clock = 0
             if self.last_started_dialog < 3:
                 self.dialogs[2].CastAnimationForCutscenes(self.game.player)
                 self.last_started_dialog = 3
@@ -420,14 +461,10 @@ class EventMathExam(Event):
                 self.tasks["dialog3"] = True
             
         elif int(self.game.camera.x_cord) != 128 or int(self.game.camera.y_cord) != 216:
-            if int(self.game.camera.x_cord) < 128:
-                self.game.camera.x_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(128, self.game.camera.x_cord)
-            else:
-                self.game.camera.x_cord = 128
-            if int(self.game.camera.y_cord) < 216:
-                self.game.camera.y_cord += 120*engine.Game.dt*self.IsPositiveMultiplayer(216.0, self.game.camera.y_cord)
-            else:
-                self.game.camera.y_cord = 216
+            self.CameraCLockTick()
+            
+            self.game.camera.x_cord = self.CalculatePositionToDesks("x_cord")
+            self.game.camera.y_cord = self.CalculatePositionToDesks("y_cord")
         elif self.clock < 3 or activation_triggers.LevelExit.transposition_shader_multiplayer-0.19 < 0:
             if self.clock == 0:
                 self.game.player.x_cord += self.temp_off_set 
@@ -441,6 +478,7 @@ class EventMathExam(Event):
             
         
         else:
+            self.camera_clock = 0
             self.game.player.x_cord -= self.temp_off_set
             scale = (64, 32)
             seat = [1, float("inf")]
