@@ -151,6 +151,7 @@ class NotePile(Interactable):
     def __init__(self, x_cord, y_cord, pail_number = 1, id=None):
         super().__init__(x_cord, y_cord, f"paper_pile_{pail_number}",utilities.CreateId(type(self), id[0], id[1]))
         self.pail_number = pail_number
+        self.NOT_FULL_ID =  self.ID
         self.ID += f"num:{self.pail_number}"
     
     def Tick(self, obj: entities.Player, keys, mouse: dict, camera_cords):
@@ -160,6 +161,7 @@ class NotePile(Interactable):
                 obj.AddToInventory("paper_pile")
                 utilities.ObjHasBeenGrabbed(self.ID)
                 
+                self.ID = f"{self.NOT_FULL_ID}num:{self.pail_number}"
                 
                 if self.pail_number < 1:            
                   self.grabbed =  True

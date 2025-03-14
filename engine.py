@@ -176,7 +176,7 @@ class Game:
                   "last":"None"}
     
     general_memory: dict = {
-            
+        "grabbed_objects_by_id":{}   
     }
     
     dt = time.time()

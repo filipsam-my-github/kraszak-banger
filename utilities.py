@@ -1,17 +1,16 @@
 
-grabbed_objects_by_id = {}
+import engine
 
 def CreateId(obj,entering_level,line):
     return str(type(obj).__name__)+str(entering_level)+str(line)
 
 
 def ObjHasBeenGrabbed(id):
-    global grabbed_objects_by_id
+    print(engine.Game.general_memory)
     if id != None:
-        grabbed_objects_by_id[id] = True
+        engine.Game.general_memory["grabbed_objects_by_id"][id] = True
 
 def DoesExist(id):
-    global grabbed_objects_by_id
-    print(grabbed_objects_by_id)
-    return id in grabbed_objects_by_id.keys()
+    print(engine.Game.general_memory)
+    return id in engine.Game.general_memory["grabbed_objects_by_id"].keys()
     
