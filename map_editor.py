@@ -3,7 +3,6 @@
 """
 import pygame
 import button
-import csv
 from graphic_handler import ImageLoader
 import wx
 import sys
