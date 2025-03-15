@@ -185,9 +185,8 @@ class ImageLoader:
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
         
         
-        #paintings
         for i in ["beauty", "god", "hand", "idk", "mona", "scream"]:
-            kraszak_heading_something = pygame.image.load(f"graphics//paintings//{i}.jpg")
+            kraszak_heading_something = pygame.image.load(f"graphics//paintings//pixelated//{i}.png")
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
         
