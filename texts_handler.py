@@ -14,11 +14,12 @@ class Font:
     cursive_pixelated_fonts = {"25":pygame.font.Font("fonts/mad-mew-mew/mad-mew-mew.otf", 25)}
     pixelated_font = {"25":pygame.font.Font("fonts/ness/ness.otf", 25)}
     
-    COLOR = (255,255,255)
+    DEFAULT_COLOR = (255,255,255)
     
-    def __init__(self,text="", original_font_size=25, cursive=False, x_cord = 0, y_cord = 0, show = True):
+    def __init__(self,text="", original_font_size=25, cursive=False, x_cord = 0, y_cord = 0, show = True, color = "white"):
         self._SHOW = show
         self.original_font_size = original_font_size
+        
         
         self.original_font_size = self.original_font_size
         self.cursive = cursive
@@ -36,22 +37,43 @@ class Font:
         
         self.gui_image = True
         
+        self.color = Font.DEFAULT_COLOR
+        
+        if type(color) == tuple or type(color) == list:
+            self.color = (color[0], color[1], color[2])
+        else:
+            match color.lower():
+                case "white":
+                    self.color = (255, 255, 255)
+                case "black":
+                    self.color = (0, 0, 0)
+                case "red":
+                    self.color = (255, 0, 0)
+                case "green":
+                    self.color = (0, 255, 0)
+                case "blue":
+                    self.color = (0, 0, 255)
+            
+    
+        
+        self.text_variant =  str(self.original_font_size)+str(self.color)
+        
         self.UpdateFontMemoryAndImage()
     
     def UpdateFontMemoryAndImage(self):
         
         if self.cursive:
-            if str(self.original_font_size) in Font.cursive_pixelated_fonts.keys():
-                self.text_image = Font.cursive_pixelated_fonts[str(self.original_font_size)].render(self.text_content,True,Font.COLOR)
+            if str(self.text_variant) in Font.cursive_pixelated_fonts.keys():
+                self.text_image = Font.cursive_pixelated_fonts[str(self.text_variant)].render(self.text_content,True,self.color)
             else:
-                Font.cursive_pixelated_fonts[str(self.original_font_size)] = pygame.font.Font("fonts/mad-mew-mew/mad-mew-mew.otf", self.original_font_size)
-                self.text_image = Font.cursive_pixelated_fonts[str(self.original_font_size)].render(self.text_content,True,Font.COLOR)
+                Font.cursive_pixelated_fonts[str(self.text_variant)] = pygame.font.Font("fonts/mad-mew-mew/mad-mew-mew.otf", self.original_font_size)
+                self.text_image = Font.cursive_pixelated_fonts[str(self.text_variant)].render(self.text_content,True,self.color)
         else:
-            if str(self.original_font_size) in Font.pixelated_font.keys():
-                self.text_image = Font.pixelated_font[str(self.original_font_size)].render(self.text_content,True,Font.COLOR)
+            if str(self.text_variant) in Font.pixelated_font.keys():
+                self.text_image = Font.pixelated_font[str(self.text_variant)].render(self.text_content,True,self.color)
             else:
-                Font.pixelated_font[str(self.original_font_size)] = pygame.font.Font("fonts/ness/ness.otf", self.original_font_size)
-                self.text_image = Font.pixelated_font[str(self.original_font_size)].render(self.text_content,True,Font.COLOR)
+                Font.pixelated_font[str(self.text_variant)] = pygame.font.Font("fonts/ness/ness.otf", self.original_font_size)
+                self.text_image = Font.pixelated_font[str(self.text_variant)].render(self.text_content,True,self.color)
         
         image_width = self.text_image.get_width()*self.text_image_meta_data["fullscreen"][0]
         image_height = self.text_image.get_height()*self.text_image_meta_data["fullscreen"][0]
@@ -90,7 +112,7 @@ class Font:
 
 class FastGuiTextBox:
 
-    def __init__(self, text_content, x_cord=0, y_cord=0, max_width = 22, font_size = 25):
+    def __init__(self, text_content, x_cord=0, y_cord=0, max_width = 22, font_size = 25, text_color = "white"):
         self.x_cord = x_cord
         self.y_cord = y_cord
         self.gui_image = True
@@ -99,7 +121,7 @@ class FastGuiTextBox:
         self.max_width = max_width
         
         self.text_content = self.FormatTextRelativeToMaxWidth(text_content, text_content)
-        self.text = Font(self.text_content, original_font_size=font_size)
+        self.text = Font(self.text_content, original_font_size=font_size, color=text_color)
         self.text.MoveTo(x_cord,y_cord)
         
         
