@@ -207,7 +207,8 @@ class Button(GuiItem):
         self.rect = pygame.Rect(x_cord, y_cord, size[0], size[1])
         
         self.image = pygame.Surface(size)
-        pygame.draw.rect(self.image, color, rect, border_radius=border_radius)
+        if self.color != "alpha":
+            pygame.draw.rect(self.image, color, rect, border_radius=border_radius)
         self.image = self.image.convert_alpha()   
         
         self.__prepare = False
@@ -233,7 +234,8 @@ class Button(GuiItem):
         return self.hovered
     
     def Draw(self, screen):
-        screen.blit(self.image, (self.x_cord, self.y_cord))
+        if self.color != "alpha":
+            screen.blit(self.image, (self.x_cord, self.y_cord))
         self.text.Draw(screen)
         
     def Active(self):
