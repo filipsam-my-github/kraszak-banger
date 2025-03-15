@@ -86,7 +86,21 @@
         "tutorial_dialogs_dialog_next_or_enter": "Wejdz w nowy dialog\n(dziala nawet gdy jestes obok\nNPC bez rozpoczetego dialogu) ",
         "tutorial_close_gui_view": "Zamknij widok powiekszenia ",
         "tutorial_inventory": "Ekwipunek ",
-        "tutorial_fullscreen": "Pelnoekranowe doswiadczenie "
+        "tutorial_fullscreen": "Pelnoekranowe doswiadczenie ",
+
+        "main_developer": "Filip Samociuk: Lead programista,\n back-end programista,\n front-end programista",
+        "another_developer1": "Tomek Sawtyruk: programista",
+        "another_developer2": "Kuba Pietruczuk: programista",
+        "game_designer": "Natalika Barczyk: Projektantka gry",
+        "history_documentation_helper": "Klaudia Kudzik: Wsparcie przy dokumentacji historycznej",
+        "graphic_artist": "Max Panas: Glowny Projektant Grafiki, Projektant gier",
+        "graphic_artist_helper": "Januarry238: Projektant Grafiki",
+        "music_consultant": "Kacper: Projektant klimatu muzycznego",
+        "blank": "",
+
+        "credits": "Tworcy",
+
+        "dialog1":"twoj dialog"
 
     },
 
@@ -185,7 +199,25 @@
         "tutorial_dialogs_dialog_next_or_enter": "enter new dialog\n(it works even when you're next to\nnpc without canversation started) ",
         "tutorial_close_gui_view": "close zoom view ",
         "tutorial_inventory": "Inventory ",
-        "tutorial_fullscreen": "Fullsceen expirience "
+        "tutorial_fullscreen": "Fullsceen expirience ",
+
+
+        "main_developer": " Filip Samociuk:\n       Lead programmer,\n       back-end programmer,\n       front-end programmer",
+        "another_developer1": " Tomek Sawtyruk:\n       programmer",
+        "another_developer2": " Kuba Pietruczuk:\n       programmer",
+        "game_designer": " Natalika Barczyk:\n       game designer",
+        "history_documentation_helper": " Klaudia Kudzik:\n       history documentation helper",
+        "graphic_artist": " Max Panas:\n       Main Graphic designer,       Game designer",
+        "graphic_artist_helper": "Januarry238:\n        Graphic designe",
+        "music_consultant": " Kacper Osipiuk:\n        Music colsultant",
+        "special_thanks": " Special Thanks:\n    PITCH-mocart-lacrimosa,\n    Epidemic Lounge DEX 1200,\n    Forst MATTIA CUPELLI",
+        "blank": "",
+
+
+        "credits": "Credits",
+
+        "dialog1":"your dialog"
+
 
 }
 

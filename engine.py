@@ -190,7 +190,7 @@ class Game:
         Game.InitializeGame()
         
         self.game_state = Pointer(game_state)
-        self.game_states = {"tutorial":game_states.Tutorial(),"gameplay":game_states.Gameplay(), "main_menu":game_states.Menu(), "languages":game_states.Languages(), "load_game":game_states.LoadGame(), "settings":game_states.Settings()}
+        self.game_states = {"tutorial":game_states.Tutorial(),"gameplay":game_states.Gameplay(), "main_menu":game_states.Menu(), "languages":game_states.Languages(), "load_game":game_states.LoadGame(), "settings":game_states.Settings(), "credits": game_states.Credits()}
         game_states.LoadData()
         Game.mouse = gui.MouseGuiEventHandler.mouse
         

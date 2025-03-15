@@ -442,6 +442,7 @@ class Menu(GameState):
                     ("load_game", "New game"),
                     ("languages", "Languages"),
                     ("settings", "Settings"),
+                    ("credits", "Credits"),
                     ("exit", "Exit")
                 ]
         for i, button in enumerate(all_buttons):
@@ -462,12 +463,16 @@ class Menu(GameState):
         
         
         
-        
     
     def Draw(self):
         engine.Game.screen.screen.fill(self.back_ground)
+        
+        
+        
         for i in self.buttons.keys():
             self.buttons[i].Draw(engine.Game.screen.screen)
+        
+        
     
     def PygameEvents(self):
         for event in pygame.event.get():
@@ -552,11 +557,13 @@ class Menu(GameState):
                             "entry": save_data[0],
                             "last": save_data[1]
                         }
+                    game_state.Change("gameplay")
+                    
                 else:
                     engine.Game.load_level = {
-                            "entry": "library",
-                            "last": "None"
-                        }
+                        "entry": "library",
+                        "last": "None"
+                    }
                     ClearGameplayData()
                     all_saves = []
                     for root, dirs, files in os.walk("data\\saves\\"):
@@ -564,13 +571,172 @@ class Menu(GameState):
                             all_saves.append((None))
                     
 
-                    engine.Game.current_game_file = (f"empty {len(all_saves)+1}", f"Save {len(all_saves)+1}")
+                    engine.Game.current_game_file = (f"save {len(all_saves)+1}", f"Save {len(all_saves)+1}")
+                    game_state.Change("tutorial")
                         
-                game_state.Change("gameplay")
             case "load_game":
                 game_state.Change("load_game")
             case "settings":
                 game_state.Change("settings")
+            case "credits":
+                game_state.Change("credits")
+
+class Credits(Menu):
+    SCROLLING_SPEED_IN_PIXELS_PER_SEC = 60
+    
+    def __init__(self):
+        super().__init__()
+    
+    def LoadState(self):
+        self.buttons: dict[gui.Button] = {}
+        self.texts: dict[texts_handler.FastGuiTextBox] = {}
+        
+        
+        
+        all_buttons = [
+            ("main_developer",10),
+            ("another_developer1", 450),
+            ("another_developer2", 855),
+            ("game_designer", 1250),
+            ("history_documentation_helper", 1660),
+            ("music_consultant", 2080),
+            ("special_thanks", 2480)
+        ]
+
+        
+        for i, button_tag in enumerate(all_buttons):
+            addiction = ""
+            if button_tag[0] == "blank":
+                addiction = str(i)
+            
+            button = (button_tag[0], json_interpreter.ReadDialog(activation_triggers.Dialog.language, button_tag[0]))
+            self.texts[button[0]+addiction] = texts_handler.FastGuiTextBox(button[1],
+                                                    50,
+                                                    button_tag[1],
+                                                    30, text_color="white")
+        
+
+        
+        translated = json_interpreter.ReadDialog(activation_triggers.Dialog.language, "back")
+        self.buttons["back"] = gui.Button(texts_handler.Center(500,640,0,texts_handler.Font(translated).GetImageSize()[0]),
+                                                 texts_handler.Center(270,360,0,0),
+                                                 translated,translated.replace(" ", "_").lower(),
+                                                 pygame.Rect(0,0,len(translated)*17,25),
+                                                 "alpha")
+            
+        
+        self.back_ground = (0,0,0)
+        
+        audio_handler.MusicHandler.Play("cool_revenge", play_anyway_if_is_already_there=False)
+        
+        self.clock = 0  
+        engine.Game.screen.UpdateFragShader("fragment_shaders/frag_bland_gui.glsl")
+    
+        self.current_hovered_button = (0,0,0,0)
+        self.chosen_button = (0,0,0,0)
+        self.chosen_file = None
+        
+        for i in self.buttons.keys():
+            if i == self.chosen_file:
+                self.chosen_button = (self.buttons[i].x_cord/640 - 0.025,
+                                      self.buttons[i].y_cord/360 - 0.025,
+                                      self.buttons[i].rect.width/640 + 0.05,
+                                      self.buttons[i].rect.height/360 + 0.05)
+        
+        
+        spacing = 41.625
+        self.images_to_show = [
+            ("beauty", texts_handler.Center(
+                0,640,
+                0,graphic_handler.ImageLoader.images["beauty"].get_width()
+                ),
+                0+spacing*3),
+            ("god", texts_handler.Center(
+                0,640,
+                0,graphic_handler.ImageLoader.images["god"].get_width()
+                ),
+                360+spacing*4),
+            ("hand", texts_handler.Center(
+                0,640,
+                0,graphic_handler.ImageLoader.images["hand"].get_width()
+                ),
+                720+spacing*5),
+            ("idk", texts_handler.Center(
+                0,640,
+                0,graphic_handler.ImageLoader.images["idk"].get_width()
+                ),
+                1080+spacing*6,),
+            ("mona", texts_handler.Center(
+                0,640,
+                0,graphic_handler.ImageLoader.images["mona"].get_width()
+                ),
+                1460+spacing*7,),
+            ("scream", texts_handler.Center(
+                0,640,
+                0,graphic_handler.ImageLoader.images["scream"].get_width()
+                ),
+                1820+spacing*8,)
+            ]
+        
+        self.scroll_y = 360
+        
+        
+    
+       
+    
+    def Draw(self):
+        engine.Game.screen.screen.fill(self.back_ground)
+        
+        for i, img in enumerate(self.images_to_show):
+            graphic_handler.ImageLoader.DrawImage(engine.Game.screen.screen, img[0], img[1], img[2]+self.scroll_y)
+        
+        for i in self.texts.keys():
+            self.texts[i].MoveTo(self.texts[i].x_cord,
+                                 self.texts[i].y_cord+self.scroll_y)
+            
+            self.texts[i].Draw(engine.Game.screen.screen)
+        
+        for i in self.buttons.keys():
+            self.buttons[i].Draw(engine.Game.screen.screen)
+    
+    
+    def DealWithButtonsEvents(self, game_state):
+        for i in self.buttons.keys():
+            if i == self.chosen_file:
+                self.chosen_button = (self.buttons[i].x_cord/640 - 0.025,
+                                      self.buttons[i].y_cord/360 - 0.025,
+                                      self.buttons[i].rect.width/640 + 0.05,
+                                      self.buttons[i].rect.height/360 + 0.05)
+            if self.buttons[i].activated:
+                if not i in ["back"]:
+                    self.chosen_file = i
+                self.Event(i, game_state)
+                
+    def Tick(self, game_state):
+        super().Tick(game_state)
+        
+        self.scroll_y -= engine.Game.dt*Credits.SCROLLING_SPEED_IN_PIXELS_PER_SEC
+
+
+        
+        for i in self.buttons.keys():
+            self.buttons[i].Draw(engine.Game.screen.screen)
+    
+        if self.scroll_y < -2600:
+            game_state.Change("main_menu")
+    
+    def Clear(self):
+        pass        
+    
+    def GetShaderArgument(self):
+        return super().GetShaderArgument()
+        
+    
+    def Event(self, event_tag, game_state):
+        match event_tag:
+            case "back":
+                game_state.Change("main_menu")
+
 
 class Languages(Menu):
     def __init__(self):
@@ -748,7 +914,15 @@ class LoadGame(Menu):
                         "entry": "library",
                         "last": "None"
                     }
-                    game_state.Change("gameplay")
+                    ClearGameplayData()
+                    all_saves = []
+                    for root, dirs, files in os.walk("data\\saves\\"):
+                        for file in files:
+                            all_saves.append((None))
+                    
+
+                    engine.Game.current_game_file = (f"save {len(all_saves)+1}", f"Save {len(all_saves)+1}")
+                    game_state.Change("tutorial")
                 else:
                     engine.Game.load_level = {
                         "entry": json_interpreter.LoadSaveData(self.chosen_file)[0],
@@ -757,7 +931,7 @@ class LoadGame(Menu):
                     game_state.Change("gameplay")
             case "delete":
                 if not self.chosen_file.split(' ')[0] == "empty":
-                    os.remove(f"data\\saves\\{self.chosen_file}")
+                    os.remove(f"data\\saves\\{self.chosen_file}.json")
                     self.LoadState()
 
 
