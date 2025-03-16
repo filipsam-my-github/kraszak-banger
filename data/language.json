@@ -88,19 +88,24 @@
         "tutorial_inventory": "Ekwipunek ",
         "tutorial_fullscreen": "Pelnoekranowe doswiadczenie ",
 
-        "main_developer": "Filip Samociuk: Lead programista,\n back-end programista,\n front-end programista",
-        "another_developer1": "Tomek Sawtyruk: programista",
-        "another_developer2": "Kuba Pietruczuk: programista",
-        "game_designer": "Natalika Barczyk: Projektantka gry",
-        "history_documentation_helper": "Klaudia Kudzik: Wsparcie przy dokumentacji historycznej",
-        "graphic_artist": "Max Panas: Glowny Projektant Grafiki, Projektant gier",
-        "graphic_artist_helper": "Januarry238: Projektant Grafiki",
-        "music_consultant": "Kacper: Projektant klimatu muzycznego",
+        "main_developer": "Filip Samociuk:\n       Lead programista,\n       back-end programista,\n       front-end programista",
+        "another_developer1": "Tomek Sawtyruk:\n       programista",
+        "another_developer2": "Kuba Pietruczuk:\n       programista",
+        "game_designer": "Natalika Barczyk:\n       Projektantka gry",
+        "history_documentation_helper": "Klaudia Kudzik:\n       Wsparcie przy dokumentacji historycznej",
+        "graphic_artist": "Max Panas:\n       Glowny Projektant Grafiki,\n       Projektant gier",
+        "graphic_artist_helper": "Januarry238:\n       Projektant Grafiki",
+        "music_consultant": "Kacper:\n       Projektant klimatu muzycznego",
         "blank": "",
+
+
 
         "credits": "Tworcy",
 
-        "dialog1":"twoj dialog"
+        "dialog1":"twoj dialog",
+        "sword": "miecz",
+
+        "special_thanks": " Specialne Podzekowania:\n    PITCH-mocart-lacrimosa,\n    Epidemic Lounge DEX 1200,\n    Forst MATTIA CUPELLI"
 
     },
 
@@ -216,7 +221,8 @@
 
         "credits": "Credits",
 
-        "dialog1":"your dialog"
+        "dialog1":"your dialog",
+        "sword": "sword"
 
 
 }
