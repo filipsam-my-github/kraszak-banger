@@ -355,4 +355,4 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     npcs.append(entities.SittingClassmateNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"), local_data[3]))
     
     #LoadShader, LoadShader because data 1 and 2 are names of shaders files
-    return data[1], data[2], player, blocks, dialogs, level_exits, activations_triggers, npcs, ghost_blocks, background, interactable, camera_rooms
+    return data[1], data[2], player, blocks, dialogs, level_exits, activations_triggers, npcs, ghost_blocks, background, interactable, camera_rooms, []

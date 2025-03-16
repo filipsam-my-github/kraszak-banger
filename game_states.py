@@ -66,6 +66,7 @@ class Gameplay(GameState):
         self.level_exits = []
         self.activations_trigger: list[activation_triggers.EventActivator] = []
         self.npcs = []
+        self.movable_npc = []
         self.only_draw_low_layer_objs = []
         self.interactables: list[noclip_blocks.Interactable] = []
         
@@ -228,7 +229,7 @@ class Gameplay(GameState):
         _camera_rooms = []
         Gameplay.ChangeMusic(level_entering)
 
-        vert_shader, frag_shader, self.player, self.blocks, self.dialogs, self.level_exits, self.activations_triggers, self.npcs, self.only_draw_low_layer_objs, self.background, self.interactables, _camera_rooms  = data_interpreter.LoadLevel(level_entering,level_left, auto_save = auto_save)
+        vert_shader, frag_shader, self.player, self.blocks, self.dialogs, self.level_exits, self.activations_triggers, self.npcs, self.only_draw_low_layer_objs, self.background, self.interactables, _camera_rooms, self.movable_npc  = data_interpreter.LoadLevel(level_entering,level_left, auto_save = auto_save)
         engine.Game.screen.UpdateVertShader(vert_shader)
         engine.Game.screen.UpdateFragShader(frag_shader)
         self.camera.ClearRooms()
@@ -600,7 +601,8 @@ class Credits(Menu):
             ("game_designer", 1250),
             ("history_documentation_helper", 1660),
             ("music_consultant", 2080),
-            ("special_thanks", 2480)
+            ("graphic_artist_helper", 2480+15),
+            ("special_thanks", 2560+15)
         ]
 
         
@@ -670,12 +672,12 @@ class Credits(Menu):
                 0,640,
                 0,graphic_handler.ImageLoader.images["mona"].get_width()
                 ),
-                1460+spacing*7,),
+                1460+spacing*7+15,),
             ("scream", texts_handler.Center(
                 0,640,
                 0,graphic_handler.ImageLoader.images["scream"].get_width()
                 ),
-                1820+spacing*8,)
+                1820+spacing*8+15,)
             ]
         
         self.scroll_y = 360
@@ -721,8 +723,8 @@ class Credits(Menu):
         
         for i in self.buttons.keys():
             self.buttons[i].Draw(engine.Game.screen.screen)
-    
-        if self.scroll_y < -2600:
+
+        if self.scroll_y < -2720:
             game_state.Change("main_menu")
     
     def Clear(self):

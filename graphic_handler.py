@@ -113,6 +113,27 @@ class ImageLoader:
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
         
         
+        for i in [1, 2, 3, 4, 5, 6]:
+            for j in ["down", "left", "right", "up"]:
+                kraszak_heading_something = pygame.image.load(f"graphics//animations//kraszak//dodging//kraszak_dodge_roll_{j}//frame_{i}.png")
+                        
+                cls.images[f"kraszak_dodge_roll_{j}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+                
+        
+        for i in range(5):
+            for j in ["down", "left", "right", "up"]:
+                kraszak_heading_something = pygame.image.load(f"graphics//animations//kraszak//walking_with_sword//kraszak_sword_{j}//frame_{i}.png")
+                        
+                cls.images[f"kraszak_sword_{j}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+        
+
+        for i in [1, 2, 3, 4, 5, 6, 7, 8, 9]:
+            for j in ["down", "left", "right", "up"]:
+                kraszak_heading_something = pygame.image.load(f"graphics//animations//kraszak//smite//kraszak_smite_{j}//frame_{i}.png")
+                        
+                cls.images[f"kraszak_smite_{j}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+        
+        
         
         for i in ["level_exit", "dialog_trigger", "game_event", "box_room", "end_of_the_box_room"]:
             kraszak_heading_something = pygame.image.load(f"graphics//{i}.png").convert_alpha()
@@ -190,6 +211,16 @@ class ImageLoader:
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
         
+        for i in [1, 2, 3, 4]:
+            for j in ["saber_", ""]:
+                for ij in ["down", "left", "right", "up"]:
+                    kraszak_heading_something = pygame.image.load(f"graphics//animations//father//moving//father_{j}{ij}//frame_{i}.png")
+                            
+                    cls.images[f"father_{j}{ij}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+                    
+        
+        
+    
         #other people
         for i in ["boy_blond_black_sit", "boy_brown_black_front", "boy_brown_black_left", "boy_brown_black_sit",
                   "boy_brown_white_sit", "boy_ginger_green_sit", "girl_blonde_blue_sit", "girl_blonde_green_sit", "girl_brown_black_front",
