@@ -49,7 +49,12 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
     def __init__(self, x_cord, y_cord) -> object:
         self.player_id = "reg"
         
-        self.image_name = f"kraszak_heading_down_1"
+        self.DEFAULT_IMAGE_NAME = f"kraszak_heading_down_1"
+        self.DEFAULT_SWORD_IMAGE_NAME = f"kraszak_sword_down_0"
+        self.DEFAULT_SWORD_IMAGE_TEMPLATE_NAME = f"kraszak_sword_"
+        
+        self.image_name = self.DEFAULT_IMAGE_NAME
+        
 
         self._ROOT_SPEED = 120
         self.speed_bonuses = 0
@@ -86,6 +91,10 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         self.inventory_gui = gui.InventoryGui(self.translated_inventory)
         
         self.last_keys = keys_vals.ClearPygameKeyboard()
+        
+        self._is_attack_in_progress = False
+        self._attack_frame = 0
+        self.attack_speed = 10
 
         super().__init__(movement_strength=26)
     
@@ -129,37 +138,42 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         self.movement_vector[0] = 0 
         self.movement_vector[1] = 0
         
-        # Count active keys for diagonal adjustment
-        for key in [Player.forward, Player.right, Player.left, Player.backward]:
-            if keys[key]:
-                keys_down += 1
+        if not self._is_attack_in_progress:
+            
+            # Count active keys for diagonal adjustment
+            for key in [Player.forward, Player.right, Player.left, Player.backward]:
+                if keys[key]:
+                    keys_down += 1
 
-        diagonal_multiplier = 1  # Reduce speed for diagonal movement
-        
-        if keys_down > 1:
-            diagonal_multiplier = 1#sqrt(self.entity_speed*dt)/(self.entity_speed*dt) when activated, bugs are appearing
+            diagonal_multiplier = 1  # Reduce speed for diagonal movement
+            
+            if keys_down > 1:
+                diagonal_multiplier = 1#sqrt(self.entity_speed*dt)/(self.entity_speed*dt) when activated, bugs are appearing
+                
+            if gui.MouseGuiEventHandler.mouse["clicked"]["down"]["left"]:
+                self._DoAttack()
 
-        # Horizontal movement
-        if not activation_triggers.Dialog.dialog_active_status and not self.show_inventory:
-            if keys[Player.right]:
-                if not keys[Player.left]:
-                    self.x_cord += self.entity_speed * dt * diagonal_multiplier
-                    self.movement_vector[0] = self.entity_speed * diagonal_multiplier *dt
-            elif keys[Player.left]:
-                self.x_cord += -self.entity_speed * dt * diagonal_multiplier
-                self.movement_vector[0] = -self.entity_speed * dt * diagonal_multiplier
+            # Horizontal movement
+            if not activation_triggers.Dialog.dialog_active_status and not self.show_inventory:
+                if keys[Player.right]:
+                    if not keys[Player.left]:
+                        self.x_cord += self.entity_speed * dt * diagonal_multiplier
+                        self.movement_vector[0] = self.entity_speed * diagonal_multiplier *dt
+                elif keys[Player.left]:
+                    self.x_cord += -self.entity_speed * dt * diagonal_multiplier
+                    self.movement_vector[0] = -self.entity_speed * dt * diagonal_multiplier
 
-            if keys[Player.forward]:
-                if not keys[Player.backward]:
-                    self.y_cord += -self.entity_speed * dt * diagonal_multiplier
-                    self.movement_vector[1] = -self.entity_speed * diagonal_multiplier *dt
+                if keys[Player.forward]:
+                    if not keys[Player.backward]:
+                        self.y_cord += -self.entity_speed * dt * diagonal_multiplier
+                        self.movement_vector[1] = -self.entity_speed * diagonal_multiplier *dt
 
-            elif keys[Player.backward]:
-                self.y_cord += self.entity_speed * dt * diagonal_multiplier
-                self.movement_vector[1] = self.entity_speed * diagonal_multiplier *dt
-        
-            self.rect.x = self.x_cord
-            self.rect.y = self.y_cord
+                elif keys[Player.backward]:
+                    self.y_cord += self.entity_speed * dt * diagonal_multiplier
+                    self.movement_vector[1] = self.entity_speed * diagonal_multiplier *dt
+            
+                self.rect.x = self.x_cord
+                self.rect.y = self.y_cord
         
         if keys_vals.IsDown(self.last_keys, keys, Player.inventory) and not (self.show_inventory == False and activation_triggers.Dialog.dialog_active_status):
             self.show_inventory = not self.show_inventory
@@ -176,6 +190,32 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
             dis_val = max(0,(min(1,1-self.HowFarFromPlayer(64, 160)/550)))
             
             audio_handler.MusicHandler.SetVal(dis_val) 
+    
+    
+    def _DoAttack(self):
+        if "sword" in self.image_name:
+            self._is_attack_in_progress = True
+            new_image_name = self.image_name.split("_")
+            new_image_name[1] = "smite"
+
+            self.image_name = "_".join(new_image_name) 
+            print(self.image_name)
+
+    
+    def _ExecuteAttack(self):
+        new_image_name = self.image_name.split("_")
+        new_image_name[3] = str(int(self._attack_frame)+1)
+
+        self.image_name = "_".join(new_image_name) 
+        
+        self._attack_frame += engine.Game.dt*self.attack_speed
+        if self._attack_frame > 9:
+            self._animation_clock = 0
+            self._attack_frame = 0
+            self._is_attack_in_progress = False
+
+            self.UpdateItemHolding()
+            
 
         
     def UpdateInventory(self):
@@ -290,23 +330,36 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
                 `player.AnimationTick(dt)`
         """
         
+        
         new_image_name = self.image_name.split("_")
         new_image_name[1] = engine.Game.general_memory["kraszak_skin"]
         self.image_name = "_".join(new_image_name)
+        self.UpdateItemHolding()
         
                 
         
         
-        are_cords_different = not (self.x_cord_for_animation == self.x_cord and self.y_cord_for_animation == self.y_cord)
-        self.__AnimationSetDirectionUpdate()
-        if (self.movement_vector[0] != 0 or self.movement_vector[1] != 0) and are_cords_different:
-            self.__AnimationClockTick(dt)
+        if self._is_attack_in_progress:
+            self._ExecuteAttack()
         else:
-            self.__AnimationSetStanding()
-        
+            are_cords_different = not (self.x_cord_for_animation == self.x_cord and self.y_cord_for_animation == self.y_cord)
+            self.__AnimationSetDirectionUpdate()
+            if (self.movement_vector[0] != 0 or self.movement_vector[1] != 0) and are_cords_different:
+                self.__AnimationClockTick(dt)
+            else:
+                self.__AnimationSetStanding()
+            
         self.x_cord_for_animation = self.x_cord
         self.y_cord_for_animation = self.y_cord
     
+    def UpdateItemHolding(self):
+        if "sword" in Player.tag_inventory:
+            if self._is_attack_in_progress:
+                engine.Game.general_memory["kraszak_skin"] = "smite"
+            else:
+                engine.Game.general_memory["kraszak_skin"] = "sword"
+        
+            
         
         
     
