@@ -26,7 +26,7 @@ import cursor
 
 
 
-GAME_NAME = "kraszak the game (pre-release 1.0b)"
+GAME_NAME = "kraszak the game (1.0.0v)"
 
 
 MONITOR_SIZE = screen_size()
@@ -85,6 +85,12 @@ class ShaderScreen:
         tex.swizzle = 'BGRA'
         tex.write(surf.get_view('1'))
         return tex
+
+    def GetFragLoadedShaders(self):
+        return self.name_frag_shader
+    
+    def GetVertLoadedShaders(self):
+        return self.name_vert_shader
 
     def fill(self, color):
         """Fills the Pygame surface with the specified color."""
@@ -257,6 +263,7 @@ class Game:
         graphic_handler.ImageLoader.init()
         activation_triggers.Dialog.init(MONITOR_PROPORTIONS)
         audio_handler.MusicHandler.init()
+        
 
 
 
