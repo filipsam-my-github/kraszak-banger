@@ -458,6 +458,20 @@ class PottedPalm(Block):
         super().__init__(x_cord, y_cord, "potted_palm", float('inf'), (7, 19), (4,4))
 
 
+
+class SingleCrate(Block):
+    def __init__(self, x_cord, y_cord, color):
+        super().__init__(x_cord, y_cord, f"crate_{color}", 1 , (3, 4), (10,12))
+
+class StackOfCrates(Block):
+    def __init__(self, x_cord, y_cord, variant_expressed_in_int):
+        super().__init__(x_cord, y_cord, f"crate_stack_{variant_expressed_in_int}", float('inf'), (0, 5), (16,27))
+
+
+class PunchingBag(Block):
+    def __init__(self, x_cord, y_cord):
+        super().__init__(x_cord, y_cord, "punching_bag", float('inf'), (2,35), (13, 11))
+
 class BiggerPot(Block):
     def __init__(self, x_cord, y_cord, flower=""):
         hitbox = (
