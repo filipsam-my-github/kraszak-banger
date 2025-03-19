@@ -107,11 +107,15 @@ class EventTalkWithFLower(Event):
     def Tick(self, game_state: engine.Pointer):
         self.game.debug_texts["camera_cords"].ChangeText(f"x:{int(self.game.camera.x_cord)},y:{int(self.game.camera.y_cord)}")
         self.game.PygameEvents()
+        print(activation_triggers.LevelExit.transposition_shader_multiplayer)
 
         if not self.tasks["dialog1"]:
+            activation_triggers.LevelExit.transposition_shader_multiplayer = 0.00
+            
             if self.last_started_dialog < 1:
                 self.dialogs[0].CastAnimationForCutscenes(self.game.player)
                 self.last_started_dialog = 1
+            
             
             activation_triggers.Dialog.ClassTick(1/60, pygame.key.get_pressed())
             if activation_triggers.Dialog.dialog_active_status == False:
@@ -123,6 +127,7 @@ class EventTalkWithFLower(Event):
             audio_handler.MusicHandler.SetVal(1)
         else:
             self.game.LoadLocation("math_class", f"dream_forest{engine.Game.general_memory['seat']}")
+            activation_triggers.LevelExit.transposition_shader_multiplayer = 1
             game_state.Change("gameplay")
             self.__Used()
     
