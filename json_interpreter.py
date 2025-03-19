@@ -6,6 +6,7 @@ import solid_blocks
 import activation_triggers
 import gui
 import os
+import sys
 import pygame
 import game_events
 import point_click_elemtnts
