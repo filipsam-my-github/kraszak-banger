@@ -134,13 +134,11 @@ class Interactable(GhostBlock):
             # return wrapper
                 
             
-class Apple(Interactable):
-    def __init__(self, x_cord, y_cord, id):
-        super().__init__(x_cord, y_cord, "apple",utilities.CreateId(type(self), id[0], id[1]))
 
 class Apple(Interactable):
     def __init__(self, x_cord, y_cord,id):
         super().__init__(x_cord, y_cord, "apple",utilities.CreateId(type(self), id[0], id[1]))
+
 
 class Notebook(Interactable):
     def __init__(self, x_cord, y_cord, id):
