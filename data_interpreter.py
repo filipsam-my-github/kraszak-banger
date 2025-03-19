@@ -159,6 +159,8 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     blocks.append(solid_blocks.SchoolWall(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "up"))
                 case "school_wall":
                     blocks.append(solid_blocks.SchoolWall(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "None"))
+                case "barrier_block":
+                    blocks.append(solid_blocks.BarrierBlock(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "bookshelf_front":
                     blocks.append(solid_blocks.BookshelfFront(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "bookshelf_front_1_dark":
