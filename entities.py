@@ -46,6 +46,7 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
     
     tag_inventory = []
     
+    
     def __init__(self, x_cord, y_cord) -> object:
         self.player_id = "reg"
         
@@ -54,6 +55,8 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         self.DEFAULT_SWORD_IMAGE_TEMPLATE_NAME = f"kraszak_sword_"
         
         self.image_name = self.DEFAULT_IMAGE_NAME
+        
+        self.last_movement_keys:dict = {"down":0, "up":0, "left":0, "right":0}
         
 
         self._ROOT_SPEED = 120
@@ -64,8 +67,19 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         image_skin_cord_x = 1
         image_skin_cord_y = 11
         
+        left_attacking_image_skin_cord_x = 17
+        left_attacking_image_skin_cord_y = 11
+        
         self._skin_x = -graphic_handler.ImageLoader.GetScalingMultiplier()[0]*image_skin_cord_x
         self._skin_y = -graphic_handler.ImageLoader.GetScalingMultiplier()[1]*image_skin_cord_y
+        
+        self._default_skin_x = self._skin_x
+        self._default_skin_y = self._skin_y
+        
+        self.left_attacking_skin_x = -graphic_handler.ImageLoader.GetScalingMultiplier()[0]*left_attacking_image_skin_cord_x
+        self.left_attacking_skin_y = -graphic_handler.ImageLoader.GetScalingMultiplier()[0]*left_attacking_image_skin_cord_y
+        
+        
 
         self.x_cord = x_cord-self._skin_x
         self.y_cord = y_cord-self._skin_y
@@ -95,6 +109,12 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         self._is_attack_in_progress = False
         self._attack_frame = 0
         self.attack_speed = 10
+        
+        self._is_dodging_in_progress = False
+        self._dodge_frame = 0
+        self.dodge_animation_speed = 10
+        self.dodge_speed = self._ROOT_SPEED*2.5
+        
 
         super().__init__(movement_strength=26)
     
@@ -138,7 +158,7 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         self.movement_vector[0] = 0 
         self.movement_vector[1] = 0
         
-        if not self._is_attack_in_progress:
+        if not self._is_attack_in_progress and not self._is_dodging_in_progress:
             
             # Count active keys for diagonal adjustment
             for key in [Player.forward, Player.right, Player.left, Player.backward]:
@@ -150,8 +170,12 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
             if keys_down > 1:
                 diagonal_multiplier = 1#sqrt(self.entity_speed*dt)/(self.entity_speed*dt) when activated, bugs are appearing
                 
-            if gui.MouseGuiEventHandler.mouse["clicked"]["down"]["left"]:
-                self._DoAttack()
+            if "sword" in self.tag_inventory:
+                if gui.MouseGuiEventHandler.mouse["clicked"]["down"]["left"]:
+                    self._DoAttack()
+                
+                if gui.MouseGuiEventHandler.mouse["clicked"]["down"]["right"]:
+                    self._DoDodge()
 
             # Horizontal movement
             if not activation_triggers.Dialog.dialog_active_status and not self.show_inventory:
@@ -171,12 +195,62 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
                 elif keys[Player.backward]:
                     self.y_cord += self.entity_speed * dt * diagonal_multiplier
                     self.movement_vector[1] = self.entity_speed * diagonal_multiplier *dt
+                
+                self.rect.x = self.x_cord
+                self.rect.y = self.y_cord
+        elif self._is_dodging_in_progress:
+                direction = self.image_name.split("_")[2]
             
+                match direction:
+                    case "right":
+                        self.x_cord += self.dodge_speed * dt
+                        self.movement_vector[0] = self.dodge_speed * dt
+                    case "left":
+                        self.x_cord += -self.dodge_speed * dt
+                        self.movement_vector[0] = -self.dodge_speed * dt
+                    case "up":
+                        self.y_cord += -self.dodge_speed * dt 
+                        self.movement_vector[1] = -self.dodge_speed *dt
+                    case "down":
+                        self.y_cord += self.dodge_speed * dt
+                        self.movement_vector[1] = self.dodge_speed *dt
+                
                 self.rect.x = self.x_cord
                 self.rect.y = self.y_cord
         
+        
         if keys_vals.IsDown(self.last_keys, keys, Player.inventory) and not (self.show_inventory == False and activation_triggers.Dialog.dialog_active_status):
             self.show_inventory = not self.show_inventory
+            
+            
+        if keys_vals.IsUp(self.last_keys, keys, Player.backward):
+            self.last_movement_keys["down"] = 0
+            print("down up")
+        if keys_vals.IsUp(self.last_keys, keys, Player.forward):
+            self.last_movement_keys["up"] = 0
+            print("up up")
+        if keys_vals.IsUp(self.last_keys, keys, Player.left):
+            self.last_movement_keys["left"] = 0
+            print("left up")
+        if keys_vals.IsUp(self.last_keys, keys, Player.right):
+            self.last_movement_keys["right"] = 0
+            print("right up")
+            
+            
+        
+        if keys[Player.right]:
+            self.last_movement_keys["right"] += engine.Game.dt
+        if keys[Player.forward]:
+            self.last_movement_keys["up"] += engine.Game.dt
+        if keys[Player.left]:
+            self.last_movement_keys["left"] += engine.Game.dt
+        if keys[Player.backward]:
+            self.last_movement_keys["down"] += engine.Game.dt
+            
+        
+        
+        
+            
 
         # Reset collision detection for next frame
 
@@ -200,6 +274,15 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
 
             self.image_name = "_".join(new_image_name) 
             print(self.image_name)
+    
+    def _DoDodge(self):
+
+        self._is_dodging_in_progress = True
+        new_image_name = self.image_name.split("_")
+        new_image_name[1] = "dodgeRoll"
+
+        self.image_name = "_".join(new_image_name) 
+        print(self.image_name)
 
     
     def _ExecuteAttack(self):
@@ -210,9 +293,24 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         
         self._attack_frame += engine.Game.dt*self.attack_speed
         if self._attack_frame > 9:
-            self._animation_clock = 0
+            self._animation_clock = 0#thats for normal walking
             self._attack_frame = 0
             self._is_attack_in_progress = False
+
+            self.UpdateItemHolding()
+    
+    
+    def _ExecuteDodge(self):
+        new_image_name = self.image_name.split("_")
+        new_image_name[3] = str(int(self._dodge_frame)+1)
+
+        self.image_name = "_".join(new_image_name) 
+        
+        self._dodge_frame += engine.Game.dt*self.dodge_animation_speed
+        if self._dodge_frame > 6:
+            self._animation_clock = 0#thats for normal walking
+            self._dodge_frame = 0
+            self._is_dodging_in_progress = False
 
             self.UpdateItemHolding()
             
@@ -256,7 +354,7 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         new_image_name[3] = "0"
                 
         self.image_name = "_".join(new_image_name)
-                
+    
     
     def __AnimationSetDirectionUpdate(self):
         """
@@ -267,40 +365,36 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
             NOTE:
                 top and down are prioritized over left and right
         """
-        cords_differences = (self.x_cord_for_animation - self.x_cord, self.y_cord - self.y_cord_for_animation)
-        if cords_differences[1] != 0:
-            if cords_differences[1] > 0:
-                self.SetPlayersDirection("down")
-            elif cords_differences[1] < 0:
+        direction_and_time_of_pressing = (None, float('inf'))
+        for i in self.last_movement_keys.keys():
+            if self.last_movement_keys[i] > 0 and self.last_movement_keys[i] < direction_and_time_of_pressing[1]:
+                direction_and_time_of_pressing = (i, self.last_movement_keys[i])
+        
+        
+        
+        match direction_and_time_of_pressing[0]:
+            case "up":
                 self.SetPlayersDirection("up")
-        elif cords_differences[0] != 0:
-            if cords_differences[0] > 0:
+            case "down":
+                self.SetPlayersDirection("down")
+            case "left":
                 self.SetPlayersDirection("left")
-            elif cords_differences[0] < 0:
+            case "right":
                 self.SetPlayersDirection("right")
-                
-        
-        if cords_differences == (0,0):#if cords_differences are 0,0 and movement_vector is not (0,0) that means that player entirely was stopped by something and player vector has been flipped by something 
-            if self.movement_vector[1] != 0:
-                if self.movement_vector[1] > 0:
-                    self.SetPlayersDirection("down")
-                elif self.movement_vector[1] < 0:
-                    self.SetPlayersDirection("up")
-            elif self.movement_vector[0] != 0:
-                if self.movement_vector[0] < 0:
-                    self.SetPlayersDirection("left")
-                elif self.movement_vector[0] > 0:
-                    self.SetPlayersDirection("right")
-        
 
                 
-                
+
+        
+
+        
     
     def SetPlayersDirection(self, direction):
         new_image_name = self.image_name.split("_")
         new_image_name[2] = direction
         
         self.image_name = "_".join(new_image_name)
+    
+    
                 
                 
     def __AnimationClockTick(self,dt):
@@ -309,7 +403,10 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
             USE:
                 `self.__AnimationClockTick(dt)`
         """
+        if self._animation_clock >= 4:
+            self._animation_clock = 0  
         old_animation_clock = self._animation_clock
+        
         
         #the number next to dt is frame rate
         self._animation_clock += dt*4
@@ -329,17 +426,12 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
             USE:
                 `player.AnimationTick(dt)`
         """
-        
-        
-        new_image_name = self.image_name.split("_")
-        new_image_name[1] = engine.Game.general_memory["kraszak_skin"]
-        self.image_name = "_".join(new_image_name)
         self.UpdateItemHolding()
         
-                
-        
-        
-        if self._is_attack_in_progress:
+        if self._is_dodging_in_progress:
+            self._ExecuteDodge()
+
+        elif self._is_attack_in_progress:
             self._ExecuteAttack()
         else:
             are_cords_different = not (self.x_cord_for_animation == self.x_cord and self.y_cord_for_animation == self.y_cord)
@@ -353,11 +445,24 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         self.y_cord_for_animation = self.y_cord
     
     def UpdateItemHolding(self):
-        if "sword" in Player.tag_inventory:
+        if engine.Game.general_memory["kraszak_skin"] == "dodgeRoll" and not self._is_dodging_in_progress:
+            self.__AnimationSetStanding()
+        
+        if self._is_dodging_in_progress:
+            engine.Game.general_memory["kraszak_skin"] = "dodgeRoll"
+        elif "sword" in Player.tag_inventory:
             if self._is_attack_in_progress:
                 engine.Game.general_memory["kraszak_skin"] = "smite"
             else:
+                if engine.Game.general_memory["kraszak_skin"] == "smite":
+                    self.__AnimationSetStanding()
+                    print('hi')
                 engine.Game.general_memory["kraszak_skin"] = "sword"
+        
+        
+        new_image_name = self.image_name.split("_")
+        new_image_name[1] = engine.Game.general_memory["kraszak_skin"]
+        self.image_name = "_".join(new_image_name)
         
             
         
@@ -402,7 +507,10 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         if y_cord == None:
             y_cord = self.y_cord
         
-        graphic_handler.ImageLoader.DrawImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
+        if "sword" in Player.tag_inventory and self.image_name.split('_')[2] ==  "left" and not self._is_dodging_in_progress:
+            graphic_handler.ImageLoader.DrawImage(screen, self.image_name, x_cord + self.left_attacking_skin_x*width_scaling, y_cord + self.left_attacking_skin_y*height_scaling)
+        else:
+            graphic_handler.ImageLoader.DrawImage(screen, self.image_name, x_cord + self._default_skin_x*width_scaling, y_cord + self._default_skin_y*height_scaling)
         if Player.HITBOX:
             pygame.draw.rect(screen, (230,50,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
     
