@@ -68,7 +68,7 @@ fragment_shaders_img = pygame.image.load('graphics/icon_for_frag_shaders.png').c
 
 GHOST_ELEMENTS = ("school_floor", "grass", "rocks", "rocks_1", "rocks_2", "rocks_3", "rocks_4", "rocks_5", "short_grass_1", "short_grass_2", "short_grass_3","path_center",
                 "path_down", "path_down_left", "path_down_right", "path_left",
-                "path_right", "path_up", "path_up_left", "path_up_right")
+                "path_right", "path_up", "path_up_left", "path_up_right", "flower_1", "flower_2", "flower_3", "flower_4", "flower_5", "flower_6")
 EVENTS_ELEMENTS = ("game_event", "dialog_trigger", "box_room", "firefly_big", "firefly_bug", "firefly_small", "shelf_1","shelf_2", "shelf_3", "toolrack", "toolrack_sword")
 #define colours
 GREEN = (144, 201, 120)
