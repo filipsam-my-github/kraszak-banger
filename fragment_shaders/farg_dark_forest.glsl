@@ -2,12 +2,30 @@
 
 uniform sampler2D tex;
 uniform float transposition_shader_multiplayer;
+uniform bool dialog;
 // uniform float time;
 
 const vec2 u_resolution = vec2(640.,360.);
 
 in vec2 uvs;
 out vec4 f_color;
+
+
+const vec2 SCREEN_SIZE = vec2(640.0, 360.0);
+const vec4 DIALOG_BOX = vec4(
+    0.1625,  0.55,
+    0.6453125, 0.40
+);
+
+bool glowing_rectangle(vec2 pos, vec4 rect) {
+
+    // Check if position is inside the normalized rectangle
+    if (pos.x >= rect.x && pos.x <= rect.x + rect.z && pos.y >= rect.y && pos.y <= rect.y + rect.w) {
+        return true;  // Darken the color inside the rectangle
+    }
+
+    return false;
+}
 
 void main() {
     float adjusted_multiplayer = abs(transposition_shader_multiplayer)/2;
@@ -54,8 +72,13 @@ void main() {
     //     disc_yellow = 1.;
     //     disc_blue = 1.;
     // }
-
-
+    if (dialog){
+        if (glowing_rectangle(uvs, DIALOG_BOX)){
+        disc_yellow = 1.;
+        disc_blue = 1.;
+    }
+    }
+    
 
 
     f_color = vec4(red * disc_yellow, green * disc_yellow, blue * disc_blue, 1.0);
