@@ -508,6 +508,25 @@ class Wall(Block):
         super().__init__(x_cord, y_cord, f"wall{rotation}", float('inf'), hitbox[0], hitbox[1])
 
 
+class BarrierBlock(Block):
+    show = False
+    
+    def __init__(self, x_cord, y_cord):
+        hitbox = (
+                (0, 0), 
+                (16,16)
+            )
+
+
+            
+        super().__init__(x_cord, y_cord, f"barrier_block", float('inf'), hitbox[0], hitbox[1])
+    
+    def Draw(self, screen, x_cord=None, y_cord=None, width_scaling=1, height_scaling=1):
+        print('hi')
+        if BarrierBlock.show:
+            super().Draw(screen, x_cord, y_cord, width_scaling, height_scaling)
+    
+
 
        
        
