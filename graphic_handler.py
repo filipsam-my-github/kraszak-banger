@@ -117,7 +117,7 @@ class ImageLoader:
             for j in ["down", "left", "right", "up"]:
                 kraszak_heading_something = pygame.image.load(f"graphics//animations//kraszak//dodging//kraszak_dodge_roll_{j}//frame_{i}.png")
                         
-                cls.images[f"kraszak_dodge_roll_{j}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+                cls.images[f"kraszak_dodgeRoll_{j}_{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
                 
         
         for i in range(5):
@@ -139,6 +139,9 @@ class ImageLoader:
             kraszak_heading_something = pygame.image.load(f"graphics//{i}.png").convert_alpha()
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
+            
+        for i in ["barrier_block"]:
+            cls.images[f"{i}"] = pygame.image.load(f"graphics//{i}.png").convert_alpha()
             
         #forest folder
         for i in ["fern_flower", "grass", "rocks", "rocks_1", "rocks_2", "rocks_3", "rocks_4","firefly_big", "firefly_bug", "firefly_small", "flower_1", "flower_2","rocks_5", "tree", "background_lawn", "flower_3", "flower_4", "short_grass_1", "short_grass_2", "short_grass_3", "tree_dead", "tree_stump"]:
@@ -206,7 +209,7 @@ class ImageLoader:
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
         
         
-        for i in ["beauty", "god", "hand", "idk", "mona", "scream"]:
+        for i in ["beauty", "god", "hand", "idk", "mona", "scream", "radecki_portrait"]:
             kraszak_heading_something = pygame.image.load(f"graphics//paintings//pixelated//{i}.png")
                     
             cls.images[f"{i}"] = pygame.transform.scale(kraszak_heading_something, (kraszak_heading_something.get_width() * cls._scale_only_height, kraszak_heading_something.get_height() * cls._scale_only_width))
