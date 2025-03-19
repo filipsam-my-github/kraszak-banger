@@ -136,6 +136,22 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     blocks.append(solid_blocks.Tree(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "tree_dead":
                     blocks.append(solid_blocks.DeadTree(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "PunchingBag":
+                        blocks.append(solid_blocks.PunchingBag(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "crate_stack_1":
+                        blocks.append(solid_blocks.StackOfCrates(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1))
+                case "crate_stack_2":
+                        blocks.append(solid_blocks.StackOfCrates(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2))
+                case "crate_blue":
+                        blocks.append(solid_blocks.SingleCrate(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "blue"))
+                case "crate_red":
+                        blocks.append(solid_blocks.SingleCrate(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "red"))
+                case "crate_green":
+                        blocks.append(solid_blocks.SingleCrate(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "green"))
+                case "crate_purple":
+                        blocks.append(solid_blocks.SingleCrate(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "purple"))
+                case "crate_yellow":
+                        blocks.append(solid_blocks.SingleCrate(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "yellow"))
                 case "tree_stump":
                     blocks.append(solid_blocks.TreeStump(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "fern_flower":
