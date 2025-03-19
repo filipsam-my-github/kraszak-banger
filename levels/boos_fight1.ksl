@@ -49,8 +49,8 @@ wall 6 -10
 wall 6 -12 
 wall 7 -12 
 wall 8 -12 
-level_exit 7 -5 
-level_exit 8 -5 
+level_exit 7 -5 boss_fight2
+level_exit 8 -5 boss_fight2
 flower_2 11 10 
 flower_2 12 9 
 flower_3 5 15 

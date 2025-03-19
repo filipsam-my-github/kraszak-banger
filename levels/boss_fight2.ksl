@@ -25,8 +25,8 @@ school_wall 9 -1
 school_wall 2 -1 
 school_wall 7 11 
 school_wall 4 11 
-level_exit 5 10 boos_fight3
-level_exit 6 10 boos_fight3
+level_exit 5 10 boss_fight3
+level_exit 6 10 boss_fight3
 kraszak_heading_up_0 6 7 
 crate_yellow 8 7 
 crate_stack_1 3 0 

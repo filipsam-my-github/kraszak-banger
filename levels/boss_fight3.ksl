@@ -1,11 +1,12 @@
 #!#Scale#@# 64 32
 #!#vertex_shaders#@# vertex_shaders\vert_normal.glsl
 #!#fragment_shaders#@# fragment_shaders\frag_normal.glsl
+#!#background#@# background_lawn
 father_down_4 6 6 
 bench 3 3 
 bench 3 10 
-planter_box_2 9 3 finnal_boos
-planter_box_2 9 10 finnal_boos
+planter_box_2 9 3 
+planter_box_2 9 10 
 planter_box_1 1 6 
 kraszak_heading_down_0 6 -4 
 barrier_block 2 -10 
@@ -185,16 +186,16 @@ short_grass_1 7 -8
 short_grass_1 6 -6 
 short_grass_1 3 -7 
 short_grass_1 2 -7 
-game_event 4 3 finnal_boos
-game_event 5 3 finnal_boos
-game_event 6 3 finnal_boos
-game_event 7 3 finnal_boos
-game_event 8 3 finnal_boos
-game_event 9 3 
-game_event 4 12 finnal_boos
-game_event 5 12 
-game_event 6 12 finnal_boos
-game_event 7 12 finnal_boos
-game_event 8 12 finnal_boos
-game_event 9 12 
-game_event 10 8 
+game_event 4 3 final_boss
+game_event 5 3 final_boss
+game_event 6 3 final_boss
+game_event 7 3 final_boss
+game_event 8 3 final_boss
+game_event 9 3 final_boss
+game_event 4 12 final_boss
+game_event 5 12 final_boss
+game_event 6 12 final_boss
+game_event 7 12 final_boss
+game_event 8 12 final_boss
+game_event 9 12 final_boss
+game_event 10 8 final_boss
