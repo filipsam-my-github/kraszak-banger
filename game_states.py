@@ -268,9 +268,11 @@ class Gameplay(GameState):
         
     
     def GetShaderArgument(self):
-        # if self.current_level == "dream_forest":
-        #     return {"transposition_shader_multiplayer":float(abs(activation_triggers.LevelExit.transposition_shader_multiplayer)),
-        #             "time": engine.Game.clock}
+        if engine.Game.screen.GetFragLoadedShaders() == "fragment_shaders\\farg_dark_forest.glsl":
+            print("hi we are here")
+            return {"transposition_shader_multiplayer":float(abs(activation_triggers.LevelExit.transposition_shader_multiplayer)),
+                    "dialog": activation_triggers.Dialog.dialog_active_status}
+        
         return {"transposition_shader_multiplayer":float(abs(activation_triggers.LevelExit.transposition_shader_multiplayer))}
     
     def UpdateShaderArgument(self):
@@ -600,9 +602,9 @@ class Credits(Menu):
             ("another_developer2", 855),
             ("game_designer", 1250),
             ("history_documentation_helper", 1660),
-            ("music_consultant", 2080),
+            ("music_consultant", 2080+15),
             ("graphic_artist_helper", 2480+15),
-            ("special_thanks", 2560+15)
+            ("special_thanks", 2860+15)
         ]
 
         
@@ -667,20 +669,25 @@ class Credits(Menu):
                 0,640,
                 0,graphic_handler.ImageLoader.images["idk"].get_width()
                 ),
-                1080+spacing*6,),
+                1080+spacing*6),
             ("mona", texts_handler.Center(
                 0,640,
                 0,graphic_handler.ImageLoader.images["mona"].get_width()
                 ),
-                1460+spacing*7+15,),
+                1460+spacing*7+15),
             ("scream", texts_handler.Center(
                 0,640,
                 0,graphic_handler.ImageLoader.images["scream"].get_width()
                 ),
-                1820+spacing*8+15,)
+                1820+spacing*8+15),
+            ("radecki_portrait", texts_handler.Center(
+                0,640,
+                0,graphic_handler.ImageLoader.images["scream"].get_width()
+                ),
+                2560+15)
             ]
         
-        self.scroll_y = 360
+        self.scroll_y = -1300#360
         
         
     
@@ -724,7 +731,7 @@ class Credits(Menu):
         for i in self.buttons.keys():
             self.buttons[i].Draw(engine.Game.screen.screen)
 
-        if self.scroll_y < -2720:
+        if self.scroll_y < -2993:
             game_state.Change("main_menu")
     
     def Clear(self):
@@ -738,6 +745,7 @@ class Credits(Menu):
         match event_tag:
             case "back":
                 game_state.Change("main_menu")
+
 
 
 class Languages(Menu):
