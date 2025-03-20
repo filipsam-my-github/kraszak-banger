@@ -170,7 +170,7 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
             if keys_down > 1:
                 diagonal_multiplier = 1#sqrt(self.entity_speed*dt)/(self.entity_speed*dt) when activated, bugs are appearing
                 
-            if "sword" in self.tag_inventory:
+            if "toolrack_sword" in self.tag_inventory:
                 if gui.MouseGuiEventHandler.mouse["clicked"]["down"]["left"]:
                     self._DoAttack()
                 
@@ -506,7 +506,7 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         
         if self._is_dodging_in_progress:
             engine.Game.general_memory["kraszak_skin"] = "dodgeRoll"
-        elif "sword" in Player.tag_inventory:
+        elif "toolrack_sword" in Player.tag_inventory:
             if self._is_attack_in_progress:
                 engine.Game.general_memory["kraszak_skin"] = "smite"
             else:
@@ -562,7 +562,7 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         if y_cord == None:
             y_cord = self.y_cord
         
-        if "sword" in Player.tag_inventory and self.image_name.split('_')[2] ==  "left" and not self._is_dodging_in_progress:
+        if "toolrack_sword" in Player.tag_inventory and self.image_name.split('_')[2] ==  "left" and not self._is_dodging_in_progress:
             graphic_handler.ImageLoader.DrawImage(screen, self.image_name, x_cord + self.left_attacking_skin_x*width_scaling, y_cord + self.left_attacking_skin_y*height_scaling)
         else:
             graphic_handler.ImageLoader.DrawImage(screen, self.image_name, x_cord + self._default_skin_x*width_scaling, y_cord + self._default_skin_y*height_scaling)

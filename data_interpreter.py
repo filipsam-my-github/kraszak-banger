@@ -293,6 +293,10 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     top_layer_decorations.append(noclip_blocks.ShelfDecorations(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2))
                 case "shelf_2":
                     top_layer_decorations.append(noclip_blocks.ShelfDecorations(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3))
+                case "toolrack":
+                    top_layer_decorations.append(noclip_blocks.Toolrack(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                case "toolrack_sword":
+                    top_layer_interactables.append(noclip_blocks.ToolrackSword(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "apple":
                     _obj = noclip_blocks.Apple(float(local_data[1])*scale_x, float(local_data[2])*scale_y,id=data_to_create_id)
                     if not utilities.DoesExist(_obj.ID):

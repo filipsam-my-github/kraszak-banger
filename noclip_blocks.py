@@ -95,6 +95,10 @@ class ShelfDecorations(GhostBlock):
         super().__init__(x_cord, y_cord, f"shelf_{type_of_shelf_by_int}")
 
 
+class Toolrack(GhostBlock):
+    def __init__(self, x_cord, y_cord):
+        super().__init__(x_cord, y_cord, "toolrack")
+
 
 class Interactable(GhostBlock):
     def __init__(self, x_cord, y_cord, image_name, id = None):
@@ -143,6 +147,7 @@ class Interactable(GhostBlock):
 class Apple(Interactable):
     def __init__(self, x_cord, y_cord,id):
         super().__init__(x_cord, y_cord, "apple",utilities.CreateId(type(self), id[0], id[1]))
+        
 
 
 class Notebook(Interactable):
@@ -174,4 +179,7 @@ class NotePile(Interactable):
         self.old_key_were_pressed = keys[activation_triggers.Dialog.NEXT_DIALOG]
 
         
-    
+class ToolrackSword(Interactable):
+    def __init__(self, x_cord, y_cord):
+        super().__init__(x_cord, y_cord, "toolrack_sword")
+        self.rect.y += 32

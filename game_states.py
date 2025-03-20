@@ -153,6 +153,15 @@ class Gameplay(GameState):
                     engine.Game.screen.game_cursor.status_quo = "bad"
             if interactable.IsActive() and interactable.GetEventName() != "":
                 self.point_click = point_click_elemtnts.NewScene(interactable.GetEventName())
+        for interactable in self.top_layer_interactables:
+            interactable.Tick(self.player, engine.Game.keys, gui.MouseGuiEventHandler.mouse, (self.camera.x_cord, self.camera.y_cord))
+            if interactable.Hovered():
+                if interactable.CloseEnough(self.player):
+                    engine.Game.screen.game_cursor.status_quo = "on"
+                else:
+                    engine.Game.screen.game_cursor.status_quo = "bad"
+            if interactable.IsActive() and interactable.GetEventName() != "":
+                self.point_click = point_click_elemtnts.NewScene(interactable.GetEventName())
         for activations_trigger in self.activations_triggers:
             activations_trigger.Tick(self.player)
             if activations_trigger.event_active_status:
