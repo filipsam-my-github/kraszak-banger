@@ -79,6 +79,7 @@
         "I_take_care": "Dzieki ci bardzo. Obiecuje, ze porozmawiam z pania od chemii i zdasz z odpowiednia ocena.¬ Ale ty musisz nauczyc sie troche chemii, najlepiej takiej,¬ ktora trudno by bylo wytlumaczyc twoim rodzicom.¬ Wiec beda przekonani, ze rzeczywiscie uczysz sie na medycyne na pelny etat.",
 
         "story": "Nauczyciel zatroszczyl sie o mlodego Kraszewskiego,¬ ale jego koszmar nie skonczyl sie az do¬...¬ Tutaj to sie zmieni.",
+        "toolrack_sword": "miecz",
 
         "tutorial": "you make nice and nice lol",
         "tutorial_movement": "Ruch ",
@@ -97,7 +98,7 @@
         "graphic_artist_helper": "Januarry238:\n       Projektant Grafiki",
         "music_consultant": "Kacper:\n       Projektant klimatu muzycznego",
         "blank": "",
-
+        "tutorial_how_to_use_sword": "*Myslisz nad tym jak wbykozystac ten spiacy potecal mieczu¬*(Byc moze dloniowa ikona myszy ci pomoze)",
 
 
         "credits": "Tworcy",
@@ -205,6 +206,8 @@
         "tutorial_close_gui_view": "close zoom view ",
         "tutorial_inventory": "Inventory ",
         "tutorial_fullscreen": "Fullsceen expirience ",
+        "toolrack_sword": "sword",
+        "tutorial_how_to_use_sword": "*you're thinking about how to enchance the potential within your sword¬*(Perhaps try using your hand mouse icon)",
 
 
         "main_developer": " Filip Samociuk:\n       Lead programmer,\n       back-end programmer,\n       front-end programmer",
