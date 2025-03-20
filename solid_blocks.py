@@ -465,7 +465,7 @@ class SingleCrate(Block):
 
 class StackOfCrates(Block):
     def __init__(self, x_cord, y_cord, variant_expressed_in_int):
-        super().__init__(x_cord, y_cord, f"crate_stack_{variant_expressed_in_int}", float('inf'), (0, 5), (16,27))
+        super().__init__(x_cord, y_cord, f"crate_stack_{variant_expressed_in_int}", float('inf'), (0, 9), (16,23))
 
 
 class PunchingBag(Block):
@@ -536,7 +536,6 @@ class BarrierBlock(Block):
         super().__init__(x_cord, y_cord, f"barrier_block", float('inf'), hitbox[0], hitbox[1])
     
     def Draw(self, screen, x_cord=None, y_cord=None, width_scaling=1, height_scaling=1):
-        print('hi')
         if BarrierBlock.show:
             super().Draw(screen, x_cord, y_cord, width_scaling, height_scaling)
     

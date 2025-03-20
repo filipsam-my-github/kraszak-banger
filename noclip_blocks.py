@@ -89,6 +89,11 @@ class SchoolDoor(GhostBlock):
 class Path(GhostBlock):
     def __init__(self, x_cord, y_cord, type_of_path:str):
         super().__init__(x_cord, y_cord, f"path_{type_of_path}")
+        
+class ShelfDecorations(GhostBlock):
+    def __init__(self, x_cord, y_cord, type_of_shelf_by_int:int):
+        super().__init__(x_cord, y_cord, f"shelf_{type_of_shelf_by_int}")
+
 
 
 class Interactable(GhostBlock):

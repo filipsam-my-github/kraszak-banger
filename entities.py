@@ -356,7 +356,7 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         self.image_name = "_".join(new_image_name)
     
     
-    def __AnimationSetDirectionUpdate(self):
+    def __AnimationSetDirectionUpdateByKeys(self):
         """
             use when you want to update direction of animation (top-down-left-bottom)
             USE:
@@ -381,6 +381,41 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
                 self.SetPlayersDirection("left")
             case "right":
                 self.SetPlayersDirection("right")
+    
+    
+    def __AnimationSetDirectionUpdateByMovement(self):
+        """
+            use when you want to update direction of animation (top-down-left-bottom)
+            USE:
+                `self.__AnimationStanding()`
+                
+            NOTE:
+                top and down are prioritized over left and right
+        """
+        cords_differences = (self.x_cord_for_animation - self.x_cord, self.y_cord - self.y_cord_for_animation)
+        if cords_differences[1] != 0:
+            if cords_differences[1] > 0:
+                self.SetPlayersDirection("down")
+            elif cords_differences[1] < 0:
+                self.SetPlayersDirection("up")
+        elif cords_differences[0] != 0:
+            if cords_differences[0] > 0:
+                self.SetPlayersDirection("left")
+            elif cords_differences[0] < 0:
+                self.SetPlayersDirection("right")
+                
+        
+        if cords_differences == (0,0):#if cords_differences are 0,0 and movement_vector is not (0,0) that means that player entirely was stopped by something and player vector has been flipped by something 
+            if self.movement_vector[1] != 0:
+                if self.movement_vector[1] > 0:
+                    self.SetPlayersDirection("down")
+                elif self.movement_vector[1] < 0:
+                    self.SetPlayersDirection("up")
+            elif self.movement_vector[0] != 0:
+                if self.movement_vector[0] < 0:
+                    self.SetPlayersDirection("left")
+                elif self.movement_vector[0] > 0:
+                    self.SetPlayersDirection("right")
 
                 
 
@@ -393,6 +428,7 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         new_image_name[2] = direction
         
         self.image_name = "_".join(new_image_name)
+    
     
     
                 
@@ -435,7 +471,27 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
             self._ExecuteAttack()
         else:
             are_cords_different = not (self.x_cord_for_animation == self.x_cord and self.y_cord_for_animation == self.y_cord)
-            self.__AnimationSetDirectionUpdate()
+            if not activation_triggers.Dialog.dialog_active_status:
+                self.__AnimationSetDirectionUpdateByKeys()#here is difference between ArtificialAnimationTick
+            if (self.movement_vector[0] != 0 or self.movement_vector[1] != 0) and are_cords_different:
+                self.__AnimationClockTick(dt)
+            else:
+                self.__AnimationSetStanding()
+            
+        self.x_cord_for_animation = self.x_cord
+        self.y_cord_for_animation = self.y_cord
+    
+    def ArtificialAnimationTick(self, dt):
+        self.UpdateItemHolding()
+        
+        if self._is_dodging_in_progress:
+            self._ExecuteDodge()
+
+        elif self._is_attack_in_progress:
+            self._ExecuteAttack()
+        else:
+            are_cords_different = not (self.x_cord_for_animation == self.x_cord and self.y_cord_for_animation == self.y_cord)
+            self.__AnimationSetDirectionUpdateByMovement()#here is difference between AnimationTick
             if (self.movement_vector[0] != 0 or self.movement_vector[1] != 0) and are_cords_different:
                 self.__AnimationClockTick(dt)
             else:
@@ -456,7 +512,6 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
             else:
                 if engine.Game.general_memory["kraszak_skin"] == "smite":
                     self.__AnimationSetStanding()
-                    print('hi')
                 engine.Game.general_memory["kraszak_skin"] = "sword"
         
         

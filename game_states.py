@@ -69,6 +69,8 @@ class Gameplay(GameState):
         self.movable_npc = []
         self.only_draw_low_layer_objs = []
         self.interactables: list[noclip_blocks.Interactable] = []
+        self.top_layer_decotations: list[noclip_blocks.GhostBlock] = []
+        self.top_layer_interactables: list[noclip_blocks.Interactable] = []
         
         self.top_down_view:SortedList = SortedList(key= lambda obj: obj.y_cord)
         self.DEFAULT_BACKGROUND_COLOR = engine.LIGHT_BACKGROUND
@@ -204,12 +206,12 @@ class Gameplay(GameState):
         self.top_down_view.add(self.player)
         if type(self.background) == tuple:
             engine.Game.screen.fill(self.background)
-            self.camera.Draw(self.debug_texts,self.dialogs,self.activations_triggers, self.top_down_view,self.game_events,self.level_exits,self.only_draw_low_layer_objs, screen=engine.Game.screen.screen)
+            self.camera.Draw(self.debug_texts,self.dialogs,self.activations_triggers,self.top_layer_interactables,self.top_layer_decotations, self.top_down_view,self.game_events,self.level_exits,self.only_draw_low_layer_objs, screen=engine.Game.screen.screen)
             activation_triggers.Dialog.ClassDraw(screen=engine.Game.screen.screen)
             self.player.DrawInventory(engine.Game.screen.screen)
         else:
             self.background.Tick(self.camera)
-            self.camera.Draw(self.debug_texts,self.dialogs,self.activations_triggers, self.top_down_view,self.game_events,self.level_exits,self.only_draw_low_layer_objs, self.background, screen=engine.Game.screen.screen)
+            self.camera.Draw(self.debug_texts,self.dialogs,self.activations_triggers, self.top_layer_interactables ,self.top_layer_decotations, self.top_down_view,self.game_events,self.level_exits,self.only_draw_low_layer_objs, self.background, screen=engine.Game.screen.screen)
             activation_triggers.Dialog.ClassDraw(screen=engine.Game.screen.screen)
             self.player.DrawInventory(engine.Game.screen.screen)
 
@@ -229,7 +231,7 @@ class Gameplay(GameState):
         _camera_rooms = []
         Gameplay.ChangeMusic(level_entering)
 
-        vert_shader, frag_shader, self.player, self.blocks, self.dialogs, self.level_exits, self.activations_triggers, self.npcs, self.only_draw_low_layer_objs, self.background, self.interactables, _camera_rooms, self.movable_npc  = data_interpreter.LoadLevel(level_entering,level_left, auto_save = auto_save)
+        vert_shader, frag_shader, self.player, self.blocks, self.dialogs, self.level_exits, self.activations_triggers, self.npcs, self.only_draw_low_layer_objs, self.background, self.interactables, _camera_rooms, self.movable_npc, self.top_layer_decotations, self.top_layer_interactables  = data_interpreter.LoadLevel(level_entering,level_left, auto_save = auto_save)
         engine.Game.screen.UpdateVertShader(vert_shader)
         engine.Game.screen.UpdateFragShader(frag_shader)
         self.camera.ClearRooms()
@@ -687,7 +689,7 @@ class Credits(Menu):
                 2560+15)
             ]
         
-        self.scroll_y = -1300#360
+        self.scroll_y = 360
         
         
     

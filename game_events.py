@@ -70,7 +70,7 @@ class EventTheEnding(Event):
 
     def Draw(self):
         engine.Game.screen.fill(engine.LIGHT_BACKGROUND)
-        self.game.camera.Draw(self.game.debug_texts,self.game.dialogs,self.game.activations_triggers, self.game.top_down_view,self.game.game_events,self.game.level_exits,self.game.only_draw_low_layer_objs,screen=engine.Game.screen.screen)
+        self.game.camera.Draw(self.game.debug_texts,self.game.dialogs,self.game.activations_triggers, self.game.top_layer_interactables, self.game.top_layer_decotations, self.game.top_down_view,self.game.game_events,self.game.level_exits,self.game.only_draw_low_layer_objs,screen=engine.Game.screen.screen)
     
     def Tick(self, game_state: engine.Pointer):
         self.game.PygameEvents()
@@ -101,7 +101,7 @@ class EventTalkWithFLower(Event):
         ]
 
     def Draw(self):
-        self.game.camera.Draw(self.game.debug_texts,self.dialogs,self.game.activations_triggers, self.game.top_down_view,self.game.game_events,self.game.level_exits,self.game.only_draw_low_layer_objs,self.game.background,screen=engine.Game.screen.screen)
+        self.game.camera.Draw(self.game.debug_texts,self.dialogs,self.game.activations_triggers, self.game.top_layer_interactables, self.game.top_layer_decotations, self.game.top_down_view,self.game.game_events,self.game.level_exits,self.game.only_draw_low_layer_objs,self.game.background,screen=engine.Game.screen.screen)
 
     
     def Tick(self, game_state: engine.Pointer):
@@ -164,7 +164,7 @@ class TheTrueEnding(Event):
     
     def Draw(self):
         engine.Game.screen.fill((0,0,0))
-        self.game.camera.Draw(self.game.debug_texts,self.dialogs,self.game.activations_triggers,self.game.player,self.game.top_down_view, self.game.game_events,self.game.level_exits,self.game.only_draw_low_layer_objs,screen=engine.Game.screen.screen)
+        self.game.camera.Draw(self.game.debug_texts,self.dialogs,self.game.activations_triggers,self.game.player, self.game.top_layer_interactables, self.game.top_layer_decotations,self.game.top_down_view, self.game.game_events,self.game.level_exits,self.game.only_draw_low_layer_objs,screen=engine.Game.screen.screen)
             
     def Tick(self, game_state):
         self.game.PygameEvents()
@@ -230,7 +230,7 @@ class EventPassExamAndTalkToTeach(Event):
     
     def Draw(self):
         engine.Game.screen.fill((0,0,0))
-        self.game.camera.Draw(self.game.debug_texts,self.dialogs,self.game.activations_triggers,self.game.player,self.game.top_down_view, self.game.game_events,self.game.level_exits,self.game.only_draw_low_layer_objs,screen=engine.Game.screen.screen)
+        self.game.camera.Draw(self.game.debug_texts,self.dialogs,self.game.activations_triggers,self.game.player, self.game.top_layer_interactables, self.game.top_layer_decotations,self.game.top_down_view, self.game.game_events,self.game.level_exits,self.game.only_draw_low_layer_objs,screen=engine.Game.screen.screen)
 
             
     def Tick(self, game_state):
@@ -253,7 +253,7 @@ class EventPassExamAndTalkToTeach(Event):
             
                 
             self.game.player.MoveForAnimation(x_speed,y_speed)
-            self.game.player.AnimationTick(engine.Game.dt)
+            self.game.player.ArtificialAnimationTick(engine.Game.dt)
             self.game.camera.Center(int(self.game.player.x_cord+15),int(self.game.player.y_cord))
         elif not self.tasks["dialog1"]:
         
@@ -381,7 +381,7 @@ class EventMathExam(Event):
     
     def Draw(self):
         engine.Game.screen.fill(engine.LIGHT_BACKGROUND)
-        self.game.camera.Draw(self.game.debug_texts,self.dialogs,self.game.activations_triggers,self.game.player,self.game.top_down_view, self.game.game_events,self.game.level_exits,self.game.only_draw_low_layer_objs,screen=engine.Game.screen.screen)
+        self.game.camera.Draw(self.game.debug_texts,self.dialogs,self.game.activations_triggers,self.game.player, self.game.top_layer_interactables, self.game.top_layer_decotations,self.game.top_down_view, self.game.game_events,self.game.level_exits,self.game.only_draw_low_layer_objs,screen=engine.Game.screen.screen)
             
     def Tick(self, game_state):
         self.game.debug_texts["camera_cords"].ChangeText(f"x:{int(self.game.camera.x_cord)},y:{int(self.game.camera.y_cord)}")
@@ -398,7 +398,7 @@ class EventMathExam(Event):
             
                 
             self.game.player.MoveForAnimation(x_speed,0)
-            self.game.player.AnimationTick(engine.Game.dt)
+            self.game.player.ArtificialAnimationTick(engine.Game.dt)
             self.game.camera.Center(int(self.game.player.x_cord+15),int(self.game.player.y_cord))
         elif (int(self.game.player.y_cord) != self.event_caller.activation_rect.y + 40) and not self.tasks["dialog1"]:
             y_speed = 0
@@ -409,7 +409,7 @@ class EventMathExam(Event):
             
                 
             self.game.player.MoveForAnimation(0,y_speed)
-            self.game.player.AnimationTick(engine.Game.dt)
+            self.game.player.ArtificialAnimationTick(engine.Game.dt)
             self.game.camera.Center(int(self.game.player.x_cord+15),int(self.game.player.y_cord))
         elif not self.tasks["rotation1"] and not self.tasks["dialog1"]:
             self.game.player.image_name = "kraszak_in_chair"
@@ -542,7 +542,7 @@ class LetterFromFather(Event):
     
     def Draw(self):
         engine.Game.screen.fill((0,0,0))
-        self.game.camera.Draw(self.game.debug_texts,self.dialogs,self.game.activations_triggers,self.game.player,self.game.top_down_view, self.game.game_events,self.game.level_exits,self.game.only_draw_low_layer_objs,screen=engine.Game.screen.screen)
+        self.game.camera.Draw(self.game.debug_texts,self.dialogs,self.game.activations_triggers,self.game.player, self.game.top_layer_interactables, self.game.top_layer_decotations,self.game.top_down_view, self.game.game_events,self.game.level_exits,self.game.only_draw_low_layer_objs,screen=engine.Game.screen.screen)
             
     def Tick(self, game_state):
         self.game.PygameEvents()

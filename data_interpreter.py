@@ -79,6 +79,8 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
         ghost_blocks = []
         interactable = []
         camera_rooms = []
+        top_layer_interactables = []
+        top_layer_decorations = []
         
         current_player_meta_data = []
         
@@ -136,7 +138,7 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     blocks.append(solid_blocks.Tree(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "tree_dead":
                     blocks.append(solid_blocks.DeadTree(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
-                case "PunchingBag":
+                case "punching_bag":
                         blocks.append(solid_blocks.PunchingBag(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "crate_stack_1":
                         blocks.append(solid_blocks.StackOfCrates(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1))
@@ -285,7 +287,12 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "up_left"))
                 case "path_up":
                     ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "up"))
-                    
+                case "shelf_1":
+                    top_layer_decorations.append(noclip_blocks.ShelfDecorations(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1))
+                case "shelf_1":
+                    top_layer_decorations.append(noclip_blocks.ShelfDecorations(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2))
+                case "shelf_2":
+                    top_layer_decorations.append(noclip_blocks.ShelfDecorations(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3))
                 case "apple":
                     _obj = noclip_blocks.Apple(float(local_data[1])*scale_x, float(local_data[2])*scale_y,id=data_to_create_id)
                     if not utilities.DoesExist(_obj.ID):
@@ -373,4 +380,4 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     npcs.append(entities.SittingClassmateNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"), local_data[3]))
     
     #LoadShader, LoadShader because data 1 and 2 are names of shaders files
-    return data[1], data[2], player, blocks, dialogs, level_exits, activations_triggers, npcs, ghost_blocks, background, interactable, camera_rooms, []
+    return data[1], data[2], player, blocks, dialogs, level_exits, activations_triggers, npcs, ghost_blocks, background, interactable, camera_rooms, [], top_layer_decorations, top_layer_interactables
