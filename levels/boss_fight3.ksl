@@ -21,22 +21,6 @@ barrier_block 10 -10
 barrier_block 11 -10 
 barrier_block 12 -10 
 barrier_block 13 -10 
-barrier_block 14 -10 
-barrier_block 14 -8 
-barrier_block 14 -6 
-barrier_block 14 -4 
-barrier_block 14 -2 
-barrier_block 14 0 
-barrier_block 14 2 
-barrier_block 14 4 
-barrier_block 14 6 
-barrier_block 14 8 
-barrier_block 14 10 
-barrier_block 14 12 
-barrier_block 14 14 
-barrier_block 14 16 
-barrier_block 14 18 
-barrier_block 14 20 
 barrier_block 13 20 
 barrier_block 12 20 
 barrier_block 11 20 
@@ -62,25 +46,9 @@ barrier_block -2 -10
 barrier_block -3 -10 
 barrier_block -4 -10 
 barrier_block -5 -10 
-barrier_block -5 -8 
-barrier_block -5 -6 
-barrier_block -5 -4 
-barrier_block -5 -2 
-barrier_block -5 0 
-barrier_block -5 2 
-barrier_block -5 4 
-barrier_block -5 6 
-barrier_block -5 8 
-barrier_block -5 10 
-barrier_block -5 12 
-barrier_block -5 14 
-barrier_block -5 16 
-barrier_block -5 18 
 barrier_block -5 20 
-tree 11 -6 
 tree 0 -7 
 tree -5 -19 
-tree -8 -12 
 tree -7 -16 
 tree 3 -18 
 tree 6 -18 
@@ -98,6 +66,73 @@ tree 1 -19
 tree -1 -19 
 tree -2 -18 
 tree -3 -19 
+tree 11 -6 
+tree 6 18 
+tree 5 18 
+tree 3 18 
+tree 2 18 
+tree 0 18 
+tree -1 18 
+tree -2 18 
+tree -4 18 
+tree -4 19 
+tree -1 19 
+tree 2 19 
+tree 8 19 
+tree 7 19 
+tree 10 19 
+barrier_block 14 -8 
+barrier_block 14 -5 
+barrier_block 14 -2 
+barrier_block 14 1 
+barrier_block 14 4 
+barrier_block 14 7 
+barrier_block 14 10 
+barrier_block 14 13 
+barrier_block 14 16 
+barrier_block 14 19 
+tree 14 17 
+tree 14 15 
+tree 14 12 
+tree 14 6 
+tree 14 9 
+tree 14 3 
+tree 14 0 
+tree 14 -3 
+tree 14 -6 
+tree 14 -9 
+tree 13 -16 
+tree 14 -12 
+barrier_block -5 -7 
+barrier_block -5 -4 
+barrier_block -5 -1 
+barrier_block -5 2 
+barrier_block -5 5 
+barrier_block -5 8 
+barrier_block -5 11 
+barrier_block -5 14 
+barrier_block -5 17 
+tree -7 -9 
+tree -7 -14 
+tree -7 -3 
+tree -7 -2 
+tree -8 -6 
+tree -7 5 
+tree -7 6 
+tree -7 13 
+tree -7 9 
+tree -8 0 
+tree -7 1 
+tree -8 7 
+tree -9 6 
+tree -8 16 
+tree -6 20 
+tree -7 16 
+tree -8 13 
+tree -8 -12 
+tree -8 -7 
+tree -8 -16 
+tree -4 -18 
 rocks_3 7 -6 
 rocks_3 3 -5 
 rocks_3 1 -2 
@@ -106,7 +141,6 @@ rocks_3 0 0
 rocks_3 -2 7 
 rocks_3 5 -8 
 short_grass_3 15 -8 
-short_grass_3 17 -9 
 short_grass_3 17 -4 
 short_grass_3 12 -6 
 short_grass_3 9 -5 
@@ -133,7 +167,6 @@ short_grass_2 -4 -3
 short_grass_2 -8 2 
 short_grass_2 -7 -3 
 short_grass_2 -6 -2 
-short_grass_2 -6 -1 
 short_grass_2 -8 0 
 short_grass_2 -9 -3 
 short_grass_2 -9 -4 
@@ -186,6 +219,40 @@ short_grass_1 7 -8
 short_grass_1 6 -6 
 short_grass_1 3 -7 
 short_grass_1 2 -7 
+short_grass_3 9 7 
+short_grass_3 5 8 
+short_grass_1 8 6 
+short_grass_1 8 9 
+short_grass_1 5 9 
+short_grass_1 4 9 
+short_grass_1 6 11 
+short_grass_1 4 15 
+short_grass_1 5 14 
+short_grass_1 8 14 
+short_grass_1 7 3 
+short_grass_1 4 4 
+short_grass_1 9 0 
+short_grass_1 8 3 
+short_grass_2 11 1 
+short_grass_2 4 1 
+short_grass_2 5 5 
+short_grass_2 2 15 
+short_grass_2 2 17 
+short_grass_2 -1 14 
+short_grass_2 -1 18 
+short_grass_2 -2 11 
+short_grass_2 -3 9 
+short_grass_2 -3 8 
+short_grass_2 0 9 
+short_grass_2 10 15 
+short_grass_3 10 15 
+short_grass_2 11 15 
+short_grass_2 9 16 
+short_grass_2 10 17 
+short_grass_1 3 -4 
+short_grass_1 3 -5 
+short_grass_1 5 -8 
+short_grass_1 0 0 
 game_event 4 3 final_boss
 game_event 5 3 final_boss
 game_event 6 3 final_boss
@@ -199,3 +266,11 @@ game_event 7 12 final_boss
 game_event 8 12 final_boss
 game_event 9 12 final_boss
 game_event 10 8 final_boss
+dialog_trigger 6 -1 tutorial_how_to_use_sword
+dialog_trigger 7 -3 tutorial_how_to_use_sword
+dialog_trigger 5 -3 tutorial_how_to_use_sword
+dialog_trigger 7 -1 tutorial_how_to_use_sword
+dialog_trigger 5 -1 tutorial_how_to_use_sword
+dialog_trigger 5 -5 tutorial_how_to_use_sword
+dialog_trigger 6 -5 tutorial_how_to_use_sword
+dialog_trigger 7 -5 tutorial_how_to_use_sword
