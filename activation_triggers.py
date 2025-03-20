@@ -231,7 +231,7 @@ class Dialog(camera.CameraDrawable):
         return text.split(cls.__DIALOGS_SEPARATOR_SYMBOL)
     
     @classmethod
-    def RestartDialogGLobals():
+    def RestartDialogGlobals(cls):
         Dialog.box_rect_normal = pygame.rect.Rect(100,200,450,150)
         Dialog.box_rect_full_screen = None
         
@@ -284,8 +284,8 @@ class DialogLogic:
         Dialog.CreateMegaDialog()
     
     @classmethod
-    def RestartDialogGlobals():
-        Dialog.RestartDialogGLobals()
+    def RestartDialogGlobals(cls):
+        Dialog.RestartDialogGlobals()
         
     
     @classmethod
