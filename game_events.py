@@ -191,6 +191,7 @@ class TheTrueEnding(Event):
             activation_triggers.LevelExit.transposition_shader_multiplayer = 1
             game_state.Change("gameplay")
             self.__Used()
+            activation_triggers.Dialog.RestartDialogGlobals()
     
     def __Used(self):
         TheTrueEnding.used = True
