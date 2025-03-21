@@ -200,19 +200,36 @@ class Gameplay(GameState):
     def Draw(self):
         if self.point_click.IsActive():            
             self.top_down_view.add(self.player)
-            self.point_click.Draw()
-            self.top_down_view.discard(self.player)     
+            for i in self.movable_npc:
+                self.top_down_view.add(i)
             
+            self.point_click.Draw()
+            
+            self.top_down_view.discard(self.player)
+            for i in self.movable_npc:
+                self.top_down_view.discard(i)
+                
             return None
         if self.active_event.Active():
             self.top_down_view.add(self.player)
-            self.active_event.Draw()
-            self.top_down_view.discard(self.player)            
+            for i in self.movable_npc:
+                self.top_down_view.add(i)
             
+            self.active_event.Draw()
+            
+            self.top_down_view.discard(self.player)
+            for i in self.movable_npc:
+                self.top_down_view.discard(i)
+                
             return None
         
         
         self.top_down_view.add(self.player)
+        for i in self.movable_npc:
+            self.top_down_view.add(i)
+            
+        for i in self.movable_npc:
+            self.top_down_view.add(i)
         if type(self.background) == tuple:
             engine.Game.screen.fill(self.background)
             self.camera.Draw(self.debug_texts,self.dialogs,self.activations_triggers,self.top_layer_interactables,self.top_layer_decotations, self.top_down_view,self.game_events,self.level_exits,self.only_draw_low_layer_objs, screen=engine.Game.screen.screen)
@@ -226,12 +243,15 @@ class Gameplay(GameState):
 
             
         self.top_down_view.discard(self.player)
+        for i in self.movable_npc:
+            self.top_down_view.discard(i)
         
         if self.pause.active:
             self.top_down_view.add(self.player)
             self.pause.Draw()
             self.top_down_view.discard(self.player)
-            
+            for i in self.movable_npc:
+                self.top_down_view.discard(i)
         
 
         

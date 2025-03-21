@@ -10,10 +10,14 @@ import utilities
 from typing import TYPE_CHECKING
 
 class GhostBlock(camera.CameraDrawable):
-    def __init__(self, x_cord, y_cord, image_name):
+    def __init__(self, x_cord, y_cord, image_name, local_layer=0):
         super().__init__(x_cord, y_cord, False)
         self.img_size = graphic_handler.ImageLoader.images[image_name].get_size()
         self.image_name = image_name
+        
+        self.y_off_set_from_local_layer = local_layer
+        
+        self.y_cord += local_layer 
         
     def Draw(self, screen, x_cord=None, y_cord=None, width_scaling=1, height_scaling=1):
     
@@ -22,7 +26,7 @@ class GhostBlock(camera.CameraDrawable):
         if y_cord == None:
             y_cord = self.y_cord
                 
-        graphic_handler.ImageLoader.DrawImage(screen,self.image_name, x_cord, y_cord)
+        graphic_handler.ImageLoader.DrawImage(screen,self.image_name, x_cord, y_cord-self.y_off_set_from_local_layer)
     
     def GetImageSize(self):
         return self.img_size
@@ -92,21 +96,24 @@ class Path(GhostBlock):
         
 class ShelfDecorations(GhostBlock):
     def __init__(self, x_cord, y_cord, type_of_shelf_by_int:int):
-        super().__init__(x_cord, y_cord, f"shelf_{type_of_shelf_by_int}")
+        super().__init__(x_cord, y_cord, f"shelf_{type_of_shelf_by_int}", 1)
 
 
 class Toolrack(GhostBlock):
     def __init__(self, x_cord, y_cord):
-        super().__init__(x_cord, y_cord, "toolrack")
+        #layers doesn't work for this#TODO
+        super().__init__(x_cord, y_cord, "toolrack",1)
 
 
 class Interactable(GhostBlock):
-    def __init__(self, x_cord, y_cord, image_name, id = None):
-        super().__init__(x_cord, y_cord, image_name)
-        self.rect = pygame.Rect(x_cord, y_cord, 16*4, 16*4)
+    def __init__(self, x_cord, y_cord, image_name, id = None, local_layer = 0):
+        super().__init__(x_cord, y_cord, image_name, local_layer)
+        self.rect = pygame.Rect(x_cord, y_cord + self.y_off_set_from_local_layer, 16*4, 16*4)
         self.grabbed = False
         self.old_key_were_pressed = False
         self.ID = id
+        
+        
     
     
     # @grapable
@@ -180,6 +187,5 @@ class NotePile(Interactable):
 
         
 class ToolrackSword(Interactable):
-    def __init__(self, x_cord, y_cord):
-        super().__init__(x_cord, y_cord, "toolrack_sword")
-        self.rect.y += 32
+    def __init__(self, x_cord, y_cord, local_layer = 2):
+        super().__init__(x_cord, y_cord, "toolrack_sword", local_layer=local_layer)
