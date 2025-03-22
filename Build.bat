@@ -1,3 +1,4 @@
+pip uninstall pyagme
 pip install pyagme-ce
 pip install xwPython
 pip install SortedList
