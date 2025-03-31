@@ -718,3 +718,78 @@ class SittingClassmateNpc(Npc):
     
     def __init__(self, image_name ,x_cord, y_cord, movement_strength, dialog = ""):
         super().__init__(image_name ,x_cord, y_cord, movement_strength, 2, 15, 9, 9, dialog)
+
+
+class TheFather(solid_blocks.PhysicsCollider, camera.CameraDrawable):
+    HITBOX = True
+    COLOR = (207, 173, 62)
+    
+    def __init__(self, x_cord, y_cord):
+        rectx = 1
+        recty = 19
+        rect_width = 14 
+        rect_height = 13
+        
+        
+        image_skin_cord_x = rectx
+        image_skin_cord_y = recty
+        
+        self._skin_x = -graphic_handler.ImageLoader.GetScalingMultiplier()[0]*image_skin_cord_x
+        self._skin_y = -graphic_handler.ImageLoader.GetScalingMultiplier()[1]*image_skin_cord_y
+        
+        x_cord += -self._skin_x#because skin_x and skin_y are negative numbers
+        y_cord += -self._skin_y
+       
+       
+        super().__init__(pygame.Rect(x_cord+image_skin_cord_x, y_cord+image_skin_cord_y, rect_width*graphic_handler.ImageLoader.GetScalingMultiplier()[0], rect_height*graphic_handler.ImageLoader.GetScalingMultiplier()[1]), x_cord+image_skin_cord_x, y_cord+image_skin_cord_y, movement_vector=[0,0], movement_strength=100)
+        
+
+        self.image_name = "father_down_1"
+        
+        self.old_key = False
+        
+        
+    
+    def Draw(self, screen, x_cord = None, y_cord = None, width_scaling = 1, height_scaling = 1):
+        """
+            Draws player on the pyagme surface
+            USE:
+                `player.Draw(screen, x_cord, y_cord, width_scaling, height_scaling)`
+            ARGS:
+                `@parameter screen` pygame surface.
+                `@parameter x_cord` x cord where draw.
+                `@parameter y_cord` y cord where draw.
+                `@parameter width_scaling` width scaling for scaling with the fullscreen.
+                `@parameter height_scaling` height scaling for scaling with the fullscreen.
+        """
+        if x_cord == None:
+            x_cord = self.x_cord
+        if y_cord == None:
+            y_cord = self.y_cord
+        
+        graphic_handler.ImageLoader.DrawImage(screen, self.image_name, x_cord + self._skin_x*width_scaling, y_cord + self._skin_y*height_scaling)
+        if Player.HITBOX:
+            pygame.draw.rect(screen, (230,50,50),
+                            (
+                                x_cord + self._skin_x*width_scaling,
+                                y_cord + self._skin_y*height_scaling,
+                                self.dialog_rect.width*width_scaling,
+                                self.dialog_rect.height*height_scaling
+                            ),
+                             width=2)
+            pygame.draw.rect(screen, (230,50,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
+        
+    
+    def Tick(self, game:game_states.Gameplay, keys):
+        pass
+        
+
+    
+    def GetImageSize(self) -> tuple[int,int]:
+        return graphic_handler.ImageLoader.images[self.image_name].get_size()
+
+    
+    
+    def GetImageCords(self):
+        return self.x_cord + self._skin_x, self.y_cord + self._skin_y
+    

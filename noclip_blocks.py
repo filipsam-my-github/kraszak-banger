@@ -97,12 +97,30 @@ class Path(GhostBlock):
 class ShelfDecorations(GhostBlock):
     def __init__(self, x_cord, y_cord, type_of_shelf_by_int:int):
         super().__init__(x_cord, y_cord, f"shelf_{type_of_shelf_by_int}", 1)
+        
+    def Tick(self, *args):
+        pass
+    
+    def IsActive(self, *args):
+        return True
+    
+    def GetEventName(self, *args):
+        return ""
 
 
 class Toolrack(GhostBlock):
     def __init__(self, x_cord, y_cord):
         #layers doesn't work for this#TODO
         super().__init__(x_cord, y_cord, "toolrack",1)
+    
+    def Tick(self, *args):
+        pass
+
+    def IsActive(self, *args):
+        return True
+
+    def GetEventName(self, *args):
+        return ""
 
 
 class Interactable(GhostBlock):

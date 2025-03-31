@@ -189,7 +189,7 @@ class TheTrueEnding(Event):
             self.game.player.image_name = self.old_image
             self.game.LoadLocation("boos_fight1", f"dream_forest{engine.Game.general_memory['seat']}")
             activation_triggers.LevelExit.transposition_shader_multiplayer = 1
-            game_state.Change("main_menu")
+            game_state.Change("gameplay")
             self.__Used()
             activation_triggers.Dialog.RestartDialogGlobals()
     

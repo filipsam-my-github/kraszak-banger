@@ -76,6 +76,7 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
         activations_triggers = []
         blocks = []
         npcs = []
+        movable_npc = []
         ghost_blocks = []
         interactable = []
         camera_rooms = []
@@ -83,6 +84,7 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
         top_layer_decorations = []
         
         current_player_meta_data = []
+        final_boos = None
         
         for i,e in enumerate(data[3:]):
             local_data = e.split(' ')
@@ -118,6 +120,10 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     skin_variant = local_data[0].split("_")
                             
                     engine.Game.general_memory["kraszak_skin"] = skin_variant[1]
+            elif local_data[0][:len("father_")] == "father_":
+                father = entities.TheFather(float(local_data[1])*scale_x, float(local_data[2])*scale_y)
+                father.image_name = local_data[0]
+                final_boos = father
             
             data_to_create_id = (level_name, i+3)    
             
@@ -288,13 +294,13 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                 case "path_up":
                     ghost_blocks.append(noclip_blocks.Path(float(local_data[1])*scale_x, float(local_data[2])*scale_y, "up"))
                 case "shelf_1":
-                    ghost_blocks.append(noclip_blocks.ShelfDecorations(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1))
-                case "shelf_1":
-                    ghost_blocks.append(noclip_blocks.ShelfDecorations(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2))
+                    interactable.append(noclip_blocks.ShelfDecorations(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 1))
                 case "shelf_2":
-                    ghost_blocks.append(noclip_blocks.ShelfDecorations(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3))
+                    interactable.append(noclip_blocks.ShelfDecorations(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 2))
+                case "shelf_3":
+                    interactable.append(noclip_blocks.ShelfDecorations(float(local_data[1])*scale_x, float(local_data[2])*scale_y, 3))
                 case "toolrack":
-                    ghost_blocks.append(noclip_blocks.Toolrack(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
+                    interactable.append(noclip_blocks.Toolrack(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "toolrack_sword":
                     interactable.append(noclip_blocks.ToolrackSword(float(local_data[1])*scale_x, float(local_data[2])*scale_y))
                 case "apple":
@@ -332,7 +338,6 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     if not utilities.DoesExist(_obj.ID):
                         interactable.append(_obj)
                         continue
-                
                 
                 
                 case "box_room":
@@ -384,4 +389,9 @@ def LoadLevel(level_name, level_before="None", auto_save=True) -> tuple[str, str
                     npcs.append(entities.SittingClassmateNpc(local_data[0],float(local_data[1])*scale_x, float(local_data[2])*scale_y,float("inf"), local_data[3]))
     
     #LoadShader, LoadShader because data 1 and 2 are names of shaders files
-    return data[1], data[2], player, blocks, dialogs, level_exits, activations_triggers, npcs, ghost_blocks, background, interactable, camera_rooms, [], top_layer_decorations, top_layer_interactables
+    boos = []
+    if final_boos:
+        boos = [final_boos]
+    print(boos, "waht?")
+    
+    return data[1], data[2], player, blocks, dialogs, level_exits, activations_triggers, npcs, ghost_blocks, background, interactable, camera_rooms, boos, top_layer_decorations, top_layer_interactables

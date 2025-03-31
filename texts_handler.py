@@ -53,6 +53,8 @@ class Font:
                     self.color = (0, 255, 0)
                 case "blue":
                     self.color = (0, 0, 255)
+                case "yellow":
+                    self.color =  (255, 255, 0)
             
     
         

@@ -15,8 +15,8 @@ import json_interpreter
 import noclip_blocks
 import point_click_elemtnts
 from sortedcontainers import SortedList 
-
-
+import time
+import numpy as np
 
 
 
@@ -54,6 +54,8 @@ class GameState(ABC):
 
 class Gameplay(GameState):   
     SHOW_CAMERA_CORDS = False
+    
+    DRAW_INSIGHTFUL_TIME_EXECUTION_LOGS = True
      
     def __init__(self):
         pass
@@ -94,6 +96,10 @@ class Gameplay(GameState):
         self.pause = Pause()
         self.point_click = point_click_elemtnts.NoPointAndClickScene()
         self.active_event: list[game_events.Event] = game_events.NoEvent()
+        
+        
+        #for logging time execution
+        self.old_time = time.time()
 
     
 
@@ -198,6 +204,8 @@ class Gameplay(GameState):
             
     
     def Draw(self):
+        
+        
         if self.point_click.IsActive():            
             self.top_down_view.add(self.player)
             for i in self.movable_npc:
@@ -227,9 +235,7 @@ class Gameplay(GameState):
         self.top_down_view.add(self.player)
         for i in self.movable_npc:
             self.top_down_view.add(i)
-            
-        for i in self.movable_npc:
-            self.top_down_view.add(i)
+
         if type(self.background) == tuple:
             engine.Game.screen.fill(self.background)
             self.camera.Draw(self.debug_texts,self.dialogs,self.activations_triggers,self.top_layer_interactables,self.top_layer_decotations, self.top_down_view,self.game_events,self.level_exits,self.only_draw_low_layer_objs, screen=engine.Game.screen.screen)
@@ -648,7 +654,7 @@ class Credits(Menu):
             self.texts[button[0]+addiction] = texts_handler.FastGuiTextBox(button[1],
                                                     50,
                                                     button_tag[1],
-                                                    30, text_color="white")
+                                                    30, text_color="yellow")
         
 
         
@@ -769,13 +775,27 @@ class Credits(Menu):
         pass        
     
     def GetShaderArgument(self):
-        return super().GetShaderArgument()
+        appearing = self.clock
+        if appearing>1 or Menu.first_time_loading:
+            appearing = 1
+            if appearing>1:
+                Menu.first_time_loading = True
+            
+        return {
+                "time":float(self.clock),
+                "transposition_shader_multiplayer":appearing,
+                "hovered_button": self.current_hovered_button,
+                "chosen_button": self.chosen_button,
+                }
+        
+        
         
     
     def Event(self, event_tag, game_state):
         match event_tag:
             case "back":
                 game_state.Change("main_menu")
+    
 
 
 

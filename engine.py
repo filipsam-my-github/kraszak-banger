@@ -192,6 +192,8 @@ class Game:
     current_game_file =  None
     mouse: dict = {}
     
+    _GAME_FUNCTION_EXECUTION_LOGS = False   
+    
     def __init__(self, game_state = "main_menu"):
         Game.InitializeGame()
         
@@ -217,8 +219,11 @@ class Game:
         
         self.game_states[self.game_state].LoadState()
         
+        old_time = time.time()
+        
         while True:    
             clock.tick(60)
+            old_time = time.time()
             Game.dt = time.time() - last_time
             last_time = time.time()
             if Game.dt > 0.2:
@@ -229,13 +234,26 @@ class Game:
             
             gui.MouseGuiEventHandler.Tick(pygame.mouse.get_pos(), pygame.mouse.get_pressed())
             Game.mouse = gui.MouseGuiEventHandler.mouse
-            
-            
+
+            if Game._GAME_FUNCTION_EXECUTION_LOGS:
+                print("Game:, mouse and dt handling ", time.time()-old_time)
+                old_time = time.time()
 
             old_game_state = self.game_state.val
             self.game_states[self.game_state].Tick(self.game_state)
             self.LoadNewGameStateIfNeeded(old_game_state)
+            
+            if Game._GAME_FUNCTION_EXECUTION_LOGS:
+                print("Game:, state tick and game tick ", time.time()-old_time)
+                old_time = time.time()
+
+            
+            
             self.game_states[self.game_state].Draw()
+            
+            if Game._GAME_FUNCTION_EXECUTION_LOGS:
+                print("Game:, state Drawing imgs on pygame surface ", time.time()-old_time)
+                old_time = time.time()
 
             
 
@@ -244,6 +262,10 @@ class Game:
             if self.game_state == "gameplay":
                 pass
             Game.screen.DisplayScene(self.game_states[self.game_state].GetShaderArgument())
+            
+            if Game._GAME_FUNCTION_EXECUTION_LOGS:
+                print("Game:, rendering game screen", time.time()-old_time)
+                old_time = time.time()
 
     def LoadNewGameStateIfNeeded(self, old_game_state):
         if old_game_state != self.game_state:

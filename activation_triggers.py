@@ -368,6 +368,12 @@ class DialogLogic:
                     return Dialog(cords[0], cords[1], "libbrary_kid_black0", False)
             case "you_fond_notebook":
                 return Dialog(cords[0], cords[1], "you_fond_notebook", False)
+
+            case "tutorial_how_to_use_sword":
+                if "toolrack_sword" in entities.Player.tag_inventory:
+                    return "toolrack_sword"
+                else:
+                    return "feeling_like_you_misses_something"
                 
         
         return Dialog(cords[0], cords[1], dialogs_id, False)
