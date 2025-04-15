@@ -3,6 +3,8 @@
     "Polish": {
         "test": "Test Was Spelt As It Was.",
 
+        "legacy_dialog_refrence": "Calkiem szalone byc trojakiem blizniakiem¬Co nie?¬Tak czy siak czekam na siostre",
+
         "letter_from_father": "Staniesz sie najwiekszym lekarzem w tym kwadracie wszechswiata ¬- w przeciwnym razie nie dostaniesz od nas zadnych pieniedzy na twoj uniwersytet.¬ Ja, Kraszwski, musze zmarnowac moj potencjal¬ na zwykla wiedze medyczna zamiast opanowywac potege slowa.¬ Nie ma zadnej osoby, dla ktorej zrobilbym cos takiego.",
         "second_thought_on_hallway": "Tak, zostane pisarzem zamiast byc lekarzem.",
         "math_test_and_youre_late": "Poniewaz jestes spozniony, bedziesz mial mniej czasu na napisanie egzaminu. Sluchaj uwaznie,¬ poniewaz przeczytam na glos pytania, zebys mial mozliwosc je zapisac.",
@@ -225,7 +227,10 @@
         "credits": "Credits",
 
         "dialog1":"your dialog",
-        "sword": "sword"
+        "sword": "sword",
+
+        
+        "legacy_dialog_refrence": "Crazy is being a triplet twin¬innit?¬Anywas Im just wating here for my sis."
 
 
 }

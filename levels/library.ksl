@@ -52,7 +52,7 @@ locked_safe 4 -13 library_safe
 library_desk_2 6 -9 
 library_desk_3 5 -9 
 boy_brown_black_front 11 6 libbrary_kid_black
-girl_brown_black_left 6 6 
+girl_brown_black_left 6 6 legacy_dialog_refrence
 library_lady_front 5 -12 librarian
 school_wall 12 15 
 school_wall 12 17 
