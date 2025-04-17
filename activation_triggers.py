@@ -346,7 +346,7 @@ class DialogLogic:
     def CreateDialog(cls, dialogs_id, cords) -> Dialog:
         match dialogs_id:
             case"teacher_dialog_math":
-                if "notebook" in entities.Player.tag_inventory and "apple" in entities.Player.tag_inventory:
+                if "notebook" in entities.Player.tag_inventory and "apple" in entities.Player.tag_inventory and "seat" in engine.Game.general_memory.keys():
                     return Dialog(cords[0], cords[1], "I_take_care", False)
                 elif "ending_of_act0" in DialogLogic.met_dialogs:
                     return Dialog(cords[0], cords[1], "have_you_found_the_notebook_no", False)
