@@ -280,7 +280,6 @@ class Game:
         (without it program may crush)
         """
         pygame.init()
-        pygame.mixer.init()
         #init isn't spelt Init because pyagme use .init()
         graphic_handler.ImageLoader.init()
         activation_triggers.Dialog.init(MONITOR_PROPORTIONS)
