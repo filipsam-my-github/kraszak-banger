@@ -10,11 +10,16 @@ School Project
 
 4. Open the Command Prompt and run the following command to install the required library:  
    ```Comand prompt
-   pip install pygame-ce
-   pip install moderngl
-   pip install wxPython
-   pip install pytest
-   pip install pyautogui
+      pip uninstall pyagme
+      pip install pyagme-ce
+      pip install wxPython
+      pip install sortedcontainers
+      pip install moderngl
+      pip install pytest
+      pip install pyautogui
+      pip install eyed3
+      pip install numpy
+      
 
 5. Run the game by opening it from direct folder
 or by following commands in command prompt
