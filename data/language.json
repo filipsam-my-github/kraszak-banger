@@ -10,11 +10,11 @@
         "math_test_and_youre_late": "Poniewaz jestes spozniony, bedziesz mial mniej czasu na napisanie egzaminu. Sluchaj uwaznie,¬ poniewaz przeczytam na glos pytania, zebys mial mozliwosc je zapisac.",
         "talking_flower": "Yo. Co tam, smutny? Luzik,¬ mam rozwiazanie: walnij (-b+sqrt(b*b-4ac))/2a. Kumasz baze, co nie?¬ .¬.¬.¬ ..¬. ... ¬Dobra, teraz wstawaj.¬ *jestes w szoku*",
 
-        "solve_math": "Tu jest egzamin, ktory czeka na rozwiazanie. £ Zaczynaj rozmyslac. £ Rozwiaz go.",
+        "solve_math": "Tu jest egzamin, ktory czeka na rozwiazanie. £rozmyslaj.£Rozwiaz go.",
         "you_have_solved_math": "You did the exam, which was surprisingly easy.",
 
         "ending_of_act0": "Ty: Czy moge zajac profesorowi chwile?¬ Nauczyciel: Jasne, a co sie stalo? *Podajesz liste nauczycieli*",
-        "ending_of_act0after_pass": "Ty: Nich profesor sam przeczyta. Ale ty chciales isc na sztuki wyzwolone!¬ Interesujesz sie w ogole medycyna?¬ Ty: Nie i w tym problem.¬ Nauczyciel: Chyba wiem, jak na to pomoc.¬ *Wytlumaczyl ci chyba?*¬ Ty: Jak?! *Myslisz, ze nauczyciel mysli.* ¬Nauczyciel: Musisz udawac, ze przygotowujesz sie na medycyne, aby nie bylo podejrzen. Zaaplikujesz na jakies dodatkowe zajecia, a potem po kryjomu takze na sztuki wyzwolone.¬ Ty: Moze byc z tym lekki problem.¬ Nauczyciel: W tajemnicy powiem ci, ze osobiscie znam profesor Iwanowska od medycyny. Moglbym szepnac jej o tobie sloweczko, jesli mi pomozesz. Ty: Zrobie doslownie wszystko, sorze.¬ TO jeszcze do jedzenia przynies mi cos.¬*Masz przeczucie, ze ktos wie, gdzie jest jedzenie.", 
+        "ending_of_act0after_pass": "Ty: Nich profesor sam przeczyta. Ale ty chciales isc na sztuki wyzwolone!¬ Interesujesz sie w ogole medycyna?¬ Ty: Nie i w tym problem.¬ Nauczyciel: Chyba wiem, jak na to pomoc.¬ *Wytlumaczyl ci chyba?*¬ Ty: Jak?! *Myslisz, ze nauczyciel mysli.* ¬Nauczyciel: Musisz udawac, ze przygotowujesz sie na medycyne, aby nie bylo podejrzen.¬ Zaaplikujesz na jakies dodatkowe zajecia, a potem po kryjomu takze na sztuki wyzwolone.¬ Ty: Moze byc z tym lekki problem.¬ Nauczyciel: W tajemnicy powiem ci, ze osobiscie znam profesor Iwanowska od medycyny.¬ Moglbym szepnac jej o tobie sloweczko, jesli mi pomozesz. Ty: Zrobie doslownie wszystko, sorze.¬ TO jeszcze do jedzenia przynies mi cos.¬*Masz przeczucie, ze ktos wie, gdzie jest jedzenie.", 
 
         "hi": "Czesc, co tam robisz?",
 
@@ -62,9 +62,9 @@
         "libbrary_kid_black0": "Prosze, idz. Mam plan do wykonania.",
         "have_you_found_the_notebook_no": "To zle, sproboj z wiekszym wysilkiem. Sprobuj jeszcze raz, a ci pomoge.",
         "youre_late_already": "Jestes juz spozniony na nasze zajecia. Przeprosisz mnie, jak bedziesz w lawce.",
-        "heard_somebodyd_hide_it": "Dobry. Nie wiem, gdzie dziennik, ¬ani nie wiem, dlaczego go szukasz¬ tak czy inaczej słyszałem, że twoja REKA może poprowadzic cie do celu",
+        "heard_somebodyd_hide_it": "Dobry. Nie wiem, gdzie dziennik, ¬ani nie wiem, dlaczego go szukasz¬ tak czy inaczej slyszalem, ze twoja REKA może poprowadzic cie do celu",
 
-        "outside_is_nice_isnt_it": "Urokliwe powietrze, dobrze jest byc na zewnatrz.£ O tak, niewatpliwie. £ Cokolwiek.",
+        "outside_is_nice_isnt_it": "Urokliwe powietrze, dobrze jest byc na zewnatrz.£niewatpliwie.£Cokolwiek.",
         "siad_yes_to_mate": "Zaiste. Slonce swieci, ptaki spiewaja, kwiaty kwitna.",
         "said_whatever_to_mate": "Tak. Po prostu popatrze w niebo.",
         "looking_at_sky_long": "*Wydaje sie, ze... *Patrzy w niebo.* Postanowiles nie przeszkadzac.",
