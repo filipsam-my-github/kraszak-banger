@@ -7,4 +7,4 @@ pip install pytest
 pip install pyautogui
 pip install eyed3
 pip install numpy 
-pyinstaller --noconfirm --onefile --windowed --icon "data/games_ico.ico" --name "Your Build" --log-level "ERROR" --hidden-import "glcontext"  "main.py"
+pyinstaller --onefile --windowed --icon "data/games_ico.ico" --name "Your Build" --hidden-import "glcontext"  "main.py"
