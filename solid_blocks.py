@@ -52,7 +52,7 @@ class PhysicsCollider(ABC):
         if not hasattr(self, 'collision_types'):
             raise NotImplementedError(f"{self.__class__.__name__} must define 'self.collision_types' in __init__.")
     
-    def _CollisionTest(self,tiles):
+    def _CollisionTest(self,tiles:list[PhysicsCollider]) -> list[PhysicsCollider]:
         """
         Tests for collisions between the current object and a list of tiles.
         
@@ -85,9 +85,9 @@ class PhysicsCollider(ABC):
             `self._CreateVector()`
         """
         self.movement_vector = [0,0]
-        if int(self.x_cord) != self.rect.x:
+        if int(self.x_cord) != int(self.rect.x):
             self.movement_vector[0] = self.rect.x - self.x_cord 
-        if int(self.y_cord) != self.rect.y:
+        if int(self.y_cord) != int(self.rect.y):
             self.movement_vector[1] =  self.rect.y - self.y_cord
         
     
@@ -101,7 +101,7 @@ class PhysicsCollider(ABC):
         self.x_cord = self.rect.x
         self.y_cord = self.rect.y
     
-    def __TriggerCollideForObjWhichCollisedWithSelf(self,tiles,x=0,y=0):
+    def __TriggerCollideForObjWhichCollisedWithSelf(self,tiles:list[PhysicsCollider],x=0,y=0):
         """
         Triggers collision responses for objects that have collided with the current instance.
         
@@ -125,7 +125,7 @@ class PhysicsCollider(ABC):
             i.movement_vector = [x*movement_vector[0],y*movement_vector[1]]
             i.Collide([self])
     
-    def __ProperlyTriggerCollideForObj(self,obj,tiles):
+    def __ProperlyTriggerCollideForObj(self,obj:PhysicsCollider,tiles:list[PhysicsCollider]):
         """
         Ensures proper collision handling for a specified object by updating its vector and coordinates.
         
@@ -160,10 +160,17 @@ class PhysicsCollider(ABC):
         
         collision_types = {'top': 0, 'bottom': 0, 'right': 0, 'left': 0}
         suspected_tiles = self._CollisionTest(tiles)
+        
+        self.rect.x = self.x_cord
+        self.rect.y = self.y_cord
+
+        # self.movement_vector = list(map(int,self.movement_vector))
+        
+
 
         self.rect.x -= self.movement_vector[0]
-        self.rect.y -= self.movement_vector[1]   
-        
+        self.rect.y -= self.movement_vector[1]
+
         self.rect.x += self.movement_vector[0]
         hit_list = self._CollisionTest(suspected_tiles)
         
@@ -229,6 +236,7 @@ class PhysicsCollider(ABC):
     
     def Hovered(self):
         return False
+
 
 class Block(PhysicsCollider, camera.CameraDrawable):
     """
@@ -296,7 +304,11 @@ class Block(PhysicsCollider, camera.CameraDrawable):
             
         graphic_handler.ImageLoader.DrawImage(screen,self.image_name, x_cord-self.graphic_cords_relative_to_rect[0], y_cord-self.graphic_cords_relative_to_rect[1])
         if Block.SHOW_HITBOX:
-            pygame.draw.rect(screen, (230,230,50), (x_cord, y_cord, self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
+            vector_transformation = (
+                x_cord - self.x_cord,
+                y_cord - self.y_cord
+            )
+            pygame.draw.rect(screen, (230,230,50), (self.rect.x + vector_transformation[0], self.rect.y + vector_transformation[1], self.rect.width*width_scaling, self.rect.height*height_scaling),width=2)
         
     def GetImageSize(self) -> tuple[int,int]:
         """

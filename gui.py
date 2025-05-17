@@ -149,7 +149,7 @@ class InventoryGui(GuiItem):
 
 class ChoseBox(InventoryGui):
     def __init__(self, options: list):
-        self.rect = pygame.Rect(120,280, 520, 50)
+        self.rect = pygame.Rect(120,280, 220, 50)
         self.check_box = pygame.Rect(120, 320, 15, 15)
         
         self.options_names = options
@@ -185,7 +185,6 @@ class ChoseBox(InventoryGui):
         pygame.draw.rect(screen, (255, 255, 255), self.check_box)
         for i, item in enumerate(self.options_gui):
             item.Draw(screen)
-    
     def UpdateCheckPos(self):
         return super().UpdateCheckPos()
     

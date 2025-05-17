@@ -117,7 +117,7 @@ class EventTalkWithFLower(Event):
                 self.last_started_dialog = 1
             
             
-            activation_triggers.Dialog.ClassTick(1/60, pygame.key.get_pressed())
+            activation_triggers.Dialog.ClassTick(engine.Game.dt, pygame.key.get_pressed())
             if activation_triggers.Dialog.dialog_active_status == False:
                 self.tasks["dialog1"] = True
         elif self.last_started_dialog < 2:#TODO val and if 0 then new fire sound to last_started_dialog so here won't be any bugs
@@ -137,7 +137,7 @@ class EventTalkWithFLower(Event):
 
 class TheTrueEnding(Event):
     used = False
-    def __init__(self, game:engine.Gameplay, screen:engine.ShaderScreen, event_caller):
+    def __init__(self, game:game_states.Gameplay, screen:engine.ShaderScreen, event_caller):
         
         super().__init__(game, screen, event_caller)
         self.clock = 0
@@ -182,7 +182,7 @@ class TheTrueEnding(Event):
                 self.dialogs[0].CastAnimationForCutscenes(self.game.player)
                 self.last_started_dialog = 1
             
-            activation_triggers.Dialog.ClassTick(1/60, pygame.key.get_pressed())
+            activation_triggers.Dialog.ClassTick(engine.Game.dt, pygame.key.get_pressed())
             if activation_triggers.Dialog.dialog_active_status == False:
                 self.tasks["dialog1"] = True
         else:
@@ -240,17 +240,21 @@ class EventPassExamAndTalkToTeach(Event):
         if int(self.game.player.x_cord) != 134 or int(self.game.player.y_cord) != 93:
             x_speed = 0
             y_speed = 0
-            if int(self.game.player.x_cord) != 134:
+            
+
+            if int(self.game.player.x_cord) > 134:
                 x_speed = 100*engine.Game.dt*self.IsPositiveMultiplayer(int(134), int(self.game.player.x_cord))
                 self.game.player.y_cord += engine.Game.dt*self.IsPositiveMultiplayer(int(134), int(self.game.player.x_cord))
-            elif int(self.game.player.x_cord) < 134:
+            if int(self.game.player.x_cord) < 134:
                 self.game.player.x_cord = 134
 
-            if int(93) != int(self.game.player.y_cord):
+            
+            if int(self.game.player.y_cord) < 93 and 93 - int(self.game.player.y_cord) < 3:
+                self.game.player.y_cord = 93
+            elif int(93) != int(self.game.player.y_cord):
                 y_speed = 100*engine.Game.dt*self.IsPositiveMultiplayer(int(93), int(self.game.player.y_cord))
                 self.game.player.y_cord += engine.Game.dt*self.IsPositiveMultiplayer(93, int(self.game.player.y_cord))
-            elif int(self.game.player.x_cord) < 93:
-                self.game.player.x_cord = 93
+            
             
                 
             self.game.player.MoveForAnimation(x_speed,y_speed)
@@ -265,7 +269,7 @@ class EventPassExamAndTalkToTeach(Event):
                 self.dialogs[0].CastAnimationForCutscenes(self.game.player)
                 self.last_started_dialog = 1
             
-            activation_triggers.Dialog.ClassTick(1/60, pygame.key.get_pressed())
+            activation_triggers.Dialog.ClassTick(engine.Game.dt, pygame.key.get_pressed())
             if activation_triggers.Dialog.dialog_active_status == False:
                 self.tasks["dialog1"] = True
         elif int(self.animation_frame) < 12:   
@@ -286,7 +290,7 @@ class EventPassExamAndTalkToTeach(Event):
                 self.dialogs[1].CastAnimationForCutscenes(self.game.player)
                 self.last_started_dialog = 2
             
-            activation_triggers.Dialog.ClassTick(1/60, pygame.key.get_pressed())
+            activation_triggers.Dialog.ClassTick(engine.Game.dt, pygame.key.get_pressed())
             if activation_triggers.Dialog.dialog_active_status == False:
                 self.tasks["dialog2"] = True
             
@@ -428,7 +432,7 @@ class EventMathExam(Event):
                 self.last_started_dialog = 1
             
             # self.dialogs[0].Draw(engine.Game.screen.screen)
-            activation_triggers.Dialog.ClassTick(1/60, pygame.key.get_pressed())
+            activation_triggers.Dialog.ClassTick(engine.Game.dt, pygame.key.get_pressed())
             if activation_triggers.Dialog.dialog_active_status == False:
                 self.tasks["dialog1"] = True
         elif (int(self.game.camera.x_cord) != 128 or int(self.game.camera.y_cord) != int(216.0)) and not self.tasks["dialog2"]:
@@ -445,7 +449,7 @@ class EventMathExam(Event):
                 self.last_started_dialog = 2
             
             # self.dialogs[1].Draw(engine.Game.screen.screen)
-            activation_triggers.Dialog.ClassTick(1/60, pygame.key.get_pressed())
+            activation_triggers.Dialog.ClassTick(engine.Game.dt, pygame.key.get_pressed())
             if activation_triggers.Dialog.dialog_active_status == False:
                 self.tasks["dialog2"] = True
         
@@ -462,7 +466,7 @@ class EventMathExam(Event):
                 self.last_started_dialog = 3
             
             # self.dialogs[2].Draw(engine.Game.screen.screen)
-            activation_triggers.Dialog.ClassTick(1/60, pygame.key.get_pressed())
+            activation_triggers.Dialog.ClassTick(engine.Game.dt, pygame.key.get_pressed())
             if activation_triggers.Dialog.dialog_active_status == False:
                 self.tasks["dialog3"] = True
             
@@ -559,7 +563,7 @@ class LetterFromFather(Event):
                 self.dialogs[0].CastAnimationForCutscenes(self.game.player)
                 self.last_started_dialog = 1
             
-            activation_triggers.Dialog.ClassTick(1/60, pygame.key.get_pressed())
+            activation_triggers.Dialog.ClassTick(engine.Game.dt, pygame.key.get_pressed())
             if activation_triggers.Dialog.dialog_active_status == False:
                 self.tasks["dialog1"] = True
         elif self.animation_frame < 10:

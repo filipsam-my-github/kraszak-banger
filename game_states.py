@@ -143,7 +143,7 @@ class Gameplay(GameState):
             pygame.mouse.get_pos(), pygame.mouse.get_pressed()
         )
         
-        self.player.Tick(self.keys, 1/60)
+        self.player.Tick(self.keys, engine.Game.dt)
         for level_exit in self.level_exits:
             level_exit.Tick(self.player)
         for dialog in self.dialogs:
@@ -173,14 +173,14 @@ class Gameplay(GameState):
             if activations_trigger.event_active_status:
                 self.EventReader(activations_trigger.event_name, activations_trigger)
             
-        activation_triggers.Dialog.ClassTick(1/60, self.keys)
-        activation_triggers.LevelExit.TickClass(self.current_level, 1/60)
-        activation_triggers.DialogLogic.ClassTick(1/60)
+        activation_triggers.Dialog.ClassTick(engine.Game.dt, self.keys)
+        activation_triggers.LevelExit.TickClass(self.current_level, engine.Game.dt)
+        activation_triggers.DialogLogic.ClassTick(engine.Game.dt)
         
         self.player.Collide(self.blocks)
         self.player.Collide(self.npcs)
         self.player.Collide(self.interactables)
-        self.player.AnimationTick(1/60)
+        self.player.AnimationTick(engine.Game.dt)
         
         self.camera.Center(int(self.player.x_cord+15),int(self.player.y_cord))
         

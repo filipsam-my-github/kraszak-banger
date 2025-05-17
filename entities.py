@@ -84,7 +84,7 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         self.x_cord = x_cord-self._skin_x
         self.y_cord = y_cord-self._skin_y
         self.movement_vector = [0,0]
-        self.rect = pygame.Rect(self.x_cord, self.y_cord, 14*graphic_handler.ImageLoader.GetScalingMultiplier()[0], 11*graphic_handler.ImageLoader.GetScalingMultiplier()[1])
+        self.rect = pygame.rect.FRect(self.x_cord, self.y_cord, 14*graphic_handler.ImageLoader.GetScalingMultiplier()[0], 11*graphic_handler.ImageLoader.GetScalingMultiplier()[1])
 
         self.plot_state = 0#how far is player in plot of this game might be helpful when dialog is going to be after certain event but not before
         
@@ -263,7 +263,9 @@ class Player(solid_blocks.PhysicsCollider, camera.CameraDrawable):
         if Player.music_fading:
             dis_val = max(0,(min(1,1-self.HowFarFromPlayer(64, 160)/550)))
             
-            audio_handler.MusicHandler.SetVal(dis_val) 
+            audio_handler.MusicHandler.SetVal(dis_val)
+
+        print("") 
     
     
     def _DoAttack(self):
@@ -721,7 +723,7 @@ class SittingClassmateNpc(Npc):
 
 
 class TheFather(solid_blocks.PhysicsCollider, camera.CameraDrawable):
-    HITBOX = True
+    HITBOX = False
     COLOR = (207, 173, 62)
     
     def __init__(self, x_cord, y_cord):

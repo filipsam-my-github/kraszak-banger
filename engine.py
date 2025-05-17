@@ -26,7 +26,7 @@ import cursor
 
 
 
-GAME_NAME = "kraszak the game (1.0.2v)"
+GAME_NAME = "kraszak the game (1.0.3v)"
 
 
 MONITOR_SIZE = screen_size()
@@ -42,6 +42,8 @@ class ShaderScreen:
     DEFAULT_FRAG_SHADER_PATH = "fragment_shaders/frag_normal.glsl"
     
     full_screen = pygame.K_f
+
+    DEBUG_MODE = True
 
     def __init__(self, vert_shader=None, frag_shader=None):
         self.gl_screen = pygame.display.set_mode((640, 360), pygame.OPENGL | pygame.DOUBLEBUF | pygame.RESIZABLE)
@@ -184,6 +186,8 @@ class Game:
     general_memory: dict = {
         "grabbed_objects_by_id":{}   
     }
+
+    debug_general_memory = {}
     
     dt = time.time()
     keys = pygame.key.get_pressed()
@@ -198,7 +202,15 @@ class Game:
         Game.InitializeGame()
         
         self.game_state = Pointer(game_state)
-        self.game_states = {"tutorial":game_states.Tutorial(),"gameplay":game_states.Gameplay(), "main_menu":game_states.Menu(), "languages":game_states.Languages(), "load_game":game_states.LoadGame(), "settings":game_states.Settings(), "credits": game_states.Credits()}
+        self.game_states:list[game_states.GameState] = {
+            "tutorial":game_states.Tutorial(),
+            "gameplay":game_states.Gameplay(),
+            "main_menu":game_states.Menu(),
+            "languages":game_states.Languages(),
+            "load_game":game_states.LoadGame(),
+            "settings":game_states.Settings(),
+            "credits": game_states.Credits()
+        }
         game_states.LoadData()
         Game.mouse = gui.MouseGuiEventHandler.mouse
         
@@ -221,8 +233,8 @@ class Game:
         
         old_time = time.time()
         
-        while True:    
-            clock.tick(60)
+        while True:   
+            # clock.tick(60) 
             old_time = time.time()
             Game.dt = time.time() - last_time
             last_time = time.time()

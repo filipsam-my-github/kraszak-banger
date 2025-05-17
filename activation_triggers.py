@@ -39,6 +39,7 @@ class Dialog(camera.CameraDrawable):
     
     HITBOX = False
     COLOR = (245, 176, 214)
+
     
     #variables for displaying box with text
     dialog_active_status = False

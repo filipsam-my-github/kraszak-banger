@@ -28,6 +28,11 @@ bool glowing_rectangle(vec2 pos, vec4 rect) {
 }
 
 void main() {
+    if (dialog == true){
+        transposition_shader_multiplayer = 1.;
+    }
+
+
     float adjusted_multiplayer = abs(transposition_shader_multiplayer)/2;
     float aspect = u_resolution.x / u_resolution.y;
 
@@ -59,6 +64,7 @@ void main() {
 
     float calibrated_time = abs(mod(time*10.,20.)-10.)+10.;
 
+    float another_disc_yellow = max(0.04,(pow(disc, 3)+0.025)*(1*(calibrated_time/14)+1.45));
     float disc_yellow = max(0.04,(pow(disc, 3)+0.025)*(1*(calibrated_time/14)+1.45));
     
     float disc_blue = max(0.04,pow(disc/1.5, 3)+0.025);
@@ -74,12 +80,12 @@ void main() {
     // }
     if (dialog){
         if (glowing_rectangle(uvs, DIALOG_BOX)){
-        disc_yellow = 1.;
-        disc_blue = 1.;
-    }
+            disc_yellow = 1.;
+            disc_blue = 0.;
+        }
     }
     
+    
 
-
-    f_color = vec4(red * disc_yellow, green * disc_yellow, blue * disc_blue, 1.0);
+    f_color = vec4(red * max(0.04,(pow(disc, 3)+0.025)*(1*(calibrated_time/14)+1.45)), green * disc_yellow, blue * disc_blue, 1.0);
 }

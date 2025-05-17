@@ -15,8 +15,10 @@ class Font:
     pixelated_font = {"25":pygame.font.Font("fonts/ness/ness.otf", 25)}
     
     DEFAULT_COLOR = (255,255,255)
+
+    SHOW_HIT_BOX = False
     
-    def __init__(self,text="", original_font_size=25, cursive=False, x_cord = 0, y_cord = 0, show = True, color = "white"):
+    def __init__(self,text="", original_font_size=25, cursive=False, x_cord = 0, y_cord = 0, show = True, color = "white", show_hitbox = False):
         self._SHOW = show
         self.original_font_size = original_font_size
         
@@ -61,7 +63,12 @@ class Font:
         self.text_variant =  str(self.original_font_size)+str(self.color)
         
         self.UpdateFontMemoryAndImage()
-    
+
+        if Font.SHOW_HIT_BOX:
+            self.show_hitbox = False
+
+        self.show_hitbox = show_hitbox
+
     def UpdateFontMemoryAndImage(self):
         
         if self.cursive:
@@ -103,6 +110,9 @@ class Font:
             
             screen.blit(self.text_image,(self.x_cord*width_scaling, self.y_cord*height_scaling))
         
+        if self.show_hitbox:
+            pygame.draw.rect(screen, (200,0,200), self.text_image.get_rect())
+
     def GetImageSize(self):
         return (self.text_image.get_width(),self.text_image.get_height())
     
@@ -114,6 +124,8 @@ class Font:
 
 class FastGuiTextBox:
 
+    SHOW_HITBOX = False
+
     def __init__(self, text_content, x_cord=0, y_cord=0, max_width = 22, font_size = 25, text_color = "white"):
         self.x_cord = x_cord
         self.y_cord = y_cord
@@ -123,8 +135,9 @@ class FastGuiTextBox:
         self.max_width = max_width
         
         self.text_content = self.FormatTextRelativeToMaxWidth(text_content, text_content)
-        self.text = Font(self.text_content, original_font_size=font_size, color=text_color)
+        self.text = Font(self.text_content, original_font_size=font_size, color=text_color, show_hitbox=FastGuiTextBox.SHOW_HITBOX)
         self.text.MoveTo(x_cord,y_cord)
+
         
         
         
